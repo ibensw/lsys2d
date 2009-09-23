@@ -1,0 +1,17 @@
+forward=[x, y, z]
+left=[x', y', z']
+top=[x", y", z"]
+
+
+turn left: a rad
+	forward=sin(a)*left+cos(a)*forward
+	left=top*forward;
+
+pitch up: a rad
+	forward=sin(a)*top+cos(a)*forward
+	top=forward*left;
+
+roll left: a rad
+	top=sin(a)*left+cos(a)*top
+	left=top*forward;
+

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='28'>
+	<alphabet action='draw'>F</alphabet>
+	<initiator>F</initiator>
+	<rule find='F'>F[&amp;+F]F[-\F][-\F][&amp;F]</rule>
+</lsystem>

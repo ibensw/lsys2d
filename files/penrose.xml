@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='36'>
+	<alphabet action='draw'>F</alphabet>
+	<initiator>[7]++[7]++[7]++[7]++[7]</initiator>
+	<rule find='6'>8F++9F----7F[-8F----6F]++</rule>
+	<rule find='7'>+8F--9F[---6F--7F]+</rule>
+	<rule find='8'>-6F++7F[+++8F++9F]-</rule>
+	<rule find='9'>--8F++++6F[+9F++++7F]--7F</rule>
+	<rule find='F'>0</rule>
+</lsystem>

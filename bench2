@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ $# < 1 ]]; then
+	s="iiiiidiiiidq"
+else
+	s=$1
+fi
+
+rm /tmp/input &> /dev/null
+echo $s > /tmp/input
+make && valgrind --tool=callgrind ./LSys2D files/plant6.xml <  /tmp/input > /dev/null

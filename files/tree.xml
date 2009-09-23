@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LSYSTEM sigma='30'>
+	<alphabet action='draw'>FA</alphabet>
+	<initiator>F</initiator>
+	<rule find='F'>///A[++F][--F]A///[++F][--F]A///[++F][--F]A</rule>
+	<rule find='A'>AAA</rule>
+</LSYSTEM>

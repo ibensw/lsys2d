@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='90'>
+	<initiator>FX</initiator>
+	<alphabet action='draw'>F</alphabet>
+	<rule find='X'>X+YF</rule>
+	<rule find='Y'>FX-Y</rule>
+</lsystem>

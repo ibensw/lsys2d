@@ -1,0 +1,6 @@
+<LSYSTEM sigma='90'>
+	<initiator>X</initiator>
+	<alphabet action='draw'>FX</alphabet>
+	<rule find='X'>^\XF^\XFX-F^//XFX&amp;F+//XFX-F/X-/</rule>
+</LSYSTEM>
+

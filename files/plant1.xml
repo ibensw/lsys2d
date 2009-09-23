@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='22.5'>
+	<initiator>X</initiator>
+	<alphabet action='draw'>F</alphabet>
+	<rule find='X'>F-[[X]+X]+F[+FX]-X</rule>
+	<rule find='F'>FF</rule>
+</lsystem>

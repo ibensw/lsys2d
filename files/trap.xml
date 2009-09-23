@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LSYSTEM sigma='15'>
+	<alphabet action='draw'>FA</alphabet>
+	<initiator>+++F</initiator>
+	<rule find='F'>FA/[++++++A]</rule>
+</LSYSTEM>

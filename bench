@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ $# < 1 ]]; then
+	s="iiiiidiiiiidq"
+else
+	s=$1
+fi
+
+echo $s
+make clean && make && echo "$s" | time ./LSys2D files/plant1.xml && gprof -b ./LSys2D
