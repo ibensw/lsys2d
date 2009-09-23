@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='60'>
+	<alphabet action='draw'>A</alphabet>
+	<initiator>A--A--A</initiator>
+	<rule find='A'>A+A--A+A</rule>
+</lsystem>

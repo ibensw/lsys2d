@@ -1,0 +1,26 @@
+-O2 -g -pg
+0.48/0.42
+
+-O2 -pg
+0.49/0.50
+
+-O3 -pg
+0.52/0.45
+
+-O2 -pg -mtune=pentium4
+0.47/0.48
+
+-O3 -pg -mtune=pentium4
+0.44/0.42
+
+-O3 -pg -mtune-native
+0.49/0.44
+
+-O3 -pg -mtune=prescott
+0.40/0.55/0.41/0.55/0.31/0.50
+
+-O2 -pg -mtune=prescott
+0.52/0.53
+
+-O3 -pg -mtune=prescott -malign-double
+0.42/0.47

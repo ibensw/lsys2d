@@ -1,0 +1,16 @@
+c^2 = a^2 + b^2 - 2*a*b*cos(gamma)
+
+gegeven:
+c
+gamma
+a=b
+
+c^2 = 2*a^2 - 2*a^2*cos(gamma)
+c^2 = 2*a^2 * (1-cos(gamma))
+c^2/(1-cos(gamma)) = 2*a^2
+c^2/(2*(1-cos(gamma))) = a^2
+
+h^2+(c/2)^2=a^2
+h^2=a^2-(c/2)^2
+
+h=sqrt(c^2/(2*(1-cos(gamma))) - (c/2)^2)
