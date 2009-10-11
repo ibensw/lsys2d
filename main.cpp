@@ -105,6 +105,7 @@ int main(int argc, char *argv[]){
 	double rotate=0.0;
 	double rotatespeed=0.1;
 	double pitch=0.0;
+	bool drawing=true;
 	unsigned int iterations=0;
 
 	void (Engine::* lineFunc)(const Point3D&, const Point3D&)=&Engine::drawLine;
@@ -130,30 +131,32 @@ int main(int argc, char *argv[]){
 	c.calculate();
 
 	while (running){
-		if (frame==100){
-			Tend=clock();
-			printf("FPS: %f\n", 100.0*((double)CLOCKS_PER_SEC)/(Tend-Tstart));
-			Tstart=Tend;
-			frame=0;
+		if (drawing){
+			if (frame==100){
+				Tend=clock();
+				printf("FPS: %f\n", 100.0*((double)CLOCKS_PER_SEC)/(Tend-Tstart));
+				Tstart=Tend;
+				frame=0;
+			}
+			++frame;
+
+
+			gfx.clear();
+
+			double factor=c.maxX-c.minX;
+			double factorY=c.maxY-c.minY;
+
+			if (factor<factorY)
+				factor=factorY;
+			gfx.setWindow(c.minX-1, c.minX+factor+1, c.minY-1, c.minY+factor+1, c.maxZ, c.minZ);
+
+			gfx.rotateY(rotate);
+			gfx.rotateX(pitch);
+			c.draw(&gfx, lineFunc);
+			gfx.draw();
+
+			rotate=fmod(rotate+rotatespeed, 360.0);
 		}
-		frame++;
-
-
-		gfx.clear();
-
-		double factor=c.maxX-c.minX;
-		double factorY=c.maxY-c.minY;
-
-		if (factor<factorY)
-			factor=factorY;
-		gfx.setWindow(c.minX-1, c.minX+factor+1, c.minY-1, c.minY+factor+1, c.maxZ, c.minZ);
-
-		gfx.rotateY(rotate);
-		gfx.rotateX(pitch);
-		c.draw(&gfx, lineFunc);
-		gfx.draw();
-
-		rotate=fmod(rotate+rotatespeed, 360.0);
 
 		//cout << "frame" << endl;
 
@@ -171,12 +174,16 @@ int main(int argc, char *argv[]){
 					case SDLK_i:
 						p.iterate(1);
 						++iterations;
-						c.init(p, angle*M_PI/180);
-						c.calculate();
+						//c.init(p, angle*M_PI/180);
+						//c.calculate();
 						break;
 					case SDLK_ESCAPE:
 					case SDLK_q:
 						running=false;
+						break;
+					case SDLK_c:
+						c.init(p, angle*M_PI/180);
+						c.calculate();
 						break;
 					case SDLK_LEFT:
 						rotatespeed-=0.05;
@@ -192,6 +199,12 @@ int main(int argc, char *argv[]){
 						break;
 					case SDLK_p:
 						printf("\nIterations: %i\nRotation: %f deg\n", iterations, rotate);
+						break;
+					case SDLK_s:
+						printf("Size: %u\n", p.getData().length());
+						break;
+					case SDLK_d:
+						drawing=!drawing;
 						break;
 					case SDLK_r:
 						pitch=0.0;

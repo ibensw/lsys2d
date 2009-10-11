@@ -14,11 +14,17 @@ SOURCES += main.cpp \
     engine/engine.cpp \
     point3d.cpp \
     direction.cpp \
-    alphabet.cpp
+    alphabet.cpp \
+    memcache.cpp \
+    iterator.cpp \
+    stringstat.cpp
 HEADERS += point2d.h \
     parser.h \
     calc.h \
     engine/engine.h \
     point3d.h \
     direction.h \
-    alphabet.h
+    alphabet.h \
+    memcache.h \
+    iterator.h \
+    stringstat.h

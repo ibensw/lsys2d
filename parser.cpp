@@ -74,7 +74,6 @@ void Parser::iterate(int times){
 				points+=rules.find(current[i])->second.addPoints;
 				if (ab->lookup(current[i])==DRAW){
 					--lines;
-					//--points;
 				}
 			}else{
 				newcurrent+=current[i];
