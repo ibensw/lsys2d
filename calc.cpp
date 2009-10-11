@@ -4,6 +4,7 @@
 #include <stack>
 #include "point3d.h"
 #include "direction.h"
+#include "memcache.h"
 
 #include <stdlib.h>
 
@@ -51,7 +52,6 @@ void Calc::calculate(){
 	Point3D f(0.0, 1.0, 0.0); //forward
 	Point3D u(0.0, 0.0, 1.0); //up
 	Direction d(f, u);
-	//gfx.clear();
 
 	if (points)
 		delete points;
@@ -62,10 +62,13 @@ void Calc::calculate(){
 	if (triangles)
 		delete triangles;
 
-	points=new Point3D[cPoints];
-	// cout << "Allocced " << cPoints << "/" << cTriangles << "/" << cLines << endl;
-	lines= new unsigned long[cLines*2];
-	triangles=new unsigned long[cTriangles*3];
+	//points=new Point3D[cPoints];
+	points=new MemCache<Point3D>(cPoints, (100*1024*1024)/sizeof(Point3D)); //100MB blocks
+	//lines= new unsigned long[cLines*2];
+	lines=new MemCache<unsigned long>(cLines*2, (100*1024*1024)/sizeof(unsigned long));
+	//triangles=new unsigned long[cTriangles*3];
+	triangles=new MemCache<unsigned long>(cTriangles*3, (100*1024*1024)/sizeof(unsigned long));
+
 	unsigned long pCount=0;
 	unsigned long lCount=0;
 	unsigned long tCount=0;
@@ -76,14 +79,14 @@ void Calc::calculate(){
 	for (unsigned long i=0; i<len; ++i){
 		switch(ab->lookup(s[i])){
 			case DRAW:
-				if (!pCount || points[pCount-1] != p){
-					points[pCount++]=p;
+				if (!pCount || points->get(pCount-1) != p){
+					(*points)[pCount++]=p;
 				}
 				p+=d.GetForward();
-				points[pCount++]=p;
+				(*points)[pCount++]=p;
 
-				lines[lCount++]=pCount-2;
-				lines[lCount++]=pCount-1;
+				(*lines)[lCount++]=pCount-2;
+				(*lines)[lCount++]=pCount-1;
 
 				if (p.c[0]<minX) minX=p.c[0];
 				if (p.c[0]>maxX) maxX=p.c[0];
@@ -94,7 +97,7 @@ void Calc::calculate(){
 				break;
 			case MOVE:
 				p+=d.GetForward();
-				points[pCount++]=p;
+				(*points)[pCount++]=p;
 				if (p.c[0]<minX) minX=p.c[0];
 				if (p.c[0]>maxX) maxX=p.c[0];
 				if (p.c[1]<minY) minY=p.c[1];
@@ -102,10 +105,10 @@ void Calc::calculate(){
 				if (p.c[2]<minZ) minZ=p.c[2];
 				if (p.c[2]>maxZ) maxZ=p.c[2];
 
-				if (polystack && p!=points[polyPoint] && points[pCount-2]!=points[polyPoint]){
-					triangles[tCount++]=polyPoint;
-					triangles[tCount++]=pCount-2;
-					triangles[tCount++]=pCount-1;
+				if (polystack && p!=points->get(polyPoint) && points->get(pCount-2)!=points->get(polyPoint)){
+					(*triangles)[tCount++]=polyPoint;
+					(*triangles)[tCount++]=pCount-2;
+					(*triangles)[tCount++]=pCount-1;
 				}
 
 				break;
@@ -155,12 +158,8 @@ void Calc::calculate(){
 	}
 
 
-	// cout << "Vectorerror, squared: " << d.GetForward().LengthSquared()-1.0 << endl;
-	// cout << "realloccing " << points << endl;
-	// cout << pCount << "\t" << sizeof(Point3D) << endl;
-	points=(Point3D*) realloc(points, pCount*sizeof(Point3D));
-	// cout << "to " << points << endl;
-	triangles=(unsigned long*) realloc(triangles, tCount*sizeof(unsigned long));
+	//points=(Point3D*) realloc(points, pCount*sizeof(Point3D));
+	//triangles=(unsigned long*) realloc(triangles, tCount*sizeof(unsigned long));
 	cPoints=pCount;
 	cTriangles=tCount/3;
 }
@@ -174,7 +173,7 @@ void Calc::draw(Engine *gfx, void (Engine::* lineFunc)(const Point3D&, const Poi
 				gfx->setColor(2.0*var, 1.0, 0.0);
 			else
 				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);
-		(gfx->*lineFunc)(points[lines[2*i]], points[lines[2*i+1]]);
+		(gfx->*lineFunc)(points->get(lines->get(2*i)), points->get(lines->get(2*i+1)));
 	}
 
 	gfx->setColor(0.01, 0.74, 0.03);
@@ -184,7 +183,7 @@ void Calc::draw(Engine *gfx, void (Engine::* lineFunc)(const Point3D&, const Poi
 				gfx->setColor(2.0*var, 1.0, 0.0);
 			else
 				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);
-		gfx->drawTriangle(points[triangles[3*i]], points[triangles[3*i+1]], points[triangles[3*i+2]]);
+		gfx->drawTriangle(points->get(triangles->get(3*i)), points->get(triangles->get(3*i+1)), points->get(triangles->get(3*i+2)));
 	}
 
 	//gfx.drawText(20, 20, "Hello world", 1.0f, 0.0f, 0.0f);
