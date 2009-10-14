@@ -9,14 +9,15 @@ class Iteration;
 class Iterator{
 	public:
 		Iterator();
-		void SetDepth(unsigned long newdepth);
+		void Initiate(std::string istr, unsigned long idepth);
 		char next();
 		inline StringStat getRule(char c){return rules[c];}
 		inline bool NoRule(char c) const {return rules.end()==rules.find(c);}
 		void CountChars();
-		void addRule(char f, string r);
+		void addRule(char f, std::string r);
 
 	private:
+		unsigned long Charcount(StringStat s, unsigned long d);
 		Iteration* init;
 		unsigned long depth;
 		unsigned long iterations;
@@ -27,8 +28,9 @@ class Iterator{
 
 class Iteration{
 	public:
-		Iteration(Iterator* it, char x, unsigned long depthleft);
+		Iteration(Iterator* it, StringStat x, unsigned long depthleft);
 		~Iteration();
+		unsigned long CountChar(char x);
 		char next();
 
 	private:

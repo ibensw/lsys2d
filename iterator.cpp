@@ -1,7 +1,17 @@
 #include "iterator.h"
 
-Iterator::Iterator()
+using namespace std;
+
+Iterator::Iterator():
+		init(0)
 {
+}
+
+void Iterator::Initiate(string istr, unsigned long idepth){
+	if (init)
+		delete init;
+
+	init=new Iteration(this, StringStat(istr), idepth);
 }
 
 void Iterator::CountChars(){
@@ -14,12 +24,39 @@ void Iterator::addRule(char f, string r){
 	 rules.insert(pair<char,StringStat>(f,StringStat(r)));
 }
 
-Iteration::Iteration(Iterator *it, char x, unsigned long depthleft):
-		location(0), depth(depthleft), main(it), sub(0), str(it->getRule(x))
+char Iterator::next(){
+	return init->next();
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+Iteration::Iteration(Iterator *it, StringStat x, unsigned long depthleft):
+		location(0), depth(depthleft), main(it), sub(0), str(x)
 {}
 
 Iteration::~Iteration(){
-	delete sub;
+	if (sub)
+		delete sub;
+}
+
+unsigned long Iteration::CountChar(char x){
+	if (depth==0){
+		return str.chcount(x);
+	}
+
+	unsigned long c=0;
+	if (main->NoRule(x)){
+		c+=str.chcount(x);
+	}
+
+	Iteration* tcount;
+
+	for (int i=0; i<256; ++i){
+		tcount=new Iteration(main, main->getRule(i), depth-1);
+		c+=str.chcount(i)*tcount->CountChar(i);
+		delete tcount;
+	}
+
 }
 
 char Iteration::next(){
@@ -34,7 +71,9 @@ char Iteration::next(){
 		return x;
 
 	if (sub){ // && !x
+		//printf("[delete sub]\n");
 		delete sub;
+		sub=0;
 		++location;
 	}
 
@@ -44,6 +83,6 @@ char Iteration::next(){
 	}
 
 	//!sub && rule exists
-	sub=new Iteration(main, str[location], depth-1);
+	sub=new Iteration(main, main->getRule(str[location]), depth-1);
 	return sub->next();
 }
