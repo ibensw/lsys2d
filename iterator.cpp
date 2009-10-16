@@ -1,6 +1,6 @@
 #include "iterator.h"
 
-using namespace std;
+/*using namespace std;
 
 Iterator::Iterator():
 		init(0)
@@ -15,7 +15,7 @@ void Iterator::Initiate(string istr, unsigned long idepth){
 }
 
 void Iterator::CountChars(){
-	for (int i=0; i<256; ++i){
+	for (int i=0; i<128; ++i){
 
 	}
 }
@@ -51,7 +51,7 @@ unsigned long Iteration::CountChar(char x){
 
 	Iteration* tcount;
 
-	for (int i=0; i<256; ++i){
+	for (int i=1; i<128; ++i){
 		tcount=new Iteration(main, main->getRule(i), depth-1);
 		c+=str.chcount(i)*tcount->CountChar(i);
 		delete tcount;
@@ -85,4 +85,4 @@ char Iteration::next(){
 	//!sub && rule exists
 	sub=new Iteration(main, main->getRule(str[location]), depth-1);
 	return sub->next();
-}
+}*/

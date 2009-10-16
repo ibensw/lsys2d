@@ -1,7 +1,7 @@
 #ifndef ITERATOR_H
 #define ITERATOR_H
 
-#include <map>
+/*#include <map>
 #include "stringstat.h"
 
 class Iteration;
@@ -21,7 +21,7 @@ class Iterator{
 		Iteration* init;
 		unsigned long depth;
 		unsigned long iterations;
-		unsigned long counts[256];
+		unsigned long counts[128];
 		std::map<char, StringStat> rules;
 
 };
@@ -39,6 +39,6 @@ class Iteration{
 		Iterator* main;
 		Iteration* sub;
 		StringStat str;
-};
+};*/
 
 #endif // ITERATOR_H

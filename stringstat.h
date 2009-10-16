@@ -17,7 +17,7 @@ class StringStat
 
 	private:
 		std::string str;
-		unsigned long charcount[256];
+		unsigned long charcount[128];
 };
 
 #endif // STRINGSTAT_H
