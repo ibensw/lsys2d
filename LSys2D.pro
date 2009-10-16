@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     alphabet.cpp \
     memcache.cpp \
     iterator.cpp \
-    stringstat.cpp
+    stringstat.cpp \
+    iterator2.cpp
 HEADERS += point2d.h \
     parser.h \
     calc.h \
@@ -27,4 +28,5 @@ HEADERS += point2d.h \
     alphabet.h \
     memcache.h \
     iterator.h \
-    stringstat.h
+    stringstat.h \
+    iterator2.h

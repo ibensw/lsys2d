@@ -16,7 +16,7 @@
 //#include "tablegeo.h"
 #include "point3d.h"
 #include "alphabet.h"
-#include "iterator.h"
+#include "iterator2.h"
 #include "stringstat.h"
 
 #include <time.h>
@@ -93,19 +93,29 @@ int read_file(string filename, Parser &p, Alphabet &a, double &angle){
 }
 
 int main(int argc, char *argv[]){
-
-	/*Iterator it;
+	Iterator it;
 	it.addRule('A', "B-A-B");
 	it.addRule('B', "A+B+A");
-	it.Initiate("A", 2);
+	it.setInit("A");
 
-	char x=1;
-	while (x=it.next()){
-		printf("%c", x);
+	char x;
+	for (int i=0; i<15; ++i){
+		it.Iterate();
 	}
-
+	/*printf("%u\t", it.length());
+	for (unsigned long j=0; j<it.length(); ++j){
+		x=it.next();
+		//printf("%c", it.next());
+	}
+	printf("\n");*/
+	printf("%u\t", it.length());
+	for (unsigned long j=0; j<it.length(); ++j){
+		x=it[j];
+		//printf("%c", it[j]);
+	}
 	printf("\n");
-	return 0;*/
+
+	return 0;
 
 
 

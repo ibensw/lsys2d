@@ -7,13 +7,13 @@ using namespace std;
 StringStat::StringStat():
 		str("")
 {
-	memset(charcount, 0, 256*sizeof(unsigned long));
+	memset(charcount, 0, 128*sizeof(unsigned long));
 }
 
 StringStat::StringStat(std::string init):
 		str(init)
 {
-	memset(charcount, 0, 256*sizeof(unsigned long));
+	memset(charcount, 0, 128*sizeof(unsigned long));
 	for (unsigned int i=0; i<str.length(); ++i){
 		++charcount[(unsigned char)str[i]];
 	}
@@ -22,7 +22,7 @@ StringStat::StringStat(std::string init):
 void StringStat::Set(std::string init){
 	str=init;
 
-	memset(charcount, 0, 256*sizeof(unsigned long));
+	memset(charcount, 0, 128*sizeof(unsigned long));
 	for (unsigned int i=0; i<str.length(); ++i){
 		++charcount[(unsigned char)str[i]];
 	}
