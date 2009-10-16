@@ -102,18 +102,18 @@ int main(int argc, char *argv[]){
 	for (int i=0; i<15; ++i){
 		it.Iterate();
 	}
-	/*printf("%u\t", it.length());
+	printf("%u\t", it.length());
 	for (unsigned long j=0; j<it.length(); ++j){
 		x=it.next();
 		//printf("%c", it.next());
 	}
-	printf("\n");*/
-	printf("%u\t", it.length());
-	for (unsigned long j=0; j<it.length(); ++j){
-		x=it[j];
-		//printf("%c", it[j]);
-	}
 	printf("\n");
+	/*printf("%u\t", it.length());
+	for (unsigned long j=0; j<it.length(); ++j){
+		//x=it[j];
+		printf("%c", it[j]);
+	}
+	printf("\n");*/
 
 	return 0;
 
