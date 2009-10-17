@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     memcache.cpp \
     iterator.cpp \
     stringstat.cpp \
-    iterator2.cpp
+    iterator2.cpp \
+    openglshot.cpp
 HEADERS += point2d.h \
     parser.h \
     calc.h \
@@ -29,4 +30,5 @@ HEADERS += point2d.h \
     memcache.h \
     iterator.h \
     stringstat.h \
-    iterator2.h
+    iterator2.h \
+    openglshot.h
