@@ -12,7 +12,7 @@ CC            = gcc
 CXX           = g++ -g
 DEFINES       = -DQT_NO_DEBUG
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT $(DEFINES)
-CXXFLAGS      = -pipe -O2 -Wall -W -D_REENTRANT $(DEFINES)
+CXXFLAGS      = -pipe -O3 -Wall -W -D_REENTRANT $(DEFINES) -mtune=prescott -funroll-loops
 INCPATH       = -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4 -I. -I.
 LINK          = g++ -g
 LFLAGS        = -Wl,-O1

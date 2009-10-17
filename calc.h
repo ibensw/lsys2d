@@ -19,6 +19,7 @@ using std::pair;
 class Calc
 {
 	//string s;
+	Iterator* s;
 	double a;
 //	Point3D *points;
 	MemCache<Point3D>* points;
@@ -30,7 +31,6 @@ class Calc
 	unsigned long cPoints;
 	unsigned long cTriangles;
 	Alphabet* ab;
-	Iterator* s;
 
 public:
 	double minX;
