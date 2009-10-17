@@ -18,7 +18,7 @@
 #include "alphabet.h"
 #include "iterator2.h"
 #include "stringstat.h"
-//#include "memcache.h"
+#include "openglshot.h"
 
 #include <time.h>
 
@@ -226,6 +226,9 @@ int main(int argc, char *argv[]){
 						pitch=0.0;
 						rotatespeed=0.0;
 						rotate=0.0;
+						break;
+					case SDLK_m:
+						Screenshot("out.png", 0, 0, WIDTH, HEIGHT);
 						break;
 					case SDLK_l:
 						if (lineFunc == &Engine::drawLine){

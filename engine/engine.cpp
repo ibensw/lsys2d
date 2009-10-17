@@ -73,6 +73,7 @@ void Engine::init(int w, int h){
 }
 
 void Engine::clear(){
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glLoadIdentity();
 }
 
@@ -90,9 +91,8 @@ void Engine::draw(){
 	glVertex3d(-tot, 0.0, -tot);
 	glEnd();*/
 
-
 	SDL_GL_SwapBuffers();
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	//glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	//glLoadIdentity();
 }
 
