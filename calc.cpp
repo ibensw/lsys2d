@@ -63,11 +63,11 @@ void Calc::calculate(){
 		delete triangles;
 
 	//points=new Point3D[cPoints];
-	points=new MemCache<Point3D>(cPoints, (50*1024*1024)/sizeof(Point3D)); //50MB blocks
+	points=new MemCache<Point3D>(cPoints, (64*1024*1024)/sizeof(Point3D)); //64MB blocks
 	//lines= new unsigned long[cLines*2];
-	lines=new MemCache<unsigned long>(cLines*2, (50*1024*1024)/sizeof(unsigned long));
+	lines=new MemCache<unsigned long>(cLines*2, (64*1024*1024)/sizeof(unsigned long));
 	//triangles=new unsigned long[cTriangles*3];
-	triangles=new MemCache<unsigned long>(cTriangles*3, (50*1024*1024)/sizeof(unsigned long));
+	triangles=new MemCache<unsigned long>(cTriangles*3, (64*1024*1024)/sizeof(unsigned long));
 
 	unsigned long pCount=0;
 	unsigned long lCount=0;
