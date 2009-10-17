@@ -26,7 +26,7 @@
 
 using namespace std;
 
-int read_file(string filename, Parser &p, Alphabet &a, double &angle){
+int read_file(string filename, Iterator &p, Alphabet &a, double &angle){
 	// cout << filename << "..." << endl;
 	TiXmlDocument doc(filename);
 	if (!doc.LoadFile()){
@@ -77,7 +77,7 @@ int read_file(string filename, Parser &p, Alphabet &a, double &angle){
 		// cout << "Could not find initiator" << endl;
 		return 1;
 	}
-	p.init(child->GetText());
+	p.setInit(child->GetText());
 
 
 	child=root->FirstChildElement("rule");
@@ -93,13 +93,13 @@ int read_file(string filename, Parser &p, Alphabet &a, double &angle){
 }
 
 int main(int argc, char *argv[]){
-	Iterator it;
+	/*Iterator it;
 	it.addRule('A', "B-A-B");
 	it.addRule('B', "A+B+A");
 	it.setInit("A");
 
 	char x;
-	for (int i=0; i<15; ++i){
+	for (int i=0; i<3; ++i){
 		it.Iterate();
 	}
 	printf("%u\t", it.length());
@@ -108,19 +108,18 @@ int main(int argc, char *argv[]){
 		//printf("%c", it.next());
 	}
 	printf("\n");
-	/*printf("%u\t", it.length());
+	printf("%u\t", it.length());
 	for (unsigned long j=0; j<it.length(); ++j){
 		//x=it[j];
 		printf("%c", it[j]);
 	}
-	printf("\n");*/
+	printf("\n")/
 
-	return 0;
-
-
+	return 0;*/
 
 	Alphabet ab;
-	Parser p(&ab);
+	//Parser p(&ab);
+	Iterator p(&ab);
 	Calc c(&ab);
 	Engine gfx;
 	gfx.init(WIDTH, HEIGHT);
@@ -151,7 +150,7 @@ int main(int argc, char *argv[]){
 	clock_t Tstart=clock();
 	clock_t Tend;
 
-	c.init(p, angle*M_PI/180);
+	c.init(&p, angle*M_PI/180);
 	c.calculate();
 
 	while (running){
@@ -196,7 +195,7 @@ int main(int argc, char *argv[]){
 			}else if(event.type == SDL_KEYDOWN){
 				switch(event.key.keysym.sym){
 					case SDLK_i:
-						p.iterate(1);
+						p.Iterate();
 						++iterations;
 						//c.init(p, angle*M_PI/180);
 						//c.calculate();
@@ -206,7 +205,7 @@ int main(int argc, char *argv[]){
 						running=false;
 						break;
 					case SDLK_c:
-						c.init(p, angle*M_PI/180);
+						c.init(&p, angle*M_PI/180);
 						c.calculate();
 						break;
 					case SDLK_LEFT:
@@ -225,7 +224,7 @@ int main(int argc, char *argv[]){
 						printf("\nIterations: %i\nRotation: %f deg\n", iterations, rotate);
 						break;
 					case SDLK_s:
-						printf("Size: %u\n", p.getData().length());
+						printf("Size: %u\n", p.length());
 						break;
 					case SDLK_d:
 						drawing=!drawing;

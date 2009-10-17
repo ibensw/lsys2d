@@ -15,7 +15,7 @@
 using namespace std;
 
 Calc::Calc(Alphabet* a):
-		s(""), a(0), points(0), lines(0), triangles(0), cLines(0), cTriangles(0), ab(a), minX(0), maxX(0), minY(0), maxY(0), minZ(0), maxZ(0)
+		s(0), a(0), points(0), lines(0), triangles(0), cLines(0), cTriangles(0), ab(a), minX(0), maxX(0), minY(0), maxY(0), minZ(0), maxZ(0)
 {
 }
 
@@ -28,12 +28,12 @@ Calc::~Calc(){
 		delete triangles;
 }
 
-void Calc::init(Parser ss, double aa){
-	s=ss.getData();
+void Calc::init(Iterator* ss, double aa){
+	s=ss;
 	a=aa;
-	cLines=ss.countLines();
-	cTriangles=ss.countTriangles();
-	cPoints=ss.countPoints();
+	cLines=ss->countLines();
+	cTriangles=ss->countTriangles();
+	cPoints=ss->countPoints();
 	minX=minY=maxX=maxY=minZ=maxZ=0.0;
 	if (points)
 		delete points;
@@ -63,11 +63,11 @@ void Calc::calculate(){
 		delete triangles;
 
 	//points=new Point3D[cPoints];
-	points=new MemCache<Point3D>(cPoints, (100*1024*1024)/sizeof(Point3D)); //100MB blocks
+	points=new MemCache<Point3D>(cPoints, (50*1024*1024)/sizeof(Point3D)); //50MB blocks
 	//lines= new unsigned long[cLines*2];
-	lines=new MemCache<unsigned long>(cLines*2, (100*1024*1024)/sizeof(unsigned long));
+	lines=new MemCache<unsigned long>(cLines*2, (50*1024*1024)/sizeof(unsigned long));
 	//triangles=new unsigned long[cTriangles*3];
-	triangles=new MemCache<unsigned long>(cTriangles*3, (100*1024*1024)/sizeof(unsigned long));
+	triangles=new MemCache<unsigned long>(cTriangles*3, (50*1024*1024)/sizeof(unsigned long));
 
 	unsigned long pCount=0;
 	unsigned long lCount=0;
@@ -75,9 +75,11 @@ void Calc::calculate(){
 	unsigned long polystack=0;
 	unsigned long polyPoint=0;
 
-	unsigned long len=s.length();
-	for (unsigned long i=0; i<len; ++i){
-		switch(ab->lookup(s[i])){
+	unsigned long len=s->length();
+	s->front();
+	char x;
+	while (x=s->next()){
+		switch(ab->lookup(x)){
 			case DRAW:
 				if (!pCount || points->get(pCount-1) != p){
 					(*points)[pCount++]=p;
