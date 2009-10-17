@@ -18,6 +18,7 @@
 #include "alphabet.h"
 #include "iterator2.h"
 #include "stringstat.h"
+//#include "memcache.h"
 
 #include <time.h>
 
@@ -93,27 +94,19 @@ int read_file(string filename, Iterator &p, Alphabet &a, double &angle){
 }
 
 int main(int argc, char *argv[]){
-	/*Iterator it;
-	it.addRule('A', "B-A-B");
-	it.addRule('B', "A+B+A");
-	it.setInit("A");
+/*	unsigned long count=100*1024*1024*sizeof(unsigned long);
 
-	char x;
-	for (int i=0; i<3; ++i){
-		it.Iterate();
+	MemCache<unsigned long> cache(count, 30*1024*1024);
+	for (unsigned long i=0; i<count; ++i){
+		cache[i]=i*2;
 	}
-	printf("%u\t", it.length());
-	for (unsigned long j=0; j<it.length(); ++j){
-		x=it.next();
-		//printf("%c", it.next());
+	for (unsigned long i=0; i<count; ++i){
+		if (cache.get(i)!=i*2){
+			printf("ERROR: %u %u\n", i, cache.get(i));
+			return 1;
+		}
 	}
-	printf("\n");
-	printf("%u\t", it.length());
-	for (unsigned long j=0; j<it.length(); ++j){
-		//x=it[j];
-		printf("%c", it[j]);
-	}
-	printf("\n")/
+
 
 	return 0;*/
 
@@ -224,7 +217,7 @@ int main(int argc, char *argv[]){
 						printf("\nIterations: %i\nRotation: %f deg\n", iterations, rotate);
 						break;
 					case SDLK_s:
-						printf("Size: %u\n", p.length());
+						printf("Size: %u\n", (unsigned int)p.length());
 						break;
 					case SDLK_d:
 						drawing=!drawing;

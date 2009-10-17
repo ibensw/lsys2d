@@ -75,10 +75,9 @@ void Calc::calculate(){
 	unsigned long polystack=0;
 	unsigned long polyPoint=0;
 
-	unsigned long len=s->length();
 	s->front();
 	char x;
-	while (x=s->next()){
+	while ((x=s->next())){
 		switch(ab->lookup(x)){
 			case DRAW:
 				if (!pCount || points->get(pCount-1) != p){

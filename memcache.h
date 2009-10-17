@@ -63,6 +63,7 @@ template<typename T> MemCache<T>::~MemCache(){
 template<typename T> void MemCache<T>::ChangeBlock(unsigned long block) const{
 	printf("\n Changed from block %u to %i, write changes: %i\n", (unsigned int)fcurrblock, (unsigned int)block, fcurrblockchanged?1:0);
 	if (fcurrblockchanged){
+		fblockexists[fcurrblock]=true;
 		rewind(ffiles[fcurrblock]);
 		fwrite(fblock, sizeof(T), fblocksize, ffiles[fcurrblock]);
 	}
@@ -70,8 +71,9 @@ template<typename T> void MemCache<T>::ChangeBlock(unsigned long block) const{
 	fcurrblock=block;
 	if (fblockexists[fcurrblock]){
 		rewind(ffiles[fcurrblock]);
-		fread(fblock, sizeof(T), fblocksize, ffiles[fcurrblock]);
+		if (!fread(fblock, sizeof(T), fblocksize, ffiles[fcurrblock])) printf("Error while reading\n");
 	}
+
 
 	fcurrblockchanged=false;
 	printf("Done\n");
