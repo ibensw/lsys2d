@@ -1,117 +1,24 @@
-#include <string>
-#include <iostream>
-
-#include "parser.h"
 #include "calc.h"
-//#include "mysdl.h"
 #include "engine/engine.h"
-#include <string>
-#include <math.h>
 #include <stdio.h>
 #include "SDL/SDL.h"
 
-#define TIXML_USE_STL
-#include "tinyxml/tinyxml.h"
-#include "tinyxml/tinystr.h"
-//#include "tablegeo.h"
 #include "point3d.h"
 #include "alphabet.h"
 #include "iterator2.h"
 #include "stringstat.h"
 #include "openglshot.h"
+#include "fileinput.h"
 
 #include <time.h>
 
-#define WIDTH 1400
+#define WIDTH 1000
 #define HEIGHT 800
 
 using namespace std;
 
-int read_file(string filename, Iterator &p, Alphabet &a, double &angle){
-	// cout << filename << "..." << endl;
-	TiXmlDocument doc(filename);
-	if (!doc.LoadFile()){
-		// cout << "Error loading file: " << doc.ErrorDesc() << endl;
-		return 1;
-	}
-
-	TiXmlElement* root=doc.RootElement();
-	if (root->QueryDoubleAttribute("sigma", &angle) != TIXML_SUCCESS){
-		angle*=M_PI/180;
-		// cout << "Could not parse angle" << endl;
-		return 1;
-	}
-
-	TiXmlElement* child=root->FirstChildElement("alphabet");
-	string type;
-	string r;
-	while (child){
-		type=child->Attribute("action");
-		r=child->GetText();
-		if (type == "draw")
-			a.setAlphabet(DRAW, r);
-		else if (type == "move")
-			a.setAlphabet(MOVE, r);
-		else if (type == "idle")
-			a.setAlphabet(IDLE, r);
-		else if (type == "push")
-			a.setAlphabet(PUSH, r);
-		else if (type == "pop")
-			a.setAlphabet(POP, r);
-		else if (type == "turn left")
-			a.setAlphabet(TURNL, r);
-		else if (type == "pitch up")
-			a.setAlphabet(PITCHU, r);
-		else if (type == "pitch down")
-			a.setAlphabet(PITCHD, r);
-		else if (type == "roll left")
-			a.setAlphabet(ROLLL, r);
-		else if (type == "roll right")
-			a.setAlphabet(ROLLR, r);
-		else if (type == "full turn")
-			a.setAlphabet(FULLTURN, r);
-		child=child->NextSiblingElement("alphabet");
-	}
-
-	child=root->FirstChildElement("initiator");
-	if (!child){
-		// cout << "Could not find initiator" << endl;
-		return 1;
-	}
-	p.setInit(child->GetText());
-
-
-	child=root->FirstChildElement("rule");
-	char s;
-	while (child){
-		s=child->Attribute("find")[0];
-		r=child->GetText();
-		p.addRule(s, r);
-		child=child->NextSiblingElement("rule");
-	}
-
-	return 0;
-}
-
 int main(int argc, char *argv[]){
-/*	unsigned long count=100*1024*1024*sizeof(unsigned long);
-
-	MemCache<unsigned long> cache(count, 30*1024*1024);
-	for (unsigned long i=0; i<count; ++i){
-		cache[i]=i*2;
-	}
-	for (unsigned long i=0; i<count; ++i){
-		if (cache.get(i)!=i*2){
-			printf("ERROR: %u %u\n", i, cache.get(i));
-			return 1;
-		}
-	}
-
-
-	return 0;*/
-
 	Alphabet ab;
-	//Parser p(&ab);
 	Iterator p(&ab);
 	Calc c(&ab);
 	Engine gfx;
@@ -119,6 +26,7 @@ int main(int argc, char *argv[]){
 	gfx.setViewport(0, 0, WIDTH, HEIGHT);
 	double angle;
 	double rotate=0.0;
+
 	double rotatespeed=0.1;
 	double pitch=0.0;
 	bool drawing=true;
@@ -127,13 +35,12 @@ int main(int argc, char *argv[]){
 	void (Engine::* lineFunc)(const Point3D&, const Point3D&)=&Engine::drawLine;
 
 	if (argc < 2){
-		cout << "No filename specified" << endl;
+		printf("No filename specified\n");
 		return 1;
 	}
 
-	// cout << "Loading " << argv[1] << endl;
 	if (read_file(argv[1], p, ab, angle)!=0){
-		//cout << "Error parsing XML file" << endl;
+		printf("Error parsing XML file\n");
 		return 1;
 	}
 
@@ -174,8 +81,6 @@ int main(int argc, char *argv[]){
 			rotate=fmod(rotate+rotatespeed, 360.0);
 		}
 
-		//cout << "frame" << endl;
-
 		Uint8 *keystate = SDL_GetKeyState(NULL);
 		if (keystate[SDLK_UP])
 			pitch+=0.1;
@@ -190,8 +95,6 @@ int main(int argc, char *argv[]){
 					case SDLK_i:
 						p.Iterate();
 						++iterations;
-						//c.init(p, angle*M_PI/180);
-						//c.calculate();
 						break;
 					case SDLK_ESCAPE:
 					case SDLK_q:
@@ -244,5 +147,6 @@ int main(int argc, char *argv[]){
 		}
 	}
 
+	printf("Cleaning up...\n");
 	return 0;
 }
