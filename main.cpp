@@ -5,7 +5,8 @@
 
 #include "point3d.h"
 #include "alphabet.h"
-#include "iterator2.h"
+//#include "iterator2.h"
+#include "iteratator3.h"
 #include "stringstat.h"
 #include "openglshot.h"
 #include "fileinput.h"
@@ -19,7 +20,30 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 	Alphabet ab;
-	Iterator p(&ab);
+
+	SIterator p(&ab);
+
+	/*Iterator p(&ab);
+
+	p.addRule('A', "B-A-B");
+	p.addRule('B', "A+B+A");
+
+	p.setInit("A");
+	for (int i=0; i<15; ++i)
+		p.Iterate();
+
+	printf("%i:\n", p.length());
+	p.front();
+
+	for (unsigned long i=0; i<p.length(); ++i){
+		char x = p.next();
+		//char x = iter[i];
+		//printf("%c\n", x);
+	}
+	printf("\n");
+
+	return 0;*/
+
 	Calc c(&ab);
 	Engine gfx;
 	gfx.init(WIDTH, HEIGHT);
@@ -55,14 +79,13 @@ int main(int argc, char *argv[]){
 
 	while (running){
 		if (drawing){
-			if (frame==100){
+			if (frame==1500){
 				Tend=clock();
-				printf("FPS: %f\n", 100.0*((double)CLOCKS_PER_SEC)/(Tend-Tstart));
+				printf("FPS: %f\n", 150.0*((double)CLOCKS_PER_SEC)/(Tend-Tstart));
 				Tstart=Tend;
 				frame=0;
 			}
 			++frame;
-
 
 			gfx.clear();
 
@@ -93,8 +116,10 @@ int main(int argc, char *argv[]){
 			}else if(event.type == SDL_KEYDOWN){
 				switch(event.key.keysym.sym){
 					case SDLK_i:
-						p.Iterate();
-						++iterations;
+						p.setIteration(++iterations);
+						break;
+					case SDLK_j:
+						p.setIteration(--iterations);
 						break;
 					case SDLK_ESCAPE:
 					case SDLK_q:
@@ -117,13 +142,21 @@ int main(int argc, char *argv[]){
 						pitch-=0.5;
 						break;
 					case SDLK_p:
-						printf("\nIterations: %i\nRotation: %f deg\n", iterations, rotate);
-						break;
-					case SDLK_s:
-						printf("Size: %u\n", (unsigned int)p.length());
+						printf("\nIterations: \t%i\nRotation: \t%f deg\nStringLength: \t%lu\n",
+							 iterations, rotate, p.length());
 						break;
 					case SDLK_d:
 						drawing=!drawing;
+						break;
+					case SDLK_s:
+						{
+							p.front();
+							printf("size: %lu\n", p.length());
+							for (unsigned long x=0; x<p.length(); ++x){
+								printf("%c", p.next());
+							}
+							printf("\n");
+						}
 						break;
 					case SDLK_r:
 						pitch=0.0;

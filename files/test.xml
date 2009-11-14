@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<lsystem sigma='5'>
+<lsystem sigma='30'>
 	<alphabet action='draw'>AF</alphabet>
-	<alphabet action='move'>fz</alphabet>
-	<initiator>FL</initiator>
-	<rule find='A'>A+F</rule>
+	<initiator>AF</initiator>
+	<rule find='A'>[^FA][+FA]</rule>
 	<rule find='T'>TF</rule>
 	<rule find='L'>{|+++++++++ff|---------f--------------ff|---------f-----------------------f++++++++f++++++++++++++++++f++++++f|++++++++++++ff+++++++++++f}</rule>
 	<rule find='X'>B</rule>

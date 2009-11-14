@@ -2,12 +2,13 @@
 #define TIXML_USE_STL
 #include "tinyxml/tinyxml.h"
 #include "tinyxml/tinystr.h"
+#include "iteratator3.h"
 
 #include <math.h>
 
 using namespace std;
 
-int read_file(string filename, Iterator &p, Alphabet &a, double &angle){
+int read_file(string filename, SIterator &p, Alphabet &a, double &angle){
 	TiXmlDocument doc(filename);
 	if (!doc.LoadFile()){
 		return 1;
@@ -54,7 +55,7 @@ int read_file(string filename, Iterator &p, Alphabet &a, double &angle){
 	if (!child){
 		return 1;
 	}
-	p.setInit(child->GetText());
+	p.setIteration(StringStat(child->GetText()));
 
 
 	child=root->FirstChildElement("rule");

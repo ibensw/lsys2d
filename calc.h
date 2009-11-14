@@ -9,7 +9,7 @@
 #include "point3d.h"
 #include "parser.h"
 #include "memcache.h"
-#include "iterator2.h"
+#include "iteratator3.h"
 
 using std::string;
 using std::stack;
@@ -19,7 +19,7 @@ using std::pair;
 class Calc
 {
 	//string s;
-	Iterator* s;
+	SIterator* s;
 	double a;
 //	Point3D *points;
 	MemCache<Point3D>* points;
@@ -42,7 +42,7 @@ public:
 
 	Calc(Alphabet*);
 	virtual ~Calc();
-	void init(Iterator* ss, double aa);
+	void init(SIterator* ss, double aa);
 	void calculate();
 	void draw(Engine* gfx, void (Engine::* lineFunc)(const Point3D&, const Point3D&));
 	inline MemCache<Point3D>* getPoints(){return points;}
