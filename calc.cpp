@@ -5,6 +5,7 @@
 #include "point3d.h"
 #include "direction.h"
 #include "memcache.h"
+#include "iteratator3.h"
 
 #include <stdlib.h>
 
@@ -28,7 +29,7 @@ Calc::~Calc(){
 		delete triangles;
 }
 
-void Calc::init(Iterator* ss, double aa){
+void Calc::init(SIterator* ss, double aa){
 	s=ss;
 	a=aa;
 	cLines=ss->countLines();

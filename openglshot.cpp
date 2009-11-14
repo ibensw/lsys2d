@@ -2,10 +2,14 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glut.h>
 #include <pngwriter.h>
 #include <stdio.h>
 
 void Screenshot(const char* filename, unsigned int x, unsigned int y, unsigned int w, unsigned int h){
+/*	GLuint fbo;
+	glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo);
+
 	pngwriter png(w, h, 0.0, filename);
 	unsigned int surface = w*h;
 	float *pixels = new float[surface*3];
@@ -21,5 +25,7 @@ void Screenshot(const char* filename, unsigned int x, unsigned int y, unsigned i
 
 	delete []pixels;
 	png.close();
+
+	glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);*/
 }
 

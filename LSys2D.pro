@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     stringstat.cpp \
     iterator2.cpp \
     openglshot.cpp \
-    fileinput.cpp
+    fileinput.cpp \
+    iteratator3.cpp
 HEADERS += point2d.h \
     parser.h \
     calc.h \
@@ -33,4 +34,5 @@ HEADERS += point2d.h \
     stringstat.h \
     iterator2.h \
     openglshot.h \
-    fileinput.h
+    fileinput.h \
+    iteratator3.h
