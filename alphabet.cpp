@@ -20,6 +20,8 @@ Alphabet::Alphabet():
 	alphatable[']']=POP;
 	alphatable['{']=POLYSTART;
 	alphatable['}']=POLYEND;
+	alphatable['(']=PARASTART;
+	alphatable[')']=PARAEND;
 }
 
 Alphabet::~Alphabet(){

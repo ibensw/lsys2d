@@ -40,11 +40,8 @@ void SIterator::setIteration(StringStat x, unsigned int d){
 }
 
 void SIterator::setIteration(unsigned int d){
-	printf("Cache elements before: %lu\n", itCache.size());
 	delete init;
 	init = new SIteration(this, initstr, d);
-	printf("Cache elements after: %lu\n", itCache.size());
-
 }
 
 char SIterator::next(){
@@ -58,6 +55,37 @@ char SIterator::next(){
 		return direct->operator [](current-directoffset);
 	}else{
 		return operator [](current-1);
+	}
+}
+
+double SIterator::nextParam(){
+	double ret=0.0;
+	double emin=0.1;
+	bool afterdot=false;
+	char x=next();
+	while ((x >= '.' && x <= '9' && x != '/')){ //slash falls between . and 0
+		if (x == '.'){
+			afterdot=true;
+		}else if (afterdot){
+			ret+=(x-'0')*emin;
+			emin/=10.0;
+		}else{
+			ret*=10.0;
+			ret+=(x-'0');
+		}
+		x=next();
+	}
+	prev();
+	return ret;
+}
+
+void SIterator::prev(){
+	--current;
+	if (charsleft){
+		if (direct->len() > (charsleft+1)) //needs a check whether +1 is nessesary
+			++charsleft;
+		else
+			charsleft=0; //no more direct buffer
 	}
 }
 
