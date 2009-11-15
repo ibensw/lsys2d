@@ -47,6 +47,13 @@ void Calc::init(SIterator* ss, double aa){
 	triangles=0;
 }
 
+struct {
+	Point3D pos;
+	Direction dir;
+	long thick;
+	long length;
+} state;
+
 void Calc::calculate(){
 	Point3D p(0.0, 0.0, 0.0);
 	stack< pair<Point3D,Direction> > pointstack;
@@ -64,9 +71,9 @@ void Calc::calculate(){
 		delete triangles;
 
 	//points=new Point3D[cPoints];
-	points=new MemCache<Point3D>(cPoints, (64*1024*1024)/sizeof(Point3D)); //64MB blocks
+	points=new MemCache<Point3D>(cPoints, (256*1024*1024)/sizeof(Point3D)); //64MB blocks
 	//lines= new unsigned long[cLines*2];
-	lines=new MemCache<unsigned long>(cLines*2, (64*1024*1024)/sizeof(unsigned long));
+	lines=new MemCache<unsigned long>(cLines*2, (128*1024*1024)/sizeof(unsigned long));
 	//triangles=new unsigned long[cTriangles*3];
 	triangles=new MemCache<unsigned long>(cTriangles*3, (64*1024*1024)/sizeof(unsigned long));
 
@@ -192,3 +199,39 @@ void Calc::draw(Engine *gfx, void (Engine::* lineFunc)(const Point3D&, const Poi
 	//gfx->draw();
 }
 
+#include "engine/povengine.h"
+
+void Calc::draw2(){
+	povengine x("test.pov");
+	double factor=maxX-minX;
+	double factorY=maxY-minY;
+
+	if (factor<factorY)
+		factor=factorY;
+
+	x.setWindow(minX-1, minX+factor+1, minY-1, minY+factor+1, maxZ, minZ);
+
+	double var;
+	//gfx->setColor(0.67, 0.45, 0.01);
+	for (unsigned long i=0; i<cLines; i++){
+		/*var=(double)i/(cLines-1);
+			if (var<0.5)
+				gfx->setColor(2.0*var, 1.0, 0.0);
+			else
+				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);*/
+		x.drawLine(points->get(lines->get(2*i)), points->get(lines->get(2*i+1)));
+	}
+
+	//gfx->setColor(0.01, 0.74, 0.03);
+	for (unsigned long i=0; i<cTriangles; i++){
+		/*var=(double)i/(cTriangles-1);
+			if (var<0.5)
+				gfx->setColor(2.0*var, 1.0, 0.0);
+			else
+				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);*/
+		x.drawTriangle(points->get(triangles->get(3*i)), points->get(triangles->get(3*i+1)), points->get(triangles->get(3*i+2)));
+	}
+
+	//gfx.drawText(20, 20, "Hello world", 1.0f, 0.0f, 0.0f);
+	x.draw();
+}

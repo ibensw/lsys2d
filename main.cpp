@@ -12,6 +12,7 @@
 #include "fileinput.h"
 
 #include <time.h>
+#include <fstream>
 
 #define WIDTH 1000
 #define HEIGHT 800
@@ -23,32 +24,15 @@ int main(int argc, char *argv[]){
 
 	SIterator p(&ab);
 
-	/*Iterator p(&ab);
-
-	p.addRule('A', "B-A-B");
-	p.addRule('B', "A+B+A");
-
-	p.setInit("A");
-	for (int i=0; i<15; ++i)
-		p.Iterate();
-
-	printf("%i:\n", p.length());
-	p.front();
-
-	for (unsigned long i=0; i<p.length(); ++i){
-		char x = p.next();
-		//char x = iter[i];
-		//printf("%c\n", x);
-	}
-	printf("\n");
-
-	return 0;*/
-
 	Calc c(&ab);
 	Engine gfx;
 	gfx.init(WIDTH, HEIGHT);
 	gfx.setViewport(0, 0, WIDTH, HEIGHT);
-	double angle;
+
+	double defaultangle=M_PI/4.0;
+	double defaultlen=1.0;
+	double defaultthick=0.1;
+
 	double rotate=0.0;
 
 	double rotatespeed=0.1;
@@ -63,7 +47,7 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-	if (read_file(argv[1], p, ab, angle)!=0){
+	if (read_file(argv[1], p, ab, defaultangle)!=0){
 		printf("Error parsing XML file\n");
 		return 1;
 	}
@@ -74,7 +58,7 @@ int main(int argc, char *argv[]){
 	clock_t Tstart=clock();
 	clock_t Tend;
 
-	c.init(&p, angle*M_PI/180);
+	c.init(&p, defaultangle*M_PI/180);
 	c.calculate();
 
 	while (running){
@@ -126,7 +110,7 @@ int main(int argc, char *argv[]){
 						running=false;
 						break;
 					case SDLK_c:
-						c.init(&p, angle*M_PI/180);
+						c.init(&p, defaultangle*M_PI/180);
 						c.calculate();
 						break;
 					case SDLK_LEFT:
@@ -151,10 +135,12 @@ int main(int argc, char *argv[]){
 					case SDLK_s:
 						{
 							p.front();
-							printf("size: %lu\n", p.length());
+							ofstream outfile("out");
+							printf("size: %lu, printing to: \n", p.length());
 							for (unsigned long x=0; x<p.length(); ++x){
-								printf("%c", p.next());
+								outfile.put(p.next());
 							}
+							outfile.close();
 							printf("\n");
 						}
 						break;
@@ -165,6 +151,10 @@ int main(int argc, char *argv[]){
 						break;
 					case SDLK_m:
 						Screenshot("out.png", 0, 0, WIDTH, HEIGHT);
+						break;
+					case SDLK_t:
+						c.draw2();
+						printf("Draw2 called and returned.\n");
 						break;
 					case SDLK_l:
 						if (lineFunc == &Engine::drawLine){

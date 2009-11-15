@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     iterator2.cpp \
     openglshot.cpp \
     fileinput.cpp \
-    iteratator3.cpp
+    iteratator3.cpp \
+    engine/povengine.cpp
 HEADERS += point2d.h \
     parser.h \
     calc.h \
@@ -35,4 +36,5 @@ HEADERS += point2d.h \
     iterator2.h \
     openglshot.h \
     fileinput.h \
-    iteratator3.h
+    iteratator3.h \
+    engine/povengine.h
