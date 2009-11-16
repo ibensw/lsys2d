@@ -27,6 +27,7 @@ void povengine::setWindow(double l, double r, double b, double t, double n, doub
 	outfile << "camera {" << endl
 			<< " location <" << (l+r)/2.0 << ", " << (b+t)/2.0 << ", " << -(dist2>dist?dist2:dist)-n << ">" << endl
 			<< " look_at <" << (l+r)/2.0 << ", " << (b+t)/2.0 << ", 0>" << endl
+			<< " angle 45.0" << endl
 			<< "}" << endl
 //			<< "light_source { <" << (l+r)/2.0 << ", " << (b+t)/2.0 << ", " << -(dist2>dist?dist2:dist)-n << "> color White}" << endl
 			<< "light_source { <" << l << ", " << t << ", " << -(dist2>dist?dist2:dist)-n << "> color White fade_distance " << (t-b)/2.0 << " fade_power 1}" << endl << endl;
@@ -36,11 +37,11 @@ void povengine::draw(){
 	outfile.close();
 }
 
-void povengine::drawLine(const Point3D& a, const Point3D& b){
+void povengine::drawLine(const Point3D& a, const Point3D& b, double thick){
 	outfile << "cylinder {" << endl
 			<< " <" << a.c[0] << ", " << a.c[1] << ", " << a.c[2] << ">," << endl
 			<< " <" << b.c[0] << ", " << b.c[1] << ", " << b.c[2] << ">," << endl
-			<< " 0.10" << endl
+			<< " "<< thick << endl
 			<< " texture { T_Wood1 }" << endl
 			<< " finish { ambient 0.3 diffuse 0.6 }" << endl
 			<< "}" << endl << endl;
@@ -57,5 +58,5 @@ void povengine::drawTriangle(const Point3D& a, const Point3D& b, const Point3D& 
 }
 
 void povengine::drawLinePlain(const Point3D& a, const Point3D& b){
-	drawLine(a, b);
+	drawLine(a, b, 0.1);
 }
