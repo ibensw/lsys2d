@@ -59,6 +59,11 @@ char SIterator::next(){
 }
 
 double SIterator::nextParam(){
+	SIteration* backup_direct=direct;
+	unsigned long backup_directoffset=directoffset;
+	unsigned long backup_charsleft=charsleft;
+	unsigned long backup_current=current;
+
 	double ret=0.0;
 	double emin=0.1;
 	bool afterdot=false;
@@ -73,20 +78,21 @@ double SIterator::nextParam(){
 			ret*=10.0;
 			ret+=(x-'0');
 		}
+
+		backup_direct=direct;
+		backup_directoffset=directoffset;
+		backup_charsleft=charsleft;
+		backup_current=current;
+
 		x=next();
 	}
-	prev();
-	return ret;
-}
 
-void SIterator::prev(){
-	--current;
-	if (charsleft){
-		if (direct->len() > (charsleft+1)) //needs a check whether +1 is nessesary
-			++charsleft;
-		else
-			charsleft=0; //no more direct buffer
-	}
+	direct=backup_direct;
+	directoffset=backup_directoffset;
+	charsleft=backup_charsleft;
+	current=backup_current;
+
+	return ret;
 }
 
 void SIterator::setDirect(SIteration* sit, unsigned long bufflen){

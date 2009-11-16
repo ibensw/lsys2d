@@ -51,7 +51,6 @@ class SIterator{
 		inline void front(){ charsleft=0; current=0; }
 		char next();
 		double nextParam();
-		void prev();
 		void setDirect(SIteration*, unsigned long);
 		inline action alphalookup(char c){ return ab->lookup(c); }
 		inline unsigned long countLines() const {return init->countLines();}
