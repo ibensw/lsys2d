@@ -22,10 +22,10 @@ Alphabet::Alphabet():
 	alphatable['}']=POLYEND;
 	alphatable['(']=PARASTART;
 	alphatable[')']=PARAEND;
-	alphatable['!']=LENGTHLESS;
-	alphatable['?']=LENGTHMORE;
-	alphatable['\'']=THICKLESS;
-	alphatable['"']=THICKMORE;
+	alphatable['!']=THICKLESS;
+	alphatable['?']=THICKMORE;
+	alphatable['\'']=LENGTHLESS;
+	alphatable['"']=LENGTHMORE;
 }
 
 Alphabet::~Alphabet(){

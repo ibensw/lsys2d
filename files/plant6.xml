@@ -3,7 +3,7 @@
 	<alphabet action='draw'>AFSL</alphabet>
 	<alphabet action='move'>f</alphabet>
 	<initiator>A</initiator>
-	<rule find='A'>[&amp;FL!A]/////'[&amp;FL!A]///////'[&amp;FL!A]</rule>
+	<rule find='A'>'[&amp;FL!A]/////[&amp;FL!A]///////[&amp;FL!A]</rule>
 	<rule find='F'>S/////F</rule>
 	<rule find='S'>FL</rule>
 	<rule find='L'>['''^^{-f+f+f-\\|-f+f+f}]</rule>
