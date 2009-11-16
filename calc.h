@@ -25,6 +25,7 @@ class Calc
 	MemCache<Point3D>* points;
 //	unsigned long *lines;
 	MemCache<unsigned long>* lines;
+	MemCache<double>* thicks;
 //	unsigned long *triangles;
 	MemCache<unsigned long>* triangles;
 	unsigned long cLines;
@@ -44,7 +45,7 @@ public:
 	virtual ~Calc();
 	void init(SIterator* ss, double aa);
 	void calculate();
-	void draw(Engine* gfx, void (Engine::* lineFunc)(const Point3D&, const Point3D&));
+	void draw(Engine* gfx, void (Engine::* lineFunc)(const Point3D&, const Point3D&, double));
 	inline MemCache<Point3D>* getPoints(){return points;}
 	inline MemCache<unsigned long>* getLines(){return lines;}
 	inline bool isDone(){return true;}

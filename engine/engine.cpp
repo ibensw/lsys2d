@@ -131,7 +131,7 @@ void Engine::setWindow(double l, double r, double b, double t, double n, double 
 	//gluLookAt(100.0, 100.0, 100.0, (r-l)/2.0, (t-b)/2.0, 0.0, 0.0, 1.0, 0.0);
 }
 
-void Engine::drawLinePlain(const Point3D& a, const Point3D& b){
+void Engine::drawLinePlain(const Point3D& a, const Point3D& b, double thick){
 	/* commented lines work even if length != 1 */
 	
 	glBegin(GL_LINES);
@@ -161,7 +161,7 @@ void Engine::drawLinePlain(const Point3D& a, const Point3D& b){
 	glPopMatrix();*/
 }
 
-void Engine::drawLine(const Point3D& a, const Point3D& b){
+void Engine::drawLine(const Point3D& a, const Point3D& b, double thick){
 	/* commented lines work even if length != 1 */
 
 	/*glBegin(GL_LINES);
@@ -173,8 +173,8 @@ void Engine::drawLine(const Point3D& a, const Point3D& b){
 	Point3D z(0.0, 0.0, 1.0);
 	Point3D axis=z*c;
 
-	//double angle=acos((c^z) / sqrt(c.LengthSquared()*z.LengthSquared()));
-	double angle=acos(c^z);
+	double angle=acos((c^z) / sqrt(c.LengthSquared()*z.LengthSquared()));
+	//double angle=acos(c^z);
 
 	glPushMatrix();
 	//glRotated(r, 0.0, 1.0, 0.0);
@@ -184,8 +184,8 @@ void Engine::drawLine(const Point3D& a, const Point3D& b){
 
 	GLUquadricObj *quadratic;
 	quadratic=gluNewQuadric();
-	//gluCylinder(quadratic, 0.10f, 0.10f, sqrt(c.LengthSquared()) ,32, 1);
-	gluCylinder(quadratic, 0.11f, 0.11f, 1.0f ,12, 1);
+	gluCylinder(quadratic, thick, thick, sqrt(c.LengthSquared()) ,32, 1);
+	//gluCylinder(quadratic, 0.11f, 0.11f, 1.0f ,12, 1);
 	gluDeleteQuadric(quadratic);
 
 	glPopMatrix();

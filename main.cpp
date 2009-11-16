@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
 	bool drawing=true;
 	unsigned int iterations=0;
 
-	void (Engine::* lineFunc)(const Point3D&, const Point3D&)=&Engine::drawLine;
+	void (Engine::* lineFunc)(const Point3D&, const Point3D&, double)=&Engine::drawLine;
 
 	if (argc < 2){
 		printf("No filename specified\n");

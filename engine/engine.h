@@ -30,8 +30,8 @@ public:
 	void rotateX(double r);
 	void rotateY(double r);
 	void rotateZ(double r);
-	void drawLine(const Point3D&, const Point3D&);
-	void drawLinePlain(const Point3D&, const Point3D&);
+	void drawLine(const Point3D&, const Point3D&, double thick);
+	void drawLinePlain(const Point3D&, const Point3D&, double thick);
 	void drawText(GLint x, GLint y, char* s, GLfloat r, GLfloat g, GLfloat b);
 	void drawTriangle(const Point3D&, const Point3D&, const Point3D&);
 	void setColor(float r, float g, float b);
