@@ -5,64 +5,162 @@
 
 #include "point3d.h"
 #include "alphabet.h"
-//#include "iterator2.h"
 #include "iteratator3.h"
 #include "stringstat.h"
 #include "openglshot.h"
 #include "fileinput.h"
+#include "lsystem.h"
+#include <vector>
+#include <string>
+#include <map>
 
 #include <time.h>
 #include <fstream>
 
-#define WIDTH 1000
-#define HEIGHT 800
-
 using namespace std;
 
+enum COMMAND {NODEF=0, QUIT, ITERATE, CALC, POV, RENDER, ROTATE};
+
+inline vector<string> splitstring(string line){
+	size_t found = 0;
+	size_t last = 0;
+	vector<string> ret;
+	if (!line.size()){
+		return ret;
+	}
+
+	while ((found = line.find(' ', last)) != string::npos){
+		ret.push_back(line.substr(last, found-last));
+		last=found+1;
+	}
+	ret.push_back(line.substr(last, line.length()-last));
+
+	return ret;
+}
+
 int main(int argc, char *argv[]){
-	Alphabet ab;
-
-	SIterator p(&ab);
-
-	Calc c(&ab);
-	Engine gfx;
-	gfx.init(WIDTH, HEIGHT);
-	gfx.setViewport(0, 0, WIDTH, HEIGHT);
-
-	double defaultangle=M_PI/4.0;
-	double defaultlen=1.0;
-	double defaultthick=0.1;
-
-	double rotate=0.0;
-
-	double rotatespeed=0.1;
-	double pitch=0.0;
-	bool drawing=true;
-	unsigned int iterations=0;
-
-	void (Engine::* lineFunc)(const Point3D&, const Point3D&, double)=&Engine::drawLine;
+	LSystem mainsystem;
 
 	if (argc < 2){
 		printf("No filename specified\n");
 		return 1;
 	}
 
-	if (read_file(argv[1], p, ab, defaultangle)!=0){
-		printf("Error parsing XML file\n");
+	if (read_file(argv[1], mainsystem)!=0){
+		printf("Error parsing XML file, exiting...\n");
 		return 1;
 	}
 
-	SDL_Event event;
-	bool running=true;
-	unsigned long frame=0;
-	clock_t Tstart=clock();
+	clock_t Tstart;
 	clock_t Tend;
 
-	c.init(&p, defaultangle*M_PI/180);
-	c.calculate();
+	bool running=true;
+	char input[256];
+
+	map<string, COMMAND> cmdmap;
+	cmdmap["quit"]=		cmdmap["q"]=	QUIT;
+	cmdmap["iterate"]=	cmdmap["i"]=	ITERATE;
+	cmdmap["calc"]=		cmdmap["c"]=	CALC;
+	cmdmap["pov"]=		cmdmap["p"]=	POV;
+	cmdmap["render"]=		cmdmap["r"]=	RENDER;
+	cmdmap["rotate"]=		cmdmap["rt"]=	ROTATE;
+
+	string lastinput;
+	vector<string> cmd;
+
+	int iterations=0;
+
+	Engine* opengl=0;
 
 	while (running){
-		if (drawing){
+		if (opengl){
+			opengl->clear();
+			mainsystem.c->draw(opengl, 0.0, mainsystem.cm);
+		}
+
+		printf("> ");
+		if (scanf("%[^\n]", input)==0) input[0]=0;
+		getchar();
+		if (input[0] != 0){
+			lastinput=input;
+			cmd=splitstring(lastinput);
+		}else{
+			printf("> %s\n", lastinput.c_str());
+		}
+
+		Tstart=clock();
+		switch(cmdmap[cmd[0]]){
+			case QUIT:
+				running=false;
+				break;
+
+			case ITERATE:
+				{
+					int relative=1;
+					if (cmd.size()>1){
+						relative=atoi(cmd[1].c_str());
+					}
+					iterations+=relative;
+					mainsystem.it->setIteration(iterations);
+				}
+				break;
+
+			case CALC:
+				mainsystem.c->calculate();
+				break;
+
+			case POV:
+				if (cmd.size()>1){
+					printf("Writing to %s...\n", cmd[1].c_str());
+					mainsystem.c->draw2(cmd[1].c_str(), mainsystem.cm);
+				}else{
+					printf("Writing to out.pov...\n");
+					mainsystem.c->draw2("out.pov", mainsystem.cm);
+				}
+
+				break;
+
+			case RENDER:
+				if (!opengl){
+					opengl = new Engine();
+					opengl->init(800, 600);
+				}
+
+				if (cmd.size()>1){
+					cmd.push_back("zbuff");
+				}
+
+				if (cmd[1]=="zbuff"){
+					opengl->setLinePlain(false);
+				}else if (cmd[1]=="line"){
+					opengl->setLinePlain(true);
+				}else if (cmd[1]=="off"){
+					delete opengl;
+					opengl=0;
+				}
+
+				break;
+
+			case ROTATE:
+				if (opengl){
+					for (unsigned int i=0; i<360; ++i){
+						opengl->clear();
+						//opengl->rotateY(i);
+						mainsystem.c->draw(opengl, i, mainsystem.cm);
+					}
+				}else{
+					printf("No render active.\n");
+				}
+				break;
+
+			default:
+				printf("Command not recognized.\n");
+				break;
+		}
+		Tend=clock();
+		printf("(%f ms)\n", (1000.0*(Tend-Tstart))/(double)CLOCKS_PER_SEC);
+
+		/*if (drawing){
 			if (frame==1500){
 				Tend=clock();
 				printf("FPS: %f\n", 150.0*((double)CLOCKS_PER_SEC)/(Tend-Tstart));
@@ -167,9 +265,12 @@ int main(int argc, char *argv[]){
 						break;
 				}
 			}
-		}
+		}*/
 	}
 
 	printf("Cleaning up...\n");
+
+	if (opengl)
+		delete opengl;
 	return 0;
 }

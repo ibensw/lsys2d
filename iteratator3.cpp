@@ -27,7 +27,7 @@ SIteration* SIterator::getIteration(char c, unsigned int d){
 	if (it == itCache.end()){
 		SIteration* siter = new SIteration(this, rules[c], d);
 		itCache[std::make_pair<char, unsigned int>(c, d)] = siter;
-		printf("CACHEADD: %c, %u\n", c, d);
+		//printf("CACHEADD: %c, %u\n", c, d);
 		return siter;
 	}else{
 		return it->second;
@@ -68,9 +68,11 @@ double SIterator::nextParam(){
 	double emin=0.1;
 	bool afterdot=false;
 	char x=next();
-	while ((x >= '.' && x <= '9' && x != '/')){ //slash falls between . and 0
+	while ((x >= '.' && x <= '9' && x != '/') || x == '('){ //slash falls between . and 0
 		if (x == '.'){
 			afterdot=true;
+		}else if (x == '('){
+			//nothing
 		}else if (afterdot){
 			ret+=(x-'0')*emin;
 			emin/=10.0;

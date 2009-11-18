@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='27.5'>
+	<alphabet action='draw'>FA</alphabet>
+	<alphabet action='move'>f</alphabet>
+	<initiator>FFA</initiator>
+	<rule find='A'>c[+&amp;/F'!A][-^/F'!A]</rule>
+	<rule find='L'>^'['''^^{-f+f+f-\|-f+f+f}]</rule>
+</lsystem>
+

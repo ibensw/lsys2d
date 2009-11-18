@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='90'>
+	<alphabet action='draw'>F</alphabet>
+	<alphabet action='move'>HX</alphabet>
+	<initiator>G&amp;G&amp;G&amp;G&amp;\G/+X&amp;G</initiator>
+	<rule find='G'>F[+F+F+F]</rule>
+	<rule find='F'>F[+[//F]F-//F\\-[//F]F+F]FF</rule>
+	<rule find='X'>H</rule>
+	<rule find='H'>HHH</rule>
+</lsystem>
+
