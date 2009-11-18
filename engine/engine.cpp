@@ -8,6 +8,7 @@ using namespace std;
 
 Engine::Engine()
 {
+	plain=false;
 }
 
 Engine::~Engine(){
@@ -47,7 +48,7 @@ void Engine::init(int w, int h){
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective( 45.0f, (GLfloat)w/(GLfloat)h, 1.1f, std::numeric_limits<float>::max());
+	gluPerspective( 50.0f, (GLfloat)w/(GLfloat)h, 1.1f, std::numeric_limits<float>::max());
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
 	//glTranslatef( 0.0f, 0.0f, ZTRANS);
@@ -62,7 +63,7 @@ void Engine::init(int w, int h){
 	//glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	//glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
-	GLfloat lightInt[] = {0.6f, 0.6f, 0.6f, 1.0f};
+	GLfloat lightInt[] = {0.3f, 0.3f, 0.3f, 1.0f};
 	GLfloat lightPos[] = {2.0f, 6.0f, 3.0f, 0.0f};
 
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
@@ -131,76 +132,53 @@ void Engine::setWindow(double l, double r, double b, double t, double n, double 
 	//gluLookAt(100.0, 100.0, 100.0, (r-l)/2.0, (t-b)/2.0, 0.0, 0.0, 1.0, 0.0);
 }
 
-void Engine::drawLinePlain(const Point3D& a, const Point3D& b, double thick){
-	/* commented lines work even if length != 1 */
+void Engine::drawLinePlain(const Line& l){
+	Point3D a=points->get(l.p1);
+	Point3D b=points->get(l.p2);
 	
 	glBegin(GL_LINES);
 	glVertex3d(a.c[0], a.c[1], a.c[2]);
 	glVertex3d(b.c[0], b.c[1], b.c[2]);
 	glEnd();
-
-	/*Point3D c=b-a;
-	Point3D z(0.0, 0.0, 1.0);
-	Point3D axis=z*c;
-
-	//double angle=acos((c^z) / sqrt(c.LengthSquared()*z.LengthSquared()));
-	double angle=acos(c^z);
-
-	glPushMatrix();
-	//glRotated(r, 0.0, 1.0, 0.0);
-	glTranslated(a.c[0], a.c[1], a.c[2]);
-
-	glRotated(angle*180/M_PI, axis.c[0], axis.c[1], axis.c[2]);
-
-	GLUquadricObj *quadratic;
-	quadratic=gluNewQuadric();
-	//gluCylinder(quadratic, 0.10f, 0.10f, sqrt(c.LengthSquared()) ,32, 1);
-	gluCylinder(quadratic, 0.11f, 0.11f, 1.0f ,12, 1);
-	gluDeleteQuadric(quadratic);
-
-	glPopMatrix();*/
 }
 
-void Engine::drawLine(const Point3D& a, const Point3D& b, double thick){
-	/* commented lines work even if length != 1 */
+void Engine::drawLine(const Line& l){
+	if (plain)
+		return drawLinePlain(l);
 
-	/*glBegin(GL_LINES);
-	glVertex3d(a.c[0], a.c[1], a.c[2]);
-	glVertex3d(b.c[0], b.c[1], b.c[2]);
-	glEnd();*/
+	Point3D a=points->get(l.p1);
+	Point3D b=points->get(l.p2);
 
 	Point3D c=b-a;
 	Point3D z(0.0, 0.0, 1.0);
 	Point3D axis=z*c;
 
 	double angle=acos((c^z) / sqrt(c.LengthSquared()*z.LengthSquared()));
-	//double angle=acos(c^z);
 
 	glPushMatrix();
-	//glRotated(r, 0.0, 1.0, 0.0);
 	glTranslated(a.c[0], a.c[1], a.c[2]);
 
 	glRotated(angle*180/M_PI, axis.c[0], axis.c[1], axis.c[2]);
 
 	GLUquadricObj *quadratic;
 	quadratic=gluNewQuadric();
-	gluCylinder(quadratic, thick, thick, sqrt(c.LengthSquared()) ,32, 1);
-	//gluCylinder(quadratic, 0.11f, 0.11f, 1.0f ,12, 1);
+	gluCylinder(quadratic, l.thickness, l.thickness, sqrt(c.LengthSquared()) ,32, 1);
 	gluDeleteQuadric(quadratic);
 
 	glPopMatrix();
 }
 
 
-void Engine::drawTriangle(const Point3D& a, const Point3D& b, const Point3D& c){
-	//glPushMatrix();
-	//glRotated(r, 0.0, 1.0, 0.0);
+void Engine::drawTriangle(const Triangle& l){
+	Point3D a=points->get(l.p1);
+	Point3D b=points->get(l.p2);
+	Point3D c=points->get(l.p3);
+
 	glBegin(GL_POLYGON);
 	glVertex3d(a.c[0], a.c[1], a.c[2]);
 	glVertex3d(b.c[0], b.c[1], b.c[2]);
 	glVertex3d(c.c[0], c.c[1], c.c[2]);
 	glEnd();
-	//glPopMatrix();
 }
 
 void Engine::rotateY(double r){
@@ -215,7 +193,7 @@ void Engine::rotateZ(double r){
 	glRotated(r, 0.0, 0.0, 1.0);
 }
 
-void Engine::drawText(GLint x, GLint y, char* s, GLfloat r, GLfloat g, GLfloat b){
+/*void Engine::drawText(GLint x, GLint y, char* s, GLfloat r, GLfloat g, GLfloat b){
 	int lines;
 	char* p;
 
@@ -239,7 +217,7 @@ void Engine::drawText(GLint x, GLint y, char* s, GLfloat r, GLfloat g, GLfloat b
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-}
+}*/
 
 
 void Engine::setColor(float r, float g, float b){

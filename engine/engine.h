@@ -7,6 +7,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include "point3d.h"
+#include "../memcache.h"
 
 class Engine
 {
@@ -18,9 +19,12 @@ class Engine
 	double bottom;
 	double near;
 	double far;
+	MemCache<Point3D>* points;
+	bool plain;
 
 public:
 	Engine();
+	inline void setPoints(MemCache<Point3D>* s){ points=s; }
 	virtual ~Engine();
 	void init(int w, int h);
 	void draw();
@@ -30,11 +34,11 @@ public:
 	void rotateX(double r);
 	void rotateY(double r);
 	void rotateZ(double r);
-	void drawLine(const Point3D&, const Point3D&, double thick);
-	void drawLinePlain(const Point3D&, const Point3D&, double thick);
-	void drawText(GLint x, GLint y, char* s, GLfloat r, GLfloat g, GLfloat b);
-	void drawTriangle(const Point3D&, const Point3D&, const Point3D&);
+	void drawLine(const Line& l);
+	void drawLinePlain(const Line& l);
+	void drawTriangle(const Triangle&);
 	void setColor(float r, float g, float b);
+	inline void setLinePlain(bool p=true){ plain=p; }
 
 	inline int PollEvent(SDL_Event &event){return SDL_PollEvent(&event);}
 };

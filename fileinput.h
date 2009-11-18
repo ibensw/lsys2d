@@ -3,8 +3,9 @@
 
 #include "iteratator3.h"
 #include "alphabet.h"
+#include "lsystem.h"
 #include <string>
 
-int read_file(std::string filename, SIterator &p, Alphabet &a, double &angle);
+int read_file(std::string filename, LSystem &system);
 
 #endif // FILEINPUT_H

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='15'>
+	<alphabet action='draw'>FAB</alphabet>
+	<initiator>FFFFFA</initiator>
+	<rule find='A'>[&amp;&amp;&amp;&amp;B]/////FF[&amp;&amp;&amp;&amp;B]//////FF[&amp;&amp;&amp;&amp;B]//////FFc!'A</rule>
+	<rule find='B'>!F+++++[F+&amp;/F''&amp;B]-----[F+&amp;\F''&amp;B]</rule>
+</lsystem>
+

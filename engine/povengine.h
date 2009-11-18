@@ -2,11 +2,14 @@
 #define POVENGINE_H
 #include <fstream>
 #include "../point3d.h"
-
+#include "../direction.h"
+#include "../memcache.h"
+#include "../colormap.h"
 
 class povengine{
 	public:
-		povengine(char* filename);
+		povengine(const char* filename, const ColorMap* cm);
+		inline void setPoints(MemCache<Point3D>* s){ points=s; }
 		void draw();
 		void clear();
 		inline void setViewport(int x, int y, int w, int h) {}
@@ -14,14 +17,15 @@ class povengine{
 		inline void rotateX(double r){}
 		inline void rotateY(double r){}
 		inline void rotateZ(double r){}
-		void drawLine(const Point3D&, const Point3D&, double);
-		void drawLinePlain(const Point3D&, const Point3D&);
-		//void drawText(GLint x, GLint y, char* s, GLfloat r, GLfloat g, GLfloat b);
-		void drawTriangle(const Point3D&, const Point3D&, const Point3D&);
+		void drawLine(const Line& l);
+		void drawLinePlain(const Line& l);
+		void drawTriangle(const Triangle& l);
 		void setColor(float r, float g, float b);
 
 	private:
+		MemCache<Point3D>* points;
 		std::ofstream outfile;
+		ColorMap* col;
 };
 
 #endif // POVENGINE_H

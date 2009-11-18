@@ -8,17 +8,20 @@
 
 using namespace std;
 
-int read_file(string filename, SIterator &p, Alphabet &a, double &angle){
+int read_file(string filename, LSystem &system){
 	TiXmlDocument doc(filename);
 	if (!doc.LoadFile()){
+		printf("Unable to load file.\n");
 		return 1;
 	}
 
 	TiXmlElement* root=doc.RootElement();
-	if (root->QueryDoubleAttribute("sigma", &angle) != TIXML_SUCCESS){
-		angle*=M_PI/180;
-		return 1;
+	if (root->QueryDoubleAttribute("sigma", &(system.angle)) == TIXML_SUCCESS){
+		system.angle*=M_PI/180;
 	}
+
+	root->QueryDoubleAttribute("length", &(system.startlength));
+	root->QueryDoubleAttribute("radius", &(system.startthick));
 
 	TiXmlElement* child=root->FirstChildElement("alphabet");
 	string type;
@@ -27,45 +30,62 @@ int read_file(string filename, SIterator &p, Alphabet &a, double &angle){
 		type=child->Attribute("action");
 		r=child->GetText();
 		if (type == "draw")
-			a.setAlphabet(DRAW, r);
+			system.ab->setAlphabet(DRAW, r);
 		else if (type == "move")
-			a.setAlphabet(MOVE, r);
+			system.ab->setAlphabet(MOVE, r);
 		else if (type == "idle")
-			a.setAlphabet(IDLE, r);
+			system.ab->setAlphabet(IDLE, r);
 		else if (type == "push")
-			a.setAlphabet(PUSH, r);
+			system.ab->setAlphabet(PUSH, r);
 		else if (type == "pop")
-			a.setAlphabet(POP, r);
+			system.ab->setAlphabet(POP, r);
 		else if (type == "turn left")
-			a.setAlphabet(TURNL, r);
+			system.ab->setAlphabet(TURNL, r);
 		else if (type == "pitch up")
-			a.setAlphabet(PITCHU, r);
+			system.ab->setAlphabet(PITCHU, r);
 		else if (type == "pitch down")
-			a.setAlphabet(PITCHD, r);
+			system.ab->setAlphabet(PITCHD, r);
 		else if (type == "roll left")
-			a.setAlphabet(ROLLL, r);
+			system.ab->setAlphabet(ROLLL, r);
 		else if (type == "roll right")
-			a.setAlphabet(ROLLR, r);
+			system.ab->setAlphabet(ROLLR, r);
 		else if (type == "full turn")
-			a.setAlphabet(FULLTURN, r);
+			system.ab->setAlphabet(FULLTURN, r);
 		child=child->NextSiblingElement("alphabet");
 	}
 
 	child=root->FirstChildElement("initiator");
 	if (!child){
+		printf("No initiator found.\n");
 		return 1;
 	}
-	p.setIteration(StringStat(child->GetText()));
-
+	system.it->setIteration(StringStat(child->GetText()), 0);
 
 	child=root->FirstChildElement("rule");
 	char s;
 	while (child){
 		s=child->Attribute("find")[0];
 		r=child->GetText();
-		p.addRule(s, r);
+		system.it->addRule(s, r);
 		child=child->NextSiblingElement("rule");
 	}
+
+	child=root->FirstChildElement("color");
+	int id;
+	float red;
+	float green;
+	float blue;
+	while (child){
+		red=green=blue=0.0;
+		child->QueryFloatAttribute("r", &red);
+		child->QueryFloatAttribute("g", &green);
+		child->QueryFloatAttribute("b", &blue);
+		child->QueryIntAttribute("id", &id);
+		system.cm->add((unsigned int)id, Color(red, green, blue));
+		child=child->NextSiblingElement("color");
+	}
+
+	system.c->init(system.it, system.angle);
 
 	return 0;
 }

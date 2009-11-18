@@ -62,4 +62,24 @@ public:
 	return oss;
 }*/
 
+struct Line{
+	inline Line(){};
+	inline Line(unsigned long pp1, unsigned long pp2, double pt, unsigned int pc):
+			p1(pp1), p2(pp2), thickness(pt), color(pc){}
+	unsigned long p1;
+	unsigned long p2;
+	double thickness;
+	unsigned int color;
+};
+
+struct Triangle{
+	inline Triangle(){}
+	inline Triangle(unsigned long pp1, unsigned long pp2, unsigned long pp3, unsigned int pc):
+			p1(pp1), p2(pp2), p3(pp3), color(pc){}
+	unsigned long p1;
+	unsigned long p2;
+	unsigned long p3;
+	unsigned int color;
+};
+
 #endif // POINT3D_H

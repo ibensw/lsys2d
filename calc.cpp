@@ -16,7 +16,7 @@
 using namespace std;
 
 Calc::Calc(Alphabet* a):
-		s(0), a(0), points(0), lines(0), thicks(0), triangles(0), cLines(0), cTriangles(0), ab(a), minX(0), maxX(0), minY(0), maxY(0), minZ(0), maxZ(0)
+		s(0), a(0), points(0), lines(0), triangles(0), cLines(0), cTriangles(0), ab(a), minX(0), maxX(0), minY(0), maxY(0), minZ(0), maxZ(0)
 {
 }
 
@@ -27,8 +27,6 @@ Calc::~Calc(){
 		delete lines;
 	if (triangles)
 		delete triangles;
-	if (thicks)
-		delete thicks;
 }
 
 void Calc::init(SIterator* ss, double aa){
@@ -47,9 +45,6 @@ void Calc::init(SIterator* ss, double aa){
 	if (triangles)
 		delete triangles;
 	triangles=0;
-	if (thicks)
-		delete thicks;
-	thicks=0;
 }
 
 struct DrawState{
@@ -57,9 +52,11 @@ struct DrawState{
 	Direction dir;
 	double thick;
 	double length;
+	unsigned int color;
 };
 
 void Calc::calculate(){
+	printf("angle=%f\n", a);
 	Point3D pp(0.0, 0.0, 0.0);
 	stack< DrawState > pointstack;
 	Point3D f(0.0, 1.0, 0.0); //forward
@@ -71,6 +68,7 @@ void Calc::calculate(){
 	curr.dir=dd;
 	curr.thick=0.1;
 	curr.length=1.0;
+	curr.color=1;
 
 	if (points)
 		delete points;
@@ -81,22 +79,16 @@ void Calc::calculate(){
 	if (triangles)
 		delete triangles;
 
-	if (thicks)
-		delete thicks;
-
-	//points=new Point3D[cPoints];
 	points=new MemCache<Point3D>(cPoints, (256*1024*1024)/sizeof(Point3D)); //64MB blocks
-	//lines= new unsigned long[cLines*2];
-	lines=new MemCache<unsigned long>(cLines*2, (128*1024*1024)/sizeof(unsigned long));
-	thicks=new MemCache<double>(cLines, (64*1024*1024)/sizeof(double));
-	//triangles=new unsigned long[cTriangles*3];
-	triangles=new MemCache<unsigned long>(cTriangles*3, (64*1024*1024)/sizeof(unsigned long));
+	lines=new MemCache<Line>(cLines, (128*1024*1024)/sizeof(Line));
+	triangles=new MemCache<Triangle>(cTriangles, (64*1024*1024)/sizeof(Triangle));
 
 	unsigned long pCount=0;
 	unsigned long lCount=0;
 	unsigned long tCount=0;
 	unsigned long polystack=0;
 	unsigned long polyPoint=0;
+	double param;
 
 	s->front();
 	char x;
@@ -109,9 +101,7 @@ void Calc::calculate(){
 				curr.pos+=(curr.dir.GetForward()*curr.length);
 				(*points)[pCount++]=curr.pos;
 
-				(*thicks)[lCount/2]=curr.thick;
-				(*lines)[lCount++]=pCount-2;
-				(*lines)[lCount++]=pCount-1;
+				(*lines)[lCount++] = Line(pCount-2, pCount-1, curr.thick, curr.color);
 
 				if (curr.pos.c[0]<minX) minX=curr.pos.c[0];
 				if (curr.pos.c[0]>maxX) maxX=curr.pos.c[0];
@@ -131,9 +121,7 @@ void Calc::calculate(){
 				if (curr.pos.c[2]>maxZ) maxZ=curr.pos.c[2];
 
 				if (polystack && curr.pos!=points->get(polyPoint) && points->get(pCount-2)!=points->get(polyPoint)){
-					(*triangles)[tCount++]=polyPoint;
-					(*triangles)[tCount++]=pCount-2;
-					(*triangles)[tCount++]=pCount-1;
+					(*triangles)[tCount++] = Triangle(polyPoint, pCount-2, pCount-1, curr.color);
 				}
 
 				break;
@@ -187,48 +175,59 @@ void Calc::calculate(){
 				pointstack.pop();
 				--polystack;
 				break;
+			case COLOR:
+				param=s->nextParam();
+				if (s){
+					curr.color=(unsigned int)param;
+				}else{
+					++curr.color;
+				}
+				break;
 			default:
 				break;
 		}
 	}
 
-
-	//points=(Point3D*) realloc(points, pCount*sizeof(Point3D));
-	//triangles=(unsigned long*) realloc(triangles, tCount*sizeof(unsigned long));
 	cPoints=pCount;
-	cTriangles=tCount/3;
+	cLines=lCount;
+	cTriangles=tCount;
 }
 
-void Calc::draw(Engine *gfx, void (Engine::* lineFunc)(const Point3D&, const Point3D&, double)){
+void Calc::draw(Engine *gfx, double rot, ColorMap* cm){
 	double var;
+	gfx->setPoints(points);
+	double factor=maxX-minX;
+	double factorY=maxY-minY;
+
+	if (factor<factorY)
+		factor=factorY;
+
+	gfx->setWindow(minX-1, minX+factor+1, minY-1, minY+factor+1, maxZ, minZ);
+	gfx->rotateY(rot);
+
+
 	gfx->setColor(0.67, 0.45, 0.01);
 	for (unsigned long i=0; i<cLines; i++){
-		var=(double)i/(cLines-1);
-			if (var<0.5)
-				gfx->setColor(2.0*var, 1.0, 0.0);
-			else
-				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);
-		(gfx->*lineFunc)(points->get(lines->get(2*i)), points->get(lines->get(2*i+1)), thicks->get(i));
+		const Line& line=lines->get(i);
+		gfx->setColor(cm->operator [](line.color).r, cm->operator [](line.color).g, cm->operator [](line.color).b);
+		gfx->drawLine(line);
 	}
 
 	gfx->setColor(0.01, 0.74, 0.03);
 	for (unsigned long i=0; i<cTriangles; i++){
-		var=(double)i/(cTriangles-1);
-			if (var<0.5)
-				gfx->setColor(2.0*var, 1.0, 0.0);
-			else
-				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);
-		gfx->drawTriangle(points->get(triangles->get(3*i)), points->get(triangles->get(3*i+1)), points->get(triangles->get(3*i+2)));
+		const Triangle& triangle=triangles->get(i);
+		gfx->setColor(cm->operator [](triangle.color).r, cm->operator [](triangle.color).g, cm->operator [](triangle.color).b);
+		gfx->drawTriangle(triangle);
 	}
 
-	//gfx.drawText(20, 20, "Hello world", 1.0f, 0.0f, 0.0f);
-	//gfx->draw();
+	gfx->draw();
 }
 
 #include "engine/povengine.h"
 
-void Calc::draw2(){
-	povengine x("test.pov");
+void Calc::draw2(const char* filename, ColorMap* cm){
+	povengine x(filename, cm);
+	x.setPoints(points);
 	double factor=maxX-minX;
 	double factorY=maxY-minY;
 
@@ -240,22 +239,12 @@ void Calc::draw2(){
 	double var;
 	//gfx->setColor(0.67, 0.45, 0.01);
 	for (unsigned long i=0; i<cLines; i++){
-		/*var=(double)i/(cLines-1);
-			if (var<0.5)
-				gfx->setColor(2.0*var, 1.0, 0.0);
-			else
-				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);*/
-		x.drawLine(points->get(lines->get(2*i)), points->get(lines->get(2*i+1)), thicks->get(i));
+		x.drawLine(lines->get(i));
 	}
 
 	//gfx->setColor(0.01, 0.74, 0.03);
 	for (unsigned long i=0; i<cTriangles; i++){
-		/*var=(double)i/(cTriangles-1);
-			if (var<0.5)
-				gfx->setColor(2.0*var, 1.0, 0.0);
-			else
-				gfx->setColor(1.0, 1.0-(2.0*var-1.0), 0);*/
-		x.drawTriangle(points->get(triangles->get(3*i)), points->get(triangles->get(3*i+1)), points->get(triangles->get(3*i+2)));
+		x.drawTriangle(triangles->get(i));
 	}
 
 	//gfx.drawText(20, 20, "Hello world", 1.0f, 0.0f, 0.0f);

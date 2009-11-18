@@ -1,0 +1,428 @@
+Execute like this :
+---------------------------------------------------------------------------
+lparser [options] [name]
+
+examples :
+
+lparser -X rcylin -d lsys03.ls
+lparser -vc -t0.5 -u10 -g lsys05
+lparser spider
+
+Name is an l-system file with the ls extension. It will standard generate a 
+RenderStar compatible 'output.vol' file. 
+
+The standard output.vol file can be taken directly to the lviewer with the 
+command : 'lviewer output'. See 'go.bat'. You will get some information about 
+the loaded object and it will bring you into a standard VGA 640x480 16 color 
+screen. Here you can rotate the object, zoom in/out and pan. For key usage 
+see the lviewer.txt file.
+
+
+Persistence of Vision (POV) output :
+---------------------------------------------------------------------------
+Part off the POV file is setup by the user and the output.pov file is then
+attached to the user's file.
+
+-v              make POV object file
+
+Generates a POV file format description. Only the body part of the file is 
+generated with a series of a l_base objects and leafs as triangles. One can 
+change the object definition of the l_base element used in the l-system form 
+to any one of the valid POV shapes as long as the shape can be scaled 
+differently in all 3 directions. With POV 2 this can also be a sphere. 
+
+The file 'setup1.pov' can be used to connect to the output.inc file created 
+with lparser -vc. The first 8 colors in the pov rendering will then match the 
+ones in the viewer.
+
+-b              make POV blob file
+
+Instead of outputting objects, postionend components are written to the 
+output.pov file. These can be used to create 'bloby' objects. All triangles 
+are skipped.
+
+The file 'setup2.pov' can be used to connect to the 'output.inc' file created 
+with lparser -bc. 
+
+-B              make multiple POV blob files
+
+Each color part of the final form is written into its own output?.pov file. 
+This allows you to have mutiple blob's each with its own color and material.  
+All triangles are skipped.
+
+The file 'setup3.pov' can be used to connect to the 'output?.inc' files created 
+with lparser -Bc. 
+
+-c              output inc files instead of POV file
+
+The output files will now have the 'inc' extension for easier including in 
+other POV files like 'setup.pov'.
+
+
+DXF output :
+---------------------------------------------------------------------------
+-d              make dxf file
+
+This creates AutoCad R12 polyline polyface meshes in dxf file format which 
+can be used in Acad and 3DS. It's a much more efficient format than the 
+3dface format. It uses blocks and inserts. The most efficient dxf file (in 
+size and write/load time) is generated with : lparser -X cube -d [name]. If 
+you read the file into Acad12 make sure you have a new (no prototype) drawing 
+since the file contains block definitions as well. The objects will have 
+color and layer attributes set. By changing all object color attributes to 
+BYLAYER one can use the layer overview for easy, by layer, color setting.
+
+-3              make dxf file
+
+This is a simple 3dface only dxf file format which will always work. It has 
+no blocks or inserts but can become very large.
+
+
+RAW output :
+---------------------------------------------------------------------------
+-R              make raw file
+
+This is a simple ascii RAW file format, it can become very large. One triangle 
+per line.
+
+
+BLB output :
+---------------------------------------------------------------------------
+-O              make blb file for Blob Sculptor
+
+This is a the ascii format which can be loaded in the Blob Sculptor PD editor
+for further editing and preview.
+
+
+WRL (VRML) output :
+---------------------------------------------------------------------------
+-V              make wrl file for VRML viewer
+
+This is a the ascii VRML v1.0 format which can be loaded into a VRML viewer
+for further preview.
+
+
+Other options :
+---------------------------------------------------------------------------
+-S [num]        set string size to [num] Kbytes
+
+The -s option allows you to set the maximum size of the production string 
+in Kbytes. This string has to be stored twice and is the main data 
+structure. For a 4meg system the maximum will be about 1500 K. The default 
+value is 2048 Kbytes (= 2 meg). This is to allow much larger strings to be 
+processed on larger memory systems. 
+
+-t [num]        set minimum thickness
+
+This allows you to set the minimum thickness a form will get during 
+recursive generation. It is to make sure the forms don't get too 'thin' to 
+be seen and render correctly. It's typicly around 0.5 to 1.0.
+
+-u [num]        mutate [num] times
+
+Mutate the l-system a number of times before starting the geometry generation 
+fase and write the mutated l-system to disc as the file 'mutation.ls'. By 
+re-using this file one can build mutation series of forms. See 'mutate.bat'.
+
+-r [num]        overrule recursion depth 
+-a [num]        overrule angle
+
+Overrule these values on the commandline. They are also set in the l-system 
+file but they will not be used when an overrule option is used on the 
+commandline. One can 'open' a form by starting with a angle of zero and 
+increase it to the final angle. This makes nice animations. Doing the same 
+with the -r option will slowly 'grow' the form into its final shape.
+
+-p [num]        limit polygons to [num]
+
+Limit the total amount off polygons/objects outputed during the parsing of 
+the final l-system production. After mutation the form may have grown very 
+(VERY!) large. The whole form could be inserted in each of its branches ! 
+The default limit is 500.000 polygons/objects.
+
+-i              link base elements together
+
+With this option you can use a connected 8 sided cylinder as a base shape. 
+Works only with VOL, DXF and RAW output. It will connect the bottom part of 
+the cylinder to a previous top part creating a tube like element. This is 
+meant to be used with polygonal plant and tree forms.
+
+-X [name]       use name.vol as base form
+
+Instead of a simple block a special object (*.vol) can be used as a base 
+element. Example forms are :
+
+objects        polygons         description
+---------------------------------------------------------------------------
+min               2             only two faces in a cross
+cube              6             block (default) 
+cylin             8             open 8 sided cylinder 
+cone             10             cone on 10 sided polygon
+cylin8           20             closed 8 sided cylinder
+cylin16          44             closed 16 sided cylinder
+tube             60             10 sided cylinder with round top 
+ball            100             sphere mesh
+rcylin          174             closed cylinder with rounded edges
+
+This is for generating VOL, WRL, DXF or RAW files only. Try : lparser -X ball 
+lsys00. Just use the small vol files supplied with the parser for this 
+purpose. Using larger lparser generated vol files may not work. The changing 
+of the base forms for POV output is done by the user in the POV headers. See 
+setup*.pov for examples.
+
+-l              show final L-string
+
+Prints the l-system production to the screen. This is the final string which 
+is then interpreted into a 3d form.
+
+-e              echo input L-system
+
+Echos the ls file to the screen with the basic parameters while it's being 
+readin. The screen feedback will be like in v2.0.
+
+-g              add ground plane
+
+Adds a large ground plane (2 triangles) touching the lowest point of the 
+form. This is for easy shadow projection and horizon.
+
+-L [num]        set random amount for ~ command
+
+This makes sure that the same random seed is used for each startup and sets 
+the amount of randomness for the ~ command to [angle] degrees. This is for 
+animations where lparser forms slowly become more random. Using the ~() form
+will still overrule the default amount.
+
+
+More info ... 
+---------------------------------------------------------------------------
+The book 'Evolutionary Art and Computers' by S. Todd and W. Latham was used 
+to base the genetic 3d form mutation principles on. In here you'll find a lot 
+of interesting ideas on how to 'grow' and 'evolve' organic looking 3d forms 
+of your own. ISBN 0-12-437185-X
+
+The implemented l-system is based on the one described in the book : 'The 
+Algorithmic Beauty of Plants' (ABOP) by P. Prusinkiewicz and A. Lindenmayer 
+(this is where the 'L' from l-systems come from). If you want more 
+information on making your own l-systems you'll want to check out this book. 
+A lot can be done by changing the l-systems suplied with the parser and 
+seeing for yourself what changes in the final form. ISBN 0-387-97297-8
+
+
+Syntax and movement
+---------------------------------------------------------------------------
+For those who are already familiar with l-systems, here are the commands and 
+their functions for this lparser's 'dialect'. All commands are 1 char only 
+and simpler then for most lparsers. This is to keep them from getting 
+'broken' by the mutation process and speeds up the parsing.
+
+There is also the posibilty to add an argument to a command. Instead
+off doing +++ one can do +(30) if the basic angle was 10 degrees. The 
+argument can be a real value.
+
+The tropism command will allow you to let gravity pull branches downward by 
+adding a 't' element togeter with and 'F'. See the file 'tropism.ls' and 
+'tree*.ls' for examples. When you are not sure about the current 'down' 
+direction do a '$' command first. This will roll the turtle horizontal and 
+make sure the current up vector is oriented in the positive z-axis direction.
+
+The turtle will start at the origin with the Z-axis as forward direction and 
+Y-axis as left direction. See the file 'axis.ls' for an detailed example. 
+Here you can experiment with the basic orientations and see how the 3d 
+turtle is using a 'right-handed' coordinate system. Use your right hand with 
+your thumb as up, forefinger as forward and an other finger as left 
+direction. 
+
+By adding &(90) in front of an axiom the turtle axis will align with the 
+right handed coordinate system used in the viewer. Adding an additional
++(90) will make it easier when working with 2d l-systems. See the
+'fract*.ls' files for examples.
+
+Values can have some randomness automaticly added to them. Using ~(xx) will 
+now add a random direction component to the current orientation with maximum 
+of xx in all three directions. This way you can mark at which locations in 
+your l-system 'jitter' needs to be introduced. Using this option no two 
+'intances' of the same l-system will look the same. See fern.ls for an 
+example.
+
+
+---------------------------------------------------------------------------
+ Turtle Orientation commands                                         
+---------------------------------------------------------------------------
+ +     turn left around up vector                        
+ +(x)  turn x left around up vector                     
+ -     turn right around up vector                     
+ -(x)  turn x right around up vector                  
+ &     pitch down around left vector                 
+ &(x)  pitch x down around left vector              
+ ^     pitch up around left vector                 
+ ^(x)  pitch x up around left vector              
+ <     roll left (counter clockwise) around forward vector 
+ <(x)  roll x left around forward vector                  
+ >     roll right (clockwise) around forward vector      
+ >(x)  roll x right around forward vector               
+
+---------------------------------------------------------------------------
+ Special Orientation commands                          
+---------------------------------------------------------------------------
+ |     turn 180 deg around up vector                  
+ %     roll 180 deg around forward vector            
+ $     roll until horizontal                        
+ ~     turn/pitch/roll in a random direction       
+ ~(x)        "     in a random direction with a maximum of x degrees
+ t     correction for gravity with 0.2                             
+ t(x)  correction for gravity with x                              
+
+---------------------------------------------------------------------------
+ Movement commands                          when {} active       
+---------------------------------------------------------------------------
+ F     move forward and draw full length    record vertex       
+ F(x)  move x forward and draw              record vertex      
+ Z     move forward and draw half length    record vertex     
+ Z(x)  move x forward and draw              record vertex    
+ f     move forward with full length        record vertex   
+ f(x)  move x forward                       record vertex  
+ z     move forward with half length        record vertex 
+ z(x)  move x forward                       record vertex
+ g     move forward with full length        don't record vertex 
+ g(x)  move x forward                       don't record vertex
+ .     don't move                           record vertex     
+
+---------------------------------------------------------------------------
+ Structure commands                                         
+---------------------------------------------------------------------------
+ [     push current state                                  
+ ]     pop current state                                  
+ {     start polygon shape                               
+ }     end polygon shape                                
+
+---------------------------------------------------------------------------
+ Inc/Dec commands                                      
+---------------------------------------------------------------------------
+ "     increment length with 1.1                             
+ '     decrement length with 0.9                            
+ "(x)  multiply length with x also '(x)                    
+ ;     increment angle with 1.1                           
+ :     decrement angle with 0.9                          
+ :(x)  multiply angle with x also ;(x)                  
+ ?     increment thickness with 1.4                    
+ !     decrement thickness with 0.7                   
+ ?(x)  multiply thickness with x also !(x)           
+
+---------------------------------------------------------------------------
+ Additional commands                                
+---------------------------------------------------------------------------
+ c     increment color index                       
+ c(x)  set color index to x                       
+ @     end of object                             
+---------------------------------------------------------------------------
+
+
+Ls-files based on 'The Algorithmic Beauty of Plants' :
+---------------------------------------------------------------------------
+bop00.ls        cordate leave           ABOP pag 123
+bop01.ls        plant                   ABOP pag 27
+bop02.ls        bush                    ABOP pag 26
+bop03.ls        form in 2d              ABOP pag 25
+bop04.ls        block form              ABOP pag 20
+bop05.ls        fractal                 ABOP pag 9
+bop06.ls        dragon curves           ABOP pag 9
+bop07.ls        compound leave          ABOP pag 130
+bop08.ls        compound leave in 3d    ABOP pag 129
+bop09.ls        maple like leave        ABOP pag 129
+bop10.ls        nested polygon leaves   ABOP pag 127
+bop13.ls        lychnis structure       ABOP page 84
+           
+tree00.ls       monopodial tree         ABOP page 56
+tree01.ls       monopodial tree         ABOP page 56
+tree02.ls       ternary tree            ABOP page 60
+
+
+Free form experiments and other fractals :
+---------------------------------------------------------------------------
+lsys00.ls       lobster form
+lsys01.ls          "    var 1
+lsys02.ls          "    var 2
+lsys03.ls          "    var 3
+lsys04.ls          "    var 4
+lsys05.ls       spiral bush
+lsys06.ls       tree base
+lsys07.ls       half circle
+lsys08.ls          "    var 1
+lsys09.ls       cello plant
+lsys10.ls       circle form
+
+spiral00.ls     overview of spiral types
+spiral01.ls     spiral form
+spiral02.ls     spiral tree
+spiral03.ls     large spiral plant var 1
+spiral04.ls     large spiral plant var 2
+
+tree03.ls       willow type tree
+tree04.ls       conifer type tree
+tree05.ls       'best' tree
+tree06.ls       conifer type tree
+tree07.ls       tropism experiment
+tree08.ls       'palm' tree based on bop07.ls structure
+tree09.ls       'Trail off trees' showing the different growth stages
+tree10.ls       leavy ternary tree type
+tree11.ls       elaboration on tree08
+tree12.ls       'Trail off trees' of tree10
+
+street1.ls      a series of trees
+flower.ls       cordate leave arangement
+fern.ls         fern plant
+leaves.ls       variation on bop00.ls
+
+fract*.ls       L-systems from FractInt
+shell*.ls       shell type forms based on spirals and bop10.ls
+
+airhorse.ls     part seahorse but with external lung
+spider.ls       octo-spider
+menger.ls       a menger cube 
+
+
+Ls-files by Cees van der Mark
+---------------------------------------------------------------------------
+plant*.ls       plants by Cees
+passie.ls       a passion flower plant
+hangpl*.ls      crystal with leaves
+crystal*.ls     crystals
+bekerpl.ls      plant/kwal
+pascal*.ls      pascal cube
+sier*.ls        sierpinski gasket
+koch*.ls        koch variation
+3dartist.ls     3dartist logo
+
+
+Ls-files by Martin Higgs
+---------------------------------------------------------------------------
+s_plus.ls       sierpinski variants by M. Higgs
+higgs01.ls      produces a crustacean of the subclass Copepoda
+higgs02.ls      produces a crustacean of the subclass Copepoda, Mutated relative
+lobster.ls      another beast
+butter.ls       butterfly
+
+
+Ls-files found on the net
+---------------------------------------------------------------------------
+bac1.ls         produces a daysa rigidula
+bac2.ls         produces a dasysiphonia rigidula 
+bac3.ls         spiral design 
+
+
+Disclaimer :
+---------------------------------------------------------------------------
+This software is free and may be freely distributed, but is copyrighted by 
+the company RenderStar Technology BV. This software is provided as is 
+without any guarantees. The author and company assume no liability for 
+damages, direct or consequential, which may result from the use of this 
+software. The 'lparser.exe' file may not be used as part of any commercial 
+package without the explicit written consent of the author or company.
+
+
+---------------------------------------------------------------------------
+The author can be reached at :
+
+Email work : Laurens.Lapre@cmg.nl 
+Email home : ljlapre@xs4all.nl
+Home  page : http://www.xs4all.nl/~ljlapre/

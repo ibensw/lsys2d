@@ -22,7 +22,9 @@ SOURCES += main.cpp \
     openglshot.cpp \
     fileinput.cpp \
     iteratator3.cpp \
-    engine/povengine.cpp
+    engine/povengine.cpp \
+    colormap.cpp \
+    lsystem.cpp
 HEADERS += point2d.h \
     parser.h \
     calc.h \
@@ -37,4 +39,6 @@ HEADERS += point2d.h \
     openglshot.h \
     fileinput.h \
     iteratator3.h \
-    engine/povengine.h
+    engine/povengine.h \
+    colormap.h \
+    lsystem.h

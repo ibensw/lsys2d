@@ -26,6 +26,7 @@ Alphabet::Alphabet():
 	alphatable['?']=THICKMORE;
 	alphatable['\'']=LENGTHLESS;
 	alphatable['"']=LENGTHMORE;
+	alphatable['c']=COLOR;
 }
 
 Alphabet::~Alphabet(){
