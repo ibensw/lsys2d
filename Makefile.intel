@@ -1,0 +1,23 @@
+CXX           = /opt/intel/Compiler/11.1/038/bin/ia32/icpc
+INCPATH       = -I. `freetype-config --cflags`
+CXXFLAGS      = $(INCPATH) -c -g -pg -pipe -fast -Wall -W -mtune=native -funroll-loops -unroll-aggressive -opt-jump-tables=large -use-intel-optimized-headers -fp-model fast -inline-calloc -opt-calloc
+LINK          = /opt/intel/Compiler/11.1/038/bin/ia32/icpc -g -pg
+LFLAGS        = -Wl,-O1
+LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype
+SOURCEFIND    = find src -type f -path '*.cpp' ! -path '*.svn*' ! -path '*qtc*' ! -path '*/tools/*'
+SOURCES       = $(shell $(SOURCEFIND))
+OBJECTS       = $(SOURCES:%.cpp=%.o)
+EXECUTABLE    = LSys2D
+$(source /opt/intel/Compiler/11.1/038/bin/iccvars.sh ia32)
+
+all: $(OBJECTS) $(EXECUTABLE)
+	
+$(EXECUTABLE): $(OBJECTS) 
+	$(LINK) $(LFLAGS) $(LIBS) $(OBJECTS) -o $@
+
+.o:
+	$(CXX) $(CXXFLAGS) $(@:%.o=%.cpp) -o `basename $@`
+
+clean:
+	rm -f $(OBJECTS) $(EXECUTABLE)
+

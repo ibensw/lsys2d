@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <lsystem sigma='30' length='1.0' radius='0.1'>
-	<alphabet action='draw'>FZ</alphabet>
-	<alphabet action='move'>f</alphabet>
-	
 	<color id='1' r='0.498039' g='1' b='0'/> <!-- MediumSpringGreen //-->
 	<!-- <color id='2' r='0.858824' g='0.439216' b='0.858824'/> //--> <!-- Orchid //-->
-	<color id='2' r='0.792157' g='0.270588' b='0.627451'/> <!-- Orchid //-->
+	<!-- <color id='2' r='0.792157' g='0.270588' b='0.627451'/> //--><!-- Orchid //-->
+	<color id='2' r='0.2' g='0' b='1'/> <!-- other //-->
 	<color id='3' r='0.411765' g='0.823529' b='0'/> <!-- Some darker MediumSpringGreen //-->
 	
 	<initiator>W</initiator>
 	
 	<rule find='W'>\''FFA</rule>
 	<rule find='T'>F</rule>
-	<rule find='A'>![\\\\[&amp;!c(3)e/w////w////w////w////w]]F''''''Z"""""""\\\\\\\\\\[[&amp;!c(3)e/w////w////w////w////w]]TTA</rule>
+	<rule find='A'>![\\\\[&amp;!c(3)e/w////w////w////w////w]]FZ\\\\\\\\\\[[&amp;!c(3)e/w////w////w////w////w]]TTA</rule>
 	
 	<rule find='f'>"f'</rule>
 	<rule find='F'>"F'</rule>
@@ -20,7 +18,7 @@
 	<rule find='s'>Fs</rule>
 	<rule find='o'>[&amp;!c(3)e/w////w////w////w////w]</rule>
 	<rule find='e'>r</rule>
-	<rule find='r'>''''''Z"""""""</rule>
+	<rule find='r'>Z</rule>
 	<rule find='w'>[c(1)^!!!!!F][qc(2){----'f+f++&amp;&amp;'f+^^''f|----'f+f++&amp;&amp;'f+^^''f}]</rule>
 	<rule find='q'>sq</rule>
 </lsystem>
