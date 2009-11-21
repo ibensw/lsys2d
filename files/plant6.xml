@@ -2,9 +2,13 @@
 <lsystem sigma='22.5'>
 	<alphabet action='draw'>AFSL</alphabet>
 	<alphabet action='move'>f</alphabet>
+	
+	<color id='1' r='0.470588' g='0.196078' b='0.003922'/>
+	<color id='2' r='0.498039' g='1' b='0'/>
+	
 	<initiator>A</initiator>
-	<rule find='A'>'[&amp;FL!A]/////[&amp;FL!A]///////[&amp;FL!A]</rule>
+	<rule find='A'>c(1)'[&amp;FL!A]/////[&amp;FL!A]///////[&amp;FL!A]</rule>
 	<rule find='F'>S/////F</rule>
-	<rule find='S'>FL</rule>
-	<rule find='L'>['''^^{-f+f+f-\\|-f+f+f}]</rule>
+	<rule find='S'>FLc(1)</rule>
+	<rule find='L'>c(2)['''^^{-f+f+f-\\|-f+f+f}]</rule>
 </lsystem>
