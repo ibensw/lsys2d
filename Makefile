@@ -6,7 +6,10 @@ LFLAGS        = -Wl,-O1
 LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype
 SOURCEFIND    = find src -type f -path '*.cpp' ! -path '*.svn*'
 SOURCES       = $(shell $(SOURCEFIND))
+HEADERFIND    = find src -type f -path '*.h' ! -path '*.svn*'
+HEADERS       = $(shell $(HEADERFIND))
 OBJECTS       = $(SOURCES:%.cpp=%.o)
+
 EXECUTABLE    = LSys2D
 
 all: $(OBJECTS) $(EXECUTABLE)
@@ -24,4 +27,11 @@ $(EXECUTABLE): $(OBJECTS)
 
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)
+
+flaw:
+	flawfinder -c --html $(SOURCES) $(HEADERS) > flawfinder.htm
+	its4 $(SOURCES) $(HEADERS) > its4.txt
+
+tar:
+	tar -caf $(EXECUTABLE).tar.gz $(SOURCES) $(HEADERS) Makefile Makefile.intel doc/* files/* LICENSE README
 
