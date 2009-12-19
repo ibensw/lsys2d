@@ -247,6 +247,8 @@ void Calc::calculate(LSystem* ls){
 	cPoints=pCount;
 	cLines=lCount;
 	cTriangles=tCount;
+
+	printf("# triangles: %lu\n# cylinders: %lu\nTotal triangles: for opengl: %lu\n", tCount, lCount, tCount+(lCount*(3*32)));
 }
 
 void Calc::draw(Engine *gfx, double rot, ColorMap* cm){

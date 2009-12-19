@@ -29,7 +29,7 @@ void Engine::init(int w, int h){
 		exit(2);
 	}
 
-	SDL_WM_SetCaption("Test", NULL);
+	SDL_WM_SetCaption("LSys2D OpenGL render", NULL);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);		// This Will Clear The Background Color To Black
 	glClearDepth(1.0f);				// Enables Clearing Of The Depth Buffer
