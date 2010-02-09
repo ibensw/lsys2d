@@ -50,7 +50,21 @@ void povengine::drawLine(const Line& l){
 			<< " "<< l.thickness << endl
 			<< " pigment { color COLOR" << l.color << " }" << endl
 			<< " finish { ambient 0.3 diffuse 0.6 }" << endl
-			<< "}" << endl << endl;
+			<< "}" << endl;
+
+	outfile << "sphere {" << endl
+			<< " <" << a.c[0] << ", " << a.c[1] << ", " << a.c[2] << ">," << endl
+			<< " " << l.thickness << endl
+			<< " pigment { color COLOR" << l.color << " }" << endl
+			<< " finish { ambient 0.3 diffuse 0.6 }" << endl
+			<< "}" << endl;
+
+	outfile << "sphere {" << endl
+			<< " <" << b.c[0] << ", " << b.c[1] << ", " << b.c[2] << ">," << endl
+			<< " " << l.thickness << endl
+			<< " pigment { color COLOR" << l.color << " }" << endl
+			<< " finish { ambient 0.3 diffuse 0.6 }" << endl
+			<< "}" << endl;
 }
 
 void povengine::drawTriangle(const Triangle& l){

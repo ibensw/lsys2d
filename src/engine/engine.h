@@ -21,6 +21,7 @@ class Engine
 	double far;
 	MemCache<Point3D>* points;
 	bool plain;
+	bool roundcyls;
 
 public:
 	Engine();
@@ -39,6 +40,7 @@ public:
 	void drawTriangle(const Triangle&);
 	void setColor(float r, float g, float b);
 	inline void setLinePlain(bool p=true){ plain=p; }
+	inline void setRoundCylinder(bool p=true){ roundcyls=p; }
 
 	inline int PollEvent(SDL_Event &event){return SDL_PollEvent(&event);}
 };
