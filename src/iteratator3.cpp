@@ -126,6 +126,7 @@ SIteration::SIteration(SIterator* p, StringStat s, unsigned long d){
 			}
 
 			if (!p->NoRule(maskArr[i])){
+				//put randomness here or in getIteration
 				childArr[i] = p->getIteration(maskArr[i], d-1);
 				maskArr[i] = 0;
 				lens[i]+=childArr[i]->len();

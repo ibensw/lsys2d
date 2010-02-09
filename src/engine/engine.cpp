@@ -9,6 +9,7 @@ using namespace std;
 Engine::Engine()
 {
 	plain=false;
+	roundcyls=false;
 }
 
 Engine::~Engine(){
@@ -164,6 +165,20 @@ void Engine::drawLine(const Line& l){
 	quadratic=gluNewQuadric();
 	gluCylinder(quadratic, l.thickness, l.thickness, sqrt(c.LengthSquared()) ,32, 1);
 	gluDeleteQuadric(quadratic);
+
+	if (roundcyls){
+		GLUquadricObj *quadratic2;
+		quadratic2=gluNewQuadric();
+		gluSphere(quadratic2, l.thickness, 32, 32);
+		gluDeleteQuadric(quadratic2);
+
+		glTranslated(0, 0, sqrt(c.LengthSquared()));
+		GLUquadricObj *quadratic3;
+		quadratic3=gluNewQuadric();
+		gluSphere(quadratic3, l.thickness, 32, 32);
+		gluDeleteQuadric(quadratic3);
+
+	}
 
 	glPopMatrix();
 }

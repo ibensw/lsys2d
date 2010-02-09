@@ -19,7 +19,7 @@
 
 using namespace std;
 
-enum COMMAND {NODEF=0, QUIT, ITERATE, CALC, POV, RENDER, ROTATE, STRING};
+enum COMMAND {NODEF=0, QUIT, ITERATE, CALC, POV, RENDER, ROTATE, STRING, ROUNDON, ROUNDOFF};
 
 inline vector<string> splitstring(string line){
 	size_t found = 0;
@@ -65,6 +65,8 @@ int main(int argc, char *argv[]){
 	cmdmap["render"]=		cmdmap["r"]=	RENDER;
 	cmdmap["rotate"]=		cmdmap["rt"]=	ROTATE;
 	cmdmap["string"]=		cmdmap["s"]=	STRING;
+	cmdmap["roundon"]=	cmdmap["ron"]=	ROUNDON;
+	cmdmap["roundoff"]=	cmdmap["roff"]=	ROUNDOFF;
 
 	string lastinput;
 	vector<string> cmd;
@@ -163,6 +165,15 @@ int main(int argc, char *argv[]){
 				}
 
 				break;
+
+			case ROUNDON:
+				opengl->setRoundCylinder(true);
+				break;
+
+			case ROUNDOFF:
+				opengl->setRoundCylinder(false);
+				break;
+
 			default:
 				printf("Command not recognized.\n");
 				break;
