@@ -1,7 +1,10 @@
 #include "iteratator3.h"
 #include <string.h>
+#include <iostream>
 
 #include <stdio.h>
+
+using namespace std;
 
 SIterator::SIterator(Alphabet *a){
 	init=0;
@@ -24,24 +27,30 @@ SIteration* SIterator::getIteration(char c, unsigned int d){
 	std::map< std::pair<char, unsigned int>, SIteration*>::const_iterator it =
 			itCache.find(std::make_pair<char, unsigned int>(c, d));
 
-	if (it == itCache.end()){
+	if (it == itCache.end() || it->second->isStochastic()){
+		//cout << "cache fail, or stochastic" << endl;
 		SIteration* siter = new SIteration(this, rules[c], d);
 		itCache[std::make_pair<char, unsigned int>(c, d)] = siter;
 		//printf("CACHEADD: %c, %u\n", c, d);
 		return siter;
 	}else{
+		//cout << "cache hit" << endl;
 		return it->second;
 	}
 }
 
 void SIterator::setIteration(StringStat x, unsigned int d){
 	initstr = x;
-	init = new SIteration(this,x,d);
+	CRule rule;
+	rule.addRule(x, 1.0);
+	init = new SIteration(this,rule,d);
 }
 
 void SIterator::setIteration(unsigned int d){
 	delete init;
-	init = new SIteration(this, initstr, d);
+	CRule rule;
+	rule.addRule(initstr, 1.0);
+	init = new SIteration(this, rule, d);
 }
 
 char SIterator::next(){
@@ -104,10 +113,21 @@ void SIterator::setDirect(SIteration* sit, unsigned long bufflen){
 	charsleft=bufflen-1;
 }
 
+void SIterator::addRule(char f, std::string r){
+	std::map<char, CRule >::const_iterator it = rules.find(f);
+
+	if (it == rules.end()){
+		rules[f] = CRule();
+	}
+	rules[f].addRule(StringStat(r), 1.0);
+}
+
 //////////////////////////////////////////////////
 
-SIteration::SIteration(SIterator* p, StringStat s, unsigned long d){
+SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 	parent=p;
+	StringStat s=c.getRule();
+	stochastic=c.isStochastic();
 	strlen=s.length();
 	maskArr = new char[strlen];
 	lens = new unsigned long[strlen];
@@ -130,6 +150,7 @@ SIteration::SIteration(SIterator* p, StringStat s, unsigned long d){
 				childArr[i] = p->getIteration(maskArr[i], d-1);
 				maskArr[i] = 0;
 				lens[i]+=childArr[i]->len();
+				stochastic |= childArr[i]->isStochastic();
 			}else{
 				++(lens[i]);
 			}

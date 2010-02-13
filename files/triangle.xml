@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <lsystem sigma='60'>
 	<alphabet action='draw'>AB</alphabet>
-	<initiator>A</initiator>
+	<color id='1' r='0' g='0.5' b='0'/> <!-- Green //-->
+
+	<initiator>c(1)A</initiator>
 	<rule find='A'>B-A-B</rule>
 	<rule find='B'>A+B+A</rule>
 </lsystem>
