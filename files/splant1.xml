@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lsystem sigma='22.5'>
+
+	<color id='1' r='0.498039' g='1' b='0'/>
+
+	<initiator>F</initiator>
+	<alphabet action='draw'>F</alphabet>
+	<rule find='F' prob='0.33'>F[+F]F[-F]F</rule>	
+	<rule find='F' prob='0.33'>F[+F]F</rule>	
+	<rule find='F' prob='0.33'>F[-F]F</rule>
+</lsystem>

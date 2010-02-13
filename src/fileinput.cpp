@@ -63,8 +63,11 @@ int read_file(string filename, LSystem &system){
 
 	child=root->FirstChildElement("rule");
 	char s;
+	double c;
 	while (child){
 		s=child->Attribute("find")[0];
+		c=1.0;
+		child->Attribute("prob", &c);
 		r=child->GetText();
 		system.it->addRule(s, r);
 		child=child->NextSiblingElement("rule");

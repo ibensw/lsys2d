@@ -4,7 +4,9 @@
 #include "stringstat.h"
 #include <string>
 #include <map>
+#include <list>
 #include "alphabet.h"
+#include "crule.h"
 
 #define BUFFSIZE 1024
 
@@ -12,7 +14,7 @@ class SIterator;
 
 class SIteration{
 	public:
-		SIteration(SIterator*, StringStat, unsigned long);
+		SIteration(SIterator*, CRule, unsigned long);
 		virtual ~SIteration();
 		unsigned long len();
 		char operator[](unsigned long);
@@ -22,6 +24,7 @@ class SIteration{
 		unsigned long countLines() const { return clines; }
 		unsigned long countPoints() const { return cpoints; }
 		unsigned long countTriangles() const { return ctriangles; }
+		inline bool isStochastic() const { return stochastic; }
 
 	private:
 		unsigned long clines;
@@ -35,6 +38,7 @@ class SIteration{
 		unsigned long* lens;
 		SIteration** childArr;
 		char* buff;
+		bool stochastic;
 };
 
 class SIterator{
@@ -45,7 +49,7 @@ class SIterator{
 		void setIteration(unsigned int);
 		SIteration* getIteration(char, unsigned int);
 		inline bool NoRule(char c) const {return rules.end()==rules.find(c);}
-		inline void addRule(char f, std::string r){rules.insert(std::pair<char,StringStat>(f,StringStat(r)));}
+		void addRule(char f, std::string r);
 		inline unsigned long length() const {return init->len();}
 		inline char operator[](unsigned long i) const {return init->operator [](i);}
 		inline void front(){ charsleft=0; current=0; }
@@ -66,7 +70,7 @@ class SIterator{
 		Alphabet* ab;
 		SIteration* init;
 		StringStat initstr;
-		mutable std::map<char, StringStat> rules;
+		mutable std::map<char, CRule > rules;
 		mutable std::map< std::pair<char, unsigned int>, SIteration*> itCache;
 };
 
