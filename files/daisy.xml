@@ -6,16 +6,17 @@
 	
 	<alphabet action='draw'>FG</alphabet>
 	
-	<initiator>c(1)F</initiator>
+	<initiator>c(1)FK</initiator>
 	
-	<rule find='K'>G[''''''''g(0.2)&amp;&amp;&amp;&amp;c(3){g^!(0.87)+++R+hRh+R+hRh+R+hRh+R+hRh+R+hRh+R+hRh}g^{++++g++g++g++g++g++g}]</rule>
+	<rule find='K'>GG[''''''''g(0.2)&amp;&amp;&amp;&amp;c(3){g^!(0.87)+++R+hRh+R+hRh+R+hRh+R+hRh+R+hRh+R+hRh}g^{++++g++g++g++g++g++g}]</rule>
 	<rule find='g'>f</rule>
 	<rule find='h'>z</rule>
 	<rule find='R'>{'c(2)\(6)---/(10)+f-f-f+\(20)|+f-f-f}</rule>
 	<rule find='L'>{'''''''''&amp;/(10)+f-f-f+\(20)|+f-f-f}</rule>
 
-	<rule find="F" prob="0.2">[+FK]F/[-FK]F!(0.97)</rule>
-	<rule find="F" prob="0.4">F[&amp;FK]F!(0.97)</rule>
-	<rule find="F" prob="0.4">F/[-FK]&amp;F!(0.97)</rule>
+	<rule find="F" prob="0.15">[+FK]F/[-FK]F!(0.97)</rule>
+	<rule find="F" prob="0.30">F[&amp;FK]F!(0.97)</rule>
+	<rule find="F" prob="0.30">F/[-FK]&amp;F!(0.97)</rule>
+	<rule find="F" prob="0.25">FF!(0.97)</rule>
 </lsystem>
 
