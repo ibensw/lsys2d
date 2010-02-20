@@ -72,6 +72,7 @@ class SIterator{
 		StringStat initstr;
 		mutable std::map<char, CRule > rules;
 		mutable std::map< std::pair<char, unsigned int>, SIteration*> itCache;
+		mutable std::list< SIteration* > itStochs;
 };
 
 #endif // ITERATATOR3_H

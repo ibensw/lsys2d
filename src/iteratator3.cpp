@@ -19,6 +19,11 @@ SIterator::~SIterator(){
 		delete it->second;
 	}
 
+	std::list< SIteration* >::iterator it2;
+	for (it2 = itStochs.begin(); it2 != itStochs.end(); it2++){
+		delete *it2;
+	}
+
 	if (init)
 		delete init;
 }
@@ -27,11 +32,15 @@ SIteration* SIterator::getIteration(char c, unsigned int d){
 	std::map< std::pair<char, unsigned int>, SIteration*>::const_iterator it =
 			itCache.find(std::make_pair<char, unsigned int>(c, d));
 
-	if (it == itCache.end() || it->second->isStochastic()){
+	if (it == itCache.end()){
 		//cout << "cache fail, or stochastic" << endl;
 		SIteration* siter = new SIteration(this, rules[c], d);
 		itCache[std::make_pair<char, unsigned int>(c, d)] = siter;
 		//printf("CACHEADD: %c, %u\n", c, d);
+		return siter;
+	}else if(it->second->isStochastic()){
+		SIteration* siter = new SIteration(this, rules[c], d);
+		itStochs.push_back(siter);
 		return siter;
 	}else{
 		//cout << "cache hit" << endl;

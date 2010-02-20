@@ -49,6 +49,7 @@ public:
 	inline bool isDone(){return true;}
 	inline unsigned long countLines(){return cLines;}
 	inline unsigned long countPoints(){return cPoints;}
+	inline unsigned long countTriangles(){return cTriangles;}
 	void draw2(const char*, ColorMap* cm);
 };
 
