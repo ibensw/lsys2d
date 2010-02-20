@@ -23,6 +23,7 @@ SIterator::~SIterator(){
 	for (it2 = itStochs.begin(); it2 != itStochs.end(); it2++){
 		delete *it2;
 	}
+	itStochs.clear();
 
 	if (init)
 		delete init;
@@ -40,6 +41,7 @@ SIteration* SIterator::getIteration(char c, unsigned int d){
 		return siter;
 	}else if(it->second->isStochastic()){
 		SIteration* siter = new SIteration(this, rules[c], d);
+		//printf("ADDING: %X\n", (unsigned int)(siter));
 		itStochs.push_back(siter);
 		return siter;
 	}else{
@@ -53,6 +55,7 @@ void SIterator::setIteration(StringStat x, unsigned int d){
 	for (it2 = itStochs.begin(); it2 != itStochs.end(); it2++){
 		delete *it2;
 	}
+	itStochs.clear();
 
 	if (init)
 		delete init;
@@ -65,9 +68,10 @@ void SIterator::setIteration(StringStat x, unsigned int d){
 void SIterator::setIteration(unsigned int d){
 	std::list< SIteration* >::iterator it2;
 	for (it2 = itStochs.begin(); it2 != itStochs.end(); it2++){
+		//printf("DELETING: %X\n", (unsigned int)(*it2));
 		delete *it2;
 	}
-
+	itStochs.clear();
 
 	if (init)
 		delete init;
@@ -169,7 +173,6 @@ SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 			}
 
 			if (!p->NoRule(maskArr[i])){
-				//put randomness here or in getIteration
 				childArr[i] = p->getIteration(maskArr[i], d-1);
 				maskArr[i] = 0;
 				lens[i]+=childArr[i]->len();
