@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<LSYSTEM sigma='16' radius='0.1'>
+	<color id='2' r='0.498039' g='1' b='0'/> <!-- MediumSpringGreen //-->
+	<color id='1' r='0.470588' g='0.196078' b='0.003922'/>
+	<initiator>c(1)F</initiator>
+	<alphabet action='draw'>F</alphabet>
+	<rule find="F" prob="0.33">[+FL]F/[-FL]F!(0.97)</rule>
+	<rule find="F" prob="0.33">F[&amp;FL]F!(0.97)</rule>
+	<rule find="F" prob="0.34">F/[-FL]&amp;F!(0.97)</rule>
+	<rule find="L" prob="1">c(2){-f++f-|-f++f-}c(1)</rule>
+</LSYSTEM>
+
