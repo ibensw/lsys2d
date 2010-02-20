@@ -34,7 +34,7 @@ Alphabet::Alphabet():
 }
 
 Alphabet::~Alphabet(){
-	delete alphatable;
+	delete []alphatable;
 }
 
 void Alphabet::setAlphabet(const action a, const string s){

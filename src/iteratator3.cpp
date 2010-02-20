@@ -49,6 +49,13 @@ SIteration* SIterator::getIteration(char c, unsigned int d){
 }
 
 void SIterator::setIteration(StringStat x, unsigned int d){
+	std::list< SIteration* >::iterator it2;
+	for (it2 = itStochs.begin(); it2 != itStochs.end(); it2++){
+		delete *it2;
+	}
+
+	if (init)
+		delete init;
 	initstr = x;
 	CRule rule;
 	rule.addRule(x, 1.0);
@@ -56,7 +63,14 @@ void SIterator::setIteration(StringStat x, unsigned int d){
 }
 
 void SIterator::setIteration(unsigned int d){
-	delete init;
+	std::list< SIteration* >::iterator it2;
+	for (it2 = itStochs.begin(); it2 != itStochs.end(); it2++){
+		delete *it2;
+	}
+
+
+	if (init)
+		delete init;
 	CRule rule;
 	rule.addRule(initstr, 1.0);
 	init = new SIteration(this, rule, d);
