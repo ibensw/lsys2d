@@ -90,7 +90,7 @@ void Calc::calculate(LSystem* ls){
 	unsigned long lCount=0;
 	unsigned long tCount=0;
 	unsigned long polystack=0;
-	unsigned long polyPoint=0;
+	stack< unsigned long > polyPoints;
 	double param;
 
 	s->front();
@@ -99,14 +99,19 @@ void Calc::calculate(LSystem* ls){
 		switch(ab->lookup(x)){
 			case DRAW:
 			case DRAWHALF:
+				param=s->nextParam();
+				if (param == 0.0){
+					param=1.0;
+				}
+
 				if (!pCount || points->get(pCount-1) != curr.pos){
 					(*points)[pCount++]=curr.pos;
 				}
 
 				if (ab->lookup(x) == DRAWHALF){
-					curr.pos+=(curr.dir.GetForward()*curr.length*0.5);
+					curr.pos+=(curr.dir.GetForward()*curr.length*0.5*param);
 				}else{
-					curr.pos+=(curr.dir.GetForward()*curr.length);
+					curr.pos+=(curr.dir.GetForward()*curr.length*param);
 				}
 
 				(*points)[pCount++]=curr.pos;
@@ -122,10 +127,14 @@ void Calc::calculate(LSystem* ls){
 				break;
 			case MOVE:
 			case MOVEHALF:
+				param=s->nextParam();
+				if (param == 0.0){
+					param=1.0;
+				}
 				if (ab->lookup(x) == MOVEHALF){
-					curr.pos+=(curr.dir.GetForward()*curr.length*0.5);
+					curr.pos+=(curr.dir.GetForward()*curr.length*0.5*param);
 				}else{
-					curr.pos+=(curr.dir.GetForward()*curr.length);
+					curr.pos+=(curr.dir.GetForward()*curr.length*param);
 				}
 
 				(*points)[pCount++]=curr.pos;
@@ -136,8 +145,8 @@ void Calc::calculate(LSystem* ls){
 				if (curr.pos.c[2]<minZ) minZ=curr.pos.c[2];
 				if (curr.pos.c[2]>maxZ) maxZ=curr.pos.c[2];
 
-				if (polystack && curr.pos!=points->get(polyPoint) && points->get(pCount-2)!=points->get(polyPoint)){
-					(*triangles)[tCount++] = Triangle(polyPoint, pCount-2, pCount-1, curr.color);
+				if (polystack && curr.pos!=points->get(polyPoints.top()) && points->get(pCount-2)!=points->get(polyPoints.top())){
+					(*triangles)[tCount++] = Triangle(polyPoints.top(), pCount-2, pCount-1, curr.color);
 				}
 
 				break;
@@ -210,26 +219,43 @@ void Calc::calculate(LSystem* ls){
 				pointstack.pop();
 				break;
 			case LENGTHLESS:
-				curr.length*=0.9;
+				param=s->nextParam();
+				if (param == 0.0){
+					param=0.9;
+				}
+				curr.length*=param;
 				break;
 			case LENGTHMORE:
-				curr.length*=1.1;
+				param=s->nextParam();
+				if (param == 0.0){
+					param=1.1;
+				}
+				curr.length*=param;
 				break;
 			case THICKLESS:
-				curr.thick*=0.7;
+				param=s->nextParam();
+				if (param == 0.0){
+					param=0.7;
+				}
+				curr.thick*=param;
 				break;
 			case THICKMORE:
-				curr.thick*=1.4;
+				param=s->nextParam();
+				if (param == 0.0){
+					param=1.4;
+				}
+				curr.thick*=param;
 				break;
 			case POLYSTART:
 				pointstack.push(curr);
 				++polystack;
-				polyPoint=pCount-1;
+				polyPoints.push(pCount-1);
 				break;
 			case POLYEND:
 				curr=pointstack.top();
 				pointstack.pop();
 				--polystack;
+				polyPoints.pop();
 				break;
 			case COLOR:
 				param=s->nextParam();
