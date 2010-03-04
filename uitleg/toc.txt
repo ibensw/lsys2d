@@ -1,0 +1,7 @@
+- Wat zijn L-systemen, en turtle graphics + polygonen
+- naive approach (string iterating)
+- bether method
+- stochastic
+- stochastic on the bether method
+- rounding and some other nifty features
+- renders

@@ -1,0 +1,18 @@
+Itereren van strings in Lindenmayer systemen.
+=============================================
+
+De string wordt bijgehouden in een boomstructuur, met het axiom als root. Elke node bevat 2 arrays. Een char array, welke gewoon de string voorsteld van de node, en een array met pointers naar de node die in een volgende iteratie door het respectievelijke karakter zal worden aangepast. Indien een karakter een eindkarakter is staat deze pointer op null. Als de iteratie niet verder gaat staat heel deze array op null.
+De nodes worden beheerd door een gemeenschappelijk object dat ervoor zorgd dat een node slechts 1 keer opslaat en berekend voor elke keer het voorkomt in een iteratiediepte.
+Hiernaast houdt elke node ook zijn totale lengte bij voor elke positie van zijn eigen string. Voor de leafnodes is dit een array van 1 tot lengte met stapgrootte 1. Voor parentnodes is de stapgrootte de lengte van het childnode op die positie. Zo kan van een karakterplaats zeer snel de positie van het child bepaald worden (dmv binary search) en de childnode kan worden bezocht.
+Omdat bij kleine substitutiestrings veel stappen uitgevoerd moeten worden om bij het karakter te geraken kan in een parentnode ook al een buffer gemaakt worden die het gehele uitgewerkte string bevat. Dit word gedaan als de totale lengte van een node kleiner is als een bepaalde threshold. Indien een kleine threshold heeft het gebruik van een buffer niet zoveel zin om het aantal recursieve stappen terug te brengen, maar bij een grote threshold worden er grote strings in een buffer geplaatst wat de geheugenefficientie van de boom teniet kan doen. De threshold moet dus zorgvuldig gekozen worden.
+Bij lindenmayer systemen zullen we meestal de string van voor naar achter overlopen. Per karakter moet echter de boom van root naar leaf doorlopen worden. Door het gebruik van buffers zullen opeenvolgende karakters meestal in dezelfde leaf eindigen. Dit pad kunnen we dus opslaan met een enkele pointer naar de leaf, en hierbij opslaan hoeveel karakters het huidige pad nog geldig blijft.
+
+Complexiteit:
+I=aantal iteraties
+N=lengte van de string
+
+Opvragen van willekeurig karakter:
+I*log N		= per iteratie een binary search
+
+Opvragen van X opeenvolgende karakters met buffergrootte B:
+(X/B) * I*log N + X*(1-1/B)		= aantal keer een volledige search gedaan moet worden + de overschot als directe link

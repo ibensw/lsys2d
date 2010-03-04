@@ -37,7 +37,7 @@ void QlSys::openClicked(){
 	}
 	lsys = new LSystem();
 
-	QString filename = QFileDialog::getOpenFileName(this, "Open", "", "XML L-System (*.xml)");
+	QString filename = QFileDialog::getOpenFileName(this, "Open", ui->txtFilename->text(), "XML L-System (*.xml)");
 	if (!filename.isNull()){
 		if (read_file(filename.toStdString(), *lsys)==0){
 			ui->txtFilename->setText(filename);
@@ -74,7 +74,7 @@ void QlSys::renderCloseClicked(){
 }
 
 void QlSys::expPovClicked(){
-	QString filename = QFileDialog::getSaveFileName(this, "Export", "", "POVRay file (*.pov)");
+	QString filename = QFileDialog::getSaveFileName(this, "Export", ui->txtFilename->text()+".pov", "POVRay file (*.pov)");
 	if (!filename.isNull()){
 		lsys->c->draw2(filename.toStdString().c_str(), lsys->cm);
 	}
