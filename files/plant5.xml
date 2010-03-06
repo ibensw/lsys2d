@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <lsystem sigma='28'>
+	<color id='1' r='0.470588' g='0.196078' b='0.003922'/>
 	<alphabet action='draw'>F</alphabet>
-	<initiator>F</initiator>
-	<rule find='F'>F[&amp;+F]F[-\F][-\F][&amp;F]</rule>
+	<initiator>c(1)F</initiator>
+	<rule find='F'>F[&amp;+F]F[-\F][&amp;F]</rule>
 </lsystem>

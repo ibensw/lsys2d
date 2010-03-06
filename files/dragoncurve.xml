@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <lsystem sigma='90'>
-	<initiator>FX</initiator>
+	<color id='1' r='0.4' g='0' b='0'/> <!-- MediumSpringGreen //-->
+	<initiator>c(1)FX</initiator>
 	<alphabet action='draw'>F</alphabet>
 	<rule find='X'>X+YF</rule>
 	<rule find='Y'>FX-Y</rule>
