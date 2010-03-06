@@ -1,12 +1,13 @@
 #ifndef ITERATATOR3_H
 #define ITERATATOR3_H
 
-#include "stringstat.h"
 #include <string>
 #include <map>
 #include <list>
 #include "alphabet.h"
 #include "crule.h"
+
+using std::string;
 
 #define BUFFSIZE 1024
 
@@ -20,7 +21,7 @@ class SIteration{
 		char operator[](unsigned long);
 		void cleanup();
 		char* getBuff();
-		inline StringStat getString() const { return str; }
+		inline string getString() const { return str; }
 		unsigned long countLines() const { return clines; }
 		unsigned long countPoints() const { return cpoints; }
 		unsigned long countTriangles() const { return ctriangles; }
@@ -32,7 +33,7 @@ class SIteration{
 		unsigned long ctriangles;
 		SIterator* parent;
 		bool leaf;
-		StringStat str;
+		string str;
 		unsigned long strlen;
 		char* maskArr;
 		unsigned long* lens;
@@ -45,7 +46,7 @@ class SIterator{
 	public:
 		SIterator(Alphabet* a);
 		virtual ~SIterator();
-		void setIteration(StringStat, unsigned int d=1);
+		void setIteration(string, unsigned int d=1);
 		void setIteration(unsigned int);
 		SIteration* getIteration(char, unsigned int);
 		inline bool NoRule(char c) const {return rules.end()==rules.find(c);}
@@ -69,7 +70,7 @@ class SIterator{
 
 		Alphabet* ab;
 		SIteration* init;
-		StringStat initstr;
+		string initstr;
 		mutable std::map<char, CRule > rules;
 		mutable std::map< std::pair<char, unsigned int>, SIteration*> itCache;
 		mutable std::list< SIteration* > itStochs;

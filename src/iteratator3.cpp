@@ -50,7 +50,7 @@ SIteration* SIterator::getIteration(char c, unsigned int d){
 	}
 }
 
-void SIterator::setIteration(StringStat x, unsigned int d){
+void SIterator::setIteration(string x, unsigned int d){
 	std::list< SIteration* >::iterator it2;
 	for (it2 = itStochs.begin(); it2 != itStochs.end(); it2++){
 		delete *it2;
@@ -146,14 +146,14 @@ void SIterator::addRule(char f, std::string r){
 	if (it == rules.end()){
 		rules[f] = CRule();
 	}
-	rules[f].addRule(StringStat(r), 1.0);
+	rules[f].addRule(r, 1.0);
 }
 
 //////////////////////////////////////////////////
 
 SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 	parent=p;
-	StringStat s=c.getRule();
+	string s=c.getRule();
 	stochastic=c.isStochastic();
 	strlen=s.length();
 	maskArr = new char[strlen];
@@ -161,7 +161,7 @@ SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 	childArr = new SIteration*[strlen];
 
 	lens[strlen-1]=strlen;
-	memcpy(maskArr, s.string().c_str(), strlen);
+	memcpy(maskArr, s.c_str(), strlen);
 	leaf = (d==0);
 
 	if (!leaf){

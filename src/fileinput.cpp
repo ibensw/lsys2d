@@ -59,7 +59,7 @@ int read_file(string filename, LSystem &system){
 		printf("No initiator found.\n");
 		return 1;
 	}
-	system.it->setIteration(StringStat(child->GetText()), 0);
+	system.it->setIteration(child->GetText(), 0);
 
 	child=root->FirstChildElement("rule");
 	char s;

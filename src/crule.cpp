@@ -16,15 +16,15 @@ CRule::CRule():
 	}
 }
 
-void CRule::addRule(StringStat str, double chance){
+void CRule::addRule(string str, double chance){
 	total+=chance;
 	rules.push_back(make_pair(str, chance));
 }
 
-StringStat CRule::getRule(){
+string CRule::getRule(){
 	if (isStochastic()){
 		double x=total*(double(rand())/(RAND_MAX+1.0)); //x<1
-		std::list< std::pair<StringStat, double> >::iterator it;
+		std::list< std::pair<string, double> >::iterator it;
 		double curr=0.0;
 		for (it=rules.begin(); it!=rules.end(); it++){
 			curr+=(*it).second;
