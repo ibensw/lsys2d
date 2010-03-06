@@ -1,17 +1,17 @@
 #ifndef CRULE_H
 #define CRULE_H
-#include "stringstat.h"
+#include <string>
 #include <list>
 
 class CRule{ //Character rules
 	public:
 		CRule();
-		void addRule(StringStat str, double chance=1.0);
+		void addRule(std::string str, double chance=1.0);
 		inline bool isStochastic(){ return rules.size()>1; }
-		StringStat getRule();
+		std::string getRule();
 
 	private:
-		std::list< std::pair<StringStat, double> > rules;
+		std::list< std::pair<std::string, double> > rules;
 		double total;
 };
 

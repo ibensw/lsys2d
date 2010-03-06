@@ -6,7 +6,6 @@
 #include "point3d.h"
 #include "alphabet.h"
 #include "iteratator3.h"
-#include "stringstat.h"
 #include "openglshot.h"
 #include "fileinput.h"
 #include "lsystem.h"
