@@ -45,10 +45,7 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-	if (read_file(argv[1], mainsystem)!=0){
-		printf("Error parsing XML file, exiting...\n");
-		return 1;
-	}
+	mainsystem.openfile(argv[1]);
 
 	clock_t Tstart;
 	clock_t Tend;
@@ -70,14 +67,13 @@ int main(int argc, char *argv[]){
 	string lastinput;
 	vector<string> cmd;
 
-	int iterations=0;
-
 	Engine* opengl=0;
 
 	while (running){
 		if (opengl){
 			opengl->clear();
-			mainsystem.c->draw(opengl, 0.0, mainsystem.cm);
+			//mainsystem.c->draw(opengl, 0.0, mainsystem.cm);
+			mainsystem.render(opengl);
 		}
 
 		printf("> ");
@@ -102,16 +98,18 @@ int main(int argc, char *argv[]){
 					if (cmd.size()>1){
 						relative=atoi(cmd[1].c_str());
 					}
-					iterations+=relative;
-					mainsystem.it->setIteration(iterations);
+					//iterations+=relative;
+					//mainsystem.it->setIteration(iterations);
+					mainsystem.iterate(relative);
 				}
 				break;
 
 			case CALC:
-				mainsystem.c->calculate(&mainsystem);
+				//mainsystem.c->calculate(&mainsystem);
+				mainsystem.calculate();
 				break;
 
-			case POV:
+			/*case POV:
 				if (cmd.size()>1){
 					printf("Writing to %s...\n", cmd[1].c_str());
 					mainsystem.c->draw2(cmd[1].c_str(), mainsystem.cm);
@@ -120,7 +118,7 @@ int main(int argc, char *argv[]){
 					mainsystem.c->draw2("out.pov", mainsystem.cm);
 				}
 
-				break;
+				break;*/
 
 			case RENDER:
 				if (!opengl){
@@ -143,7 +141,7 @@ int main(int argc, char *argv[]){
 
 				break;
 
-			case ROTATE:
+			/*case ROTATE:
 				if (opengl){
 					for (unsigned int i=0; i<360; ++i){
 						opengl->clear();
@@ -163,7 +161,7 @@ int main(int argc, char *argv[]){
 					}
 				}
 
-				break;
+				break;*/
 
 			case ROUNDON:
 				opengl->setRoundCylinder(true);

@@ -44,13 +44,12 @@ public:
 	virtual ~Calc();
 	void init(SIterator* ss, double aa);
 	void calculate(LSystem*);
-	void draw(Engine* gfx, double, ColorMap* cm);
+	void draw(Engine* gfx, ColorMap* cm);
 	inline MemCache<Point3D>* getPoints(){return points;}
 	inline bool isDone(){return true;}
 	inline unsigned long countLines(){return cLines;}
 	inline unsigned long countPoints(){return cPoints;}
 	inline unsigned long countTriangles(){return cTriangles;}
-	void draw2(const char*, ColorMap* cm);
 };
 
 #endif // CALC_H

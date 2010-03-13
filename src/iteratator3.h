@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <vector>
 #include "alphabet.h"
 #include "crule.h"
 
@@ -44,8 +45,10 @@ class SIteration{
 
 class SIterator{
 	public:
-		SIterator(Alphabet* a);
+		SIterator();
 		virtual ~SIterator();
+		inline void setAlphabet(Alphabet* alpha){ ab=alpha; }
+		inline void setParameters(std::vector<double>* p){ params=p; }
 		void setIteration(string, unsigned int d=1);
 		void setIteration(unsigned int);
 		SIteration* getIteration(char, unsigned int);
@@ -55,12 +58,13 @@ class SIterator{
 		inline char operator[](unsigned long i) const {return init->operator [](i);}
 		inline void front(){ charsleft=0; current=0; }
 		char next();
-		double nextParam();
+		double nextParam(double def);
 		void setDirect(SIteration*, unsigned long);
 		inline action alphalookup(char c){ return ab->lookup(c); }
 		inline unsigned long countLines() const {return init->countLines();}
 		inline unsigned long countPoints() const {return init->countPoints()+1;}
 		inline unsigned long countTriangles() const {return init->countTriangles();}
+		void optimize();
 
 	private:
 		SIteration* direct;
@@ -74,6 +78,7 @@ class SIterator{
 		mutable std::map<char, CRule > rules;
 		mutable std::map< std::pair<char, unsigned int>, SIteration*> itCache;
 		mutable std::list< SIteration* > itStochs;
+		std::vector<double>* params;
 };
 
 #endif // ITERATATOR3_H

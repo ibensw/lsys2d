@@ -1,0 +1,30 @@
+echo "i 11;c;q" | ./LSys2D files/plant6.xml
+
+No optimalization: (rev 27)
+
+1500
+1430
+1500
+1500
+1460
+
+Stringstat removed: (this is just some overhead removed, shouldnt make that mush difference) (rev 28)
+1460
+1510
+1480
+1440
+1460
+
+With refactoring and inlined parameters:
+1410
+1420
+1370
+1390
+1370
+
+With substituted values for repeated actions:
+1070
+1070
+1080
+1080
+1110

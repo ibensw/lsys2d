@@ -6,17 +6,48 @@
 #include "alphabet.h"
 #include "colormap.h"
 
-struct LSystem{
-	LSystem();
-	virtual ~LSystem();
+#include <map>
+#include <vector>
 
-	Alphabet* ab;
-	Calc* c;
-	SIterator* it;
-	ColorMap* cm;
-	double angle;
-	double startlength;
-	double startthick;
+struct Geometry{
+	double minX;
+	double maxX;
+	double minY;
+	double maxY;
+	double minZ;
+	double maxZ;
+	MemCache<Point3D>* points;
+	MemCache<Line>* lines;
+	MemCache<Triangle>* triangles;
+	unsigned long cLines;
+	unsigned long cPoints;
+	unsigned long cTriangles;
+	Geometry();
+	virtual ~Geometry();
+	void cleanup();
+};
+
+class LSystem{
+	public:
+		LSystem();
+		virtual ~LSystem();
+
+		void openfile(char* filename);
+		void iterate(int i=1);
+		void calculate();
+		void render(Engine*);
+
+	private:
+		Geometry geo;
+		std::vector<double> params;
+		Alphabet alphabet;
+		//Calc calculator;
+		SIterator iterator;
+		ColorMap colors;
+		double sigma;
+		double startlength;
+		double startthick;
+		int iterations;
 };
 
 #endif // LSYSTEM_H
