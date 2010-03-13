@@ -6,9 +6,8 @@
 
 using namespace std;
 
-SIterator::SIterator(Alphabet *a){
+SIterator::SIterator(){
 	init=0;
-	ab=a;
 	direct=0;
 	front();
 }
@@ -94,7 +93,7 @@ char SIterator::next(){
 	}
 }
 
-double SIterator::nextParam(){
+/*double SIterator::nextParam(){
 	SIteration* backup_direct=direct;
 	unsigned long backup_directoffset=directoffset;
 	unsigned long backup_charsleft=charsleft;
@@ -132,6 +131,29 @@ double SIterator::nextParam(){
 	current=backup_current;
 
 	return ret;
+}*/
+
+double SIterator::nextParam(double def){
+	SIteration* backup_direct=direct;
+	unsigned long backup_directoffset=directoffset;
+	unsigned long backup_charsleft=charsleft;
+	unsigned long backup_current=current;
+
+	char x=next();
+
+	if (x=='`'){
+		char p=next();
+		return def*p;
+	}else if (x=='~'){
+		char p=next();
+		return params->operator[](p);
+	}
+
+	direct=backup_direct;
+	directoffset=backup_directoffset;
+	charsleft=backup_charsleft;
+	current=backup_current;
+	return def;
 }
 
 void SIterator::setDirect(SIteration* sit, unsigned long bufflen){
@@ -147,6 +169,13 @@ void SIterator::addRule(char f, std::string r){
 		rules[f] = CRule();
 	}
 	rules[f].addRule(r, 1.0);
+}
+
+void SIterator::optimize(){
+	std::map<char, CRule >::iterator it;
+	for (it=rules.begin(); it != rules.end(); it++){
+		(*it).second.optimize(ab, this);
+	}
 }
 
 //////////////////////////////////////////////////

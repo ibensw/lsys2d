@@ -21,14 +21,17 @@ public:
 		AXIS_LEFT=up*forward;
 	}
 	inline void TurnLeft(double a){
+		a*=M_PI/180.0;
 		AXIS_FORWARD=AXIS_LEFT*sin(a)+AXIS_FORWARD*cos(a);
 		AXIS_LEFT=AXIS_UP*AXIS_FORWARD;
 	}
 	inline void PitchUp(double a){
+		a*=M_PI/180.0;
 		AXIS_FORWARD=AXIS_UP*sin(a)+AXIS_FORWARD*cos(a);
 		AXIS_UP=AXIS_FORWARD*AXIS_LEFT;
 	}
 	inline void RollLeft(double a){
+		a*=M_PI/180.0;
 		AXIS_UP=AXIS_LEFT*sin(a)+AXIS_UP*cos(a);
 		AXIS_LEFT=AXIS_UP*AXIS_FORWARD;
 	}

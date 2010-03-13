@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <utility>
+#include "stringopt.h"
+
+#include "alphabet.h"
+#include "iteratator3.h"
 
 using namespace std;
 
@@ -34,5 +38,16 @@ string CRule::getRule(){
 		}
 	}else{
 		return rules.front().first;
+	}
+
+	throw("Stochastic rule did not produce");
+}
+
+void CRule::optimize(Alphabet* ab, SIterator* const ite){
+	std::list< std::pair<string, double> >::iterator it;
+	for (it=rules.begin(); it!=rules.end(); it++){
+		printf("From %s\n", (*it).first.c_str());
+		(*it).first=cacheoptimize((*it).first, ab, ite);
+		printf("To   %s\n", (*it).first.c_str());
 	}
 }
