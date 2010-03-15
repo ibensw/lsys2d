@@ -1,7 +1,7 @@
 #include "calc.h"
-#include "engine/engine.h"
+#include "engine/oglengine.h"
+#include "engine/povengine.h"
 #include <stdio.h>
-#include "SDL/SDL.h"
 
 #include "point3d.h"
 #include "alphabet.h"
@@ -19,6 +19,13 @@
 using namespace std;
 
 enum COMMAND {NODEF=0, QUIT, ITERATE, CALC, POV, RENDER, ROTATE, STRING, ROUNDON, ROUNDOFF};
+OGLEngine* opengl=0;
+
+void closerender(void*){
+	printf("Window closed\n");
+	delete opengl;
+	opengl=0;
+}
 
 inline vector<string> splitstring(string line){
 	size_t found = 0;
@@ -67,8 +74,6 @@ int main(int argc, char *argv[]){
 	string lastinput;
 	vector<string> cmd;
 
-	Engine* opengl=0;
-
 	while (running){
 		if (opengl){
 			opengl->clear();
@@ -109,21 +114,24 @@ int main(int argc, char *argv[]){
 				mainsystem.calculate();
 				break;
 
-			/*case POV:
+			case POV:
+				POVEngine* pov;;
 				if (cmd.size()>1){
 					printf("Writing to %s...\n", cmd[1].c_str());
-					mainsystem.c->draw2(cmd[1].c_str(), mainsystem.cm);
+					pov=new POVEngine(cmd[1].c_str(), mainsystem.getColors());
 				}else{
 					printf("Writing to out.pov...\n");
-					mainsystem.c->draw2("out.pov", mainsystem.cm);
+					pov=new POVEngine("out.pov", mainsystem.getColors());
 				}
+				mainsystem.render(pov);
+				delete pov;
 
-				break;*/
+				break;
 
 			case RENDER:
 				if (!opengl){
-					opengl = new Engine();
-					opengl->init(800, 600);
+					opengl = new OGLEngine(800, 600, "LSystem");
+					opengl->onQuit(closerender, 0);
 				}
 
 				if (cmd.size()>1){
@@ -141,19 +149,19 @@ int main(int argc, char *argv[]){
 
 				break;
 
-			/*case ROTATE:
+			case ROTATE:
 				if (opengl){
 					for (unsigned int i=0; i<360; ++i){
 						opengl->clear();
-						//opengl->rotateY(i);
-						mainsystem.c->draw(opengl, i, mainsystem.cm);
+						opengl->rotateY(i);
+						mainsystem.render(opengl);
 					}
 				}else{
 					printf("No render active.\n");
 				}
 				break;
 
-			case STRING:
+			/*case STRING:
 				mainsystem.it->front();
 				{
 					for (unsigned int i=0; i<mainsystem.it->length() && i < 1024; ++i){
