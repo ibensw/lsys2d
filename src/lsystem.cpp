@@ -19,10 +19,6 @@ void LSystem::iterate(int i){
 	iterator.setIteration(iterations);
 }
 
-/*void LSystem::render(Engine* engine){
-	calculator.draw(engine, &colors);
-}*/
-
 void LSystem::render(Engine *gfx){
 	gfx->setPoints(geo.points);
 	double factor=geo.maxX-geo.minX;

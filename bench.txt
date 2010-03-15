@@ -22,7 +22,7 @@ With refactoring and inlined parameters:
 1390
 1370
 
-With substituted values for repeated actions:
+With substituted values for repeated actions: (rev 29)
 1070
 1070
 1080

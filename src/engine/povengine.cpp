@@ -2,7 +2,7 @@
 
 using namespace std;
 
-povengine::povengine(const char* filename, const ColorMap* cm){
+POVEngine::POVEngine(const char* filename, const ColorMap* cm){
 	if (outfile.is_open()) outfile.close();
 	outfile.open(filename);
 
@@ -20,7 +20,7 @@ povengine::povengine(const char* filename, const ColorMap* cm){
 
 }
 
-void povengine::setWindow(double l, double r, double b, double t, double n, double f){
+void POVEngine::setWindow(double l, double r, double b, double t, double n, double f __attribute__ ((unused))){
 	double gamma=45.0/180.0*M_PI;
 	double c=r-l;
 	double dist=sqrt( (c*c) /(2*(1-cos(gamma))) - (c/2.0)*(c/2.0));
@@ -36,11 +36,11 @@ void povengine::setWindow(double l, double r, double b, double t, double n, doub
 			<< "light_source { <" << l << ", " << t << ", " << -(dist2>dist?dist2:dist)-n << "> color rgb<1, 1, 1> fade_distance " << (t-b)/2.0 << " fade_power 1}" << endl << endl;
 }
 
-void povengine::draw(){
+void POVEngine::draw(){
 	outfile.close();
 }
 
-void povengine::drawLine(const Line& l){
+void POVEngine::drawLine(const Line& l){
 	Point3D a=points->get(l.p1);
 	Point3D b=points->get(l.p2);
 
@@ -67,7 +67,7 @@ void povengine::drawLine(const Line& l){
 			<< "}" << endl;
 }
 
-void povengine::drawTriangle(const Triangle& l){
+void POVEngine::drawTriangle(const Triangle& l){
 	Point3D a=points->get(l.p1);
 	Point3D b=points->get(l.p2);
 	Point3D c=points->get(l.p3);
@@ -81,6 +81,6 @@ void povengine::drawTriangle(const Triangle& l){
 			<< "}" << endl << endl;
 }
 
-void povengine::drawLinePlain(const Line& l){
+void POVEngine::drawLinePlain(const Line& l){
 	drawLine(l);
 }

@@ -93,46 +93,6 @@ char SIterator::next(){
 	}
 }
 
-/*double SIterator::nextParam(){
-	SIteration* backup_direct=direct;
-	unsigned long backup_directoffset=directoffset;
-	unsigned long backup_charsleft=charsleft;
-	unsigned long backup_current=current;
-
-	double ret=0.0;
-	double emin=0.1;
-	bool afterdot=false;
-	char x=next();
-
-	while ((x >= '.' && x <= '9' && x != '/') || x == '('){ //slash falls between . and 0
-		if (x == '.'){
-			afterdot=true;
-		}else if (x == '('){
-			//nothing
-		}else if (afterdot){
-			ret+=(x-'0')*emin;
-			emin/=10.0;
-		}else{
-			ret*=10.0;
-			ret+=(x-'0');
-		}
-
-		backup_direct=direct;
-		backup_directoffset=directoffset;
-		backup_charsleft=charsleft;
-		backup_current=current;
-
-		x=next();
-	}
-
-	direct=backup_direct;
-	directoffset=backup_directoffset;
-	charsleft=backup_charsleft;
-	current=backup_current;
-
-	return ret;
-}*/
-
 double SIterator::nextParam(double def){
 	SIteration* backup_direct=direct;
 	unsigned long backup_directoffset=directoffset;

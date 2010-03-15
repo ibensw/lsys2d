@@ -36,6 +36,7 @@ class LSystem{
 		void iterate(int i=1);
 		void calculate();
 		void render(Engine*);
+		inline ColorMap* getColors(){ return &colors; }
 
 	private:
 		Geometry geo;
