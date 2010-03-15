@@ -31,7 +31,7 @@ struct DrawState{
 };
 
 void LSystem::calculate(){
-	geo.cleanup();
+	geo->cleanup();
 
 	printf("angle=%f\n", sigma);
 	Point3D pp(0.0, 0.0, 0.0);
@@ -48,9 +48,9 @@ void LSystem::calculate(){
 	printf("startthickness=%f\n", curr.thick);
 	curr.color=1;
 
-	geo.points=new MemCache<Point3D>(iterator.countPoints(), (256*1024*1024)/sizeof(Point3D)); //64MB blocks
-	geo.lines=new MemCache<Line>(iterator.countLines(), (128*1024*1024)/sizeof(Line));
-	geo.triangles=new MemCache<Triangle>(iterator.countTriangles(), (64*1024*1024)/sizeof(Triangle));
+	geo->points=new MemCache<Point3D>(iterator.countPoints(), (256*1024*1024)/sizeof(Point3D)); //64MB blocks
+	geo->lines=new MemCache<Line>(iterator.countLines(), (128*1024*1024)/sizeof(Line));
+	geo->triangles=new MemCache<Triangle>(iterator.countTriangles(), (64*1024*1024)/sizeof(Triangle));
 
 	unsigned long pCount=0;
 	unsigned long lCount=0;
@@ -67,8 +67,8 @@ void LSystem::calculate(){
 			case DRAWHALF:
 				param=iterator.nextParam(1.0);
 
-				if (!pCount || geo.points->get(pCount-1) != curr.pos){
-					(*geo.points)[pCount++]=curr.pos;
+				if (!pCount || geo->points->get(pCount-1) != curr.pos){
+					(*geo->points)[pCount++]=curr.pos;
 				}
 
 				if (alphabet.lookup(x) == DRAWHALF){
@@ -77,16 +77,16 @@ void LSystem::calculate(){
 					curr.pos+=(curr.dir.GetForward()*curr.length*param);
 				}
 
-				(*geo.points)[pCount++]=curr.pos;
+				(*geo->points)[pCount++]=curr.pos;
 
-				(*geo.lines)[lCount++] = Line(pCount-2, pCount-1, curr.thick, curr.color);
+				(*geo->lines)[lCount++] = Line(pCount-2, pCount-1, curr.thick, curr.color);
 
-				if (curr.pos.c[0]<geo.minX) geo.minX=curr.pos.c[0];
-				if (curr.pos.c[0]>geo.maxX) geo.maxX=curr.pos.c[0];
-				if (curr.pos.c[1]<geo.minY) geo.minY=curr.pos.c[1];
-				if (curr.pos.c[1]>geo.maxY) geo.maxY=curr.pos.c[1];
-				if (curr.pos.c[2]<geo.minZ) geo.minZ=curr.pos.c[2];
-				if (curr.pos.c[2]>geo.maxZ) geo.maxZ=curr.pos.c[2];
+				if (curr.pos.c[0]<geo->minX) geo->minX=curr.pos.c[0];
+				if (curr.pos.c[0]>geo->maxX) geo->maxX=curr.pos.c[0];
+				if (curr.pos.c[1]<geo->minY) geo->minY=curr.pos.c[1];
+				if (curr.pos.c[1]>geo->maxY) geo->maxY=curr.pos.c[1];
+				if (curr.pos.c[2]<geo->minZ) geo->minZ=curr.pos.c[2];
+				if (curr.pos.c[2]>geo->maxZ) geo->maxZ=curr.pos.c[2];
 				break;
 			case MOVE:
 			case MOVEHALF:
@@ -97,16 +97,16 @@ void LSystem::calculate(){
 					curr.pos+=(curr.dir.GetForward()*curr.length*param);
 				}
 
-				(*geo.points)[pCount++]=curr.pos;
-				if (curr.pos.c[0]<geo.minX) geo.minX=curr.pos.c[0];
-				if (curr.pos.c[0]>geo.maxX) geo.maxX=curr.pos.c[0];
-				if (curr.pos.c[1]<geo.minY) geo.minY=curr.pos.c[1];
-				if (curr.pos.c[1]>geo.maxY) geo.maxY=curr.pos.c[1];
-				if (curr.pos.c[2]<geo.minZ) geo.minZ=curr.pos.c[2];
-				if (curr.pos.c[2]>geo.maxZ) geo.maxZ=curr.pos.c[2];
+				(*geo->points)[pCount++]=curr.pos;
+				if (curr.pos.c[0]<geo->minX) geo->minX=curr.pos.c[0];
+				if (curr.pos.c[0]>geo->maxX) geo->maxX=curr.pos.c[0];
+				if (curr.pos.c[1]<geo->minY) geo->minY=curr.pos.c[1];
+				if (curr.pos.c[1]>geo->maxY) geo->maxY=curr.pos.c[1];
+				if (curr.pos.c[2]<geo->minZ) geo->minZ=curr.pos.c[2];
+				if (curr.pos.c[2]>geo->maxZ) geo->maxZ=curr.pos.c[2];
 
-				if (polystack && curr.pos!=geo.points->get(polypoints.top()) && geo.points->get(pCount-2)!=geo.points->get(polypoints.top())){
-					(*geo.triangles)[tCount++] = Triangle(polypoints.top(), pCount-2, pCount-1, curr.color);
+				if (polystack && curr.pos!=geo->points->get(polypoints.top()) && geo->points->get(pCount-2)!=geo->points->get(polypoints.top())){
+					(*geo->triangles)[tCount++] = Triangle(polypoints.top(), pCount-2, pCount-1, curr.color);
 				}
 
 				break;
@@ -180,9 +180,9 @@ void LSystem::calculate(){
 		}
 	}
 
-	geo.cPoints=pCount;
-	geo.cLines=lCount;
-	geo.cTriangles=tCount;
+	geo->cPoints=pCount;
+	geo->cLines=lCount;
+	geo->cTriangles=tCount;
 
 	printf("# triangles: %lu\n# cylinders: %lu\nTotal triangles: for opengl: %lu\n", tCount, lCount, tCount+(lCount*(3*32)));
 }

@@ -4,7 +4,7 @@
 #include <QtGui/QMainWindow>
 #include <QString>
 #include "../../src/lsystem.h"
-#include "../../src/engine/engine.h"
+#include "../../src/engine/oglengine.h"
 
 namespace Ui
 {
@@ -21,9 +21,9 @@ public:
 
 private:
     Ui::QlSysClass *ui;
-    QString povsettings;
     LSystem* lsys;
-    Engine* opengl;
+    OGLEngine* opengl;
+    QString povsettings;
     void doiterate(int i);
     void docalculate();
     void dorender();

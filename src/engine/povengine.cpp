@@ -2,7 +2,8 @@
 
 using namespace std;
 
-POVEngine::POVEngine(const char* filename, const ColorMap* cm){
+POVEngine::POVEngine(const char* filename, ColorMap* cm){
+	col=cm;
 	if (outfile.is_open()) outfile.close();
 	outfile.open(filename);
 

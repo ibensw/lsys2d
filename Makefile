@@ -1,9 +1,9 @@
 CXX           = g++
-INCPATH       = -I. `freetype-config --cflags`
+INCPATH       = -I. `freetype-config --cflags` `pkg-config libxml++-2.6 --cflags`
 CXXFLAGS      = $(INCPATH) -g -pg -pipe -O3 -Wall -W -mtune=native -funroll-loops -ffast-math
 LINK          = g++ -g -pg
 LFLAGS        = -Wl,-O1
-LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype
+LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype `pkg-config libxml++-2.6 --cflags --libs`
 SOURCEFIND    = find src -type f -path '*.cpp' ! -path '*.svn*'
 SOURCES       = $(shell $(SOURCEFIND))
 HEADERFIND    = find src -type f -path '*.h' ! -path '*.svn*'

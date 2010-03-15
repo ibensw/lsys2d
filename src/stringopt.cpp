@@ -103,6 +103,7 @@ string contract(string s, Alphabet* ab, action plus, action minus, char plussign
 			ret[2]=(unsigned char)-x;
 		}
 
+		printf("opt: %i\n", ret[2]);
 		return ret;
 	}
 }

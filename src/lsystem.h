@@ -32,14 +32,19 @@ class LSystem{
 		LSystem();
 		virtual ~LSystem();
 
-		void openfile(char* filename);
+		void openfile(const char* filename);
 		void iterate(int i=1);
+		void absoluteiterate(int i);
 		void calculate();
 		void render(Engine*);
 		inline ColorMap* getColors(){ return &colors; }
+		inline unsigned int StringSize(){ return iterator.length(); }
+		inline unsigned int CountLines(){ return geo->cLines; }
+		inline unsigned int CountPoints(){ return geo->cPoints; }
+		inline unsigned int CountTriangles(){ return geo->cTriangles; }
 
 	private:
-		Geometry geo;
+		Geometry* geo;
 		std::vector<double> params;
 		Alphabet alphabet;
 		//Calc calculator;
