@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'qlsys.ui'
 **
-** Created: Sat Feb 20 23:23:46 2010
+** Created: Mon Mar 15 14:09:34 2010
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!

@@ -52,7 +52,6 @@ template<typename T> MemCache<T>::MemCache(unsigned long size, unsigned long blo
 template<typename T> MemCache<T>::~MemCache(){
 	for (unsigned long i=0; i<fblocks; i++){
 		fclose(ffiles[i]);
-		//delete ffiles[i];
 	}
 
 	delete []ffiles;
@@ -92,7 +91,6 @@ template<typename T> const T& MemCache<T>::get(unsigned long i) const{
 	if (i/fblocksize != fcurrblock){
 		ChangeBlock(i/fblocksize);
 	}
-
 	return fblock[i%fblocksize];
 }
 

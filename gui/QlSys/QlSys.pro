@@ -4,10 +4,8 @@
 TARGET = QlSys
 TEMPLATE = app
 SOURCES += main.cpp \
-    qlsys.cpp \
-    lswidget.cpp
-HEADERS += qlsys.h \
-    lswidget.h
+    qlsys.cpp
+HEADERS += qlsys.h
 FORMS += qlsys.ui
 QT += opengl
 LIBS += ../../src/*.o ../../src/engine/*.o ../../src/tinyxml/*.o -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype

@@ -9,7 +9,7 @@
 
 class POVEngine: public Engine{
 	public:
-		POVEngine(const char* filename, const ColorMap* cm);
+		POVEngine(const char* filename, ColorMap* cm);
 		void draw();
 		void clear();
 		void setWindow(double l, double r, double b, double t, double n, double f);
@@ -18,7 +18,6 @@ class POVEngine: public Engine{
 		void drawTriangle(const Triangle& l);
 
 	private:
-		MemCache<Point3D>* points;
 		std::ofstream outfile;
 		ColorMap* col;
 };
