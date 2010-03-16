@@ -86,7 +86,6 @@ char SIterator::next(){
 
 	if (charsleft){
 		--charsleft;
-
 		return direct->operator [](current-directoffset);
 	}else{
 		return operator [](current-1);

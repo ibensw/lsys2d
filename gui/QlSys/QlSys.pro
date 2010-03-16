@@ -8,4 +8,4 @@ SOURCES += main.cpp \
 HEADERS += qlsys.h
 FORMS += qlsys.ui
 QT += opengl
-LIBS += ../../src/*.o ../../src/engine/*.o ../../src/tinyxml/*.o -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype
+LIBS += ../../src/*.o ../../src/engine/*.o -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype `pkg-config libxml++-2.6 --cflags --libs`

@@ -52,10 +52,10 @@ void LSystem::openfile(const char* filename){
 
 	//TiXmlElement* root=doc.RootElement();
 	const Node* root = doc.get_document()->get_root_node();
-	sigma = AttribD(root, "@sigma", 45.0);
+	sigma = AttribD(root, "sigma", 45.0);
 	params.push_back(sigma);
-	startlength = AttribD(root, "@length", 1.0);
-	startthick = AttribD(root, "@radius", 0.1);
+	startlength = AttribD(root, "length", 1.0);
+	startthick = AttribD(root, "radius", 0.1);
 
 	list<Node*> children = root->get_children("alphabet");
 	list<Node*>::iterator childiter;
