@@ -125,9 +125,9 @@ void OGLEngine::setWindow(double l, double r, double b, double t, double n, doub
 
 void OGLEngine::drawLinePlain(const Line& l){
 	glPushMatrix();
-	glRotated(rotX, 0.0, 1.0, 0.0);
+	glRotated(rotX, 1.0, 0.0, 0.0);
 	glRotated(rotY, 0.0, 1.0, 0.0);
-	glRotated(rotZ, 0.0, 1.0, 0.0);
+	glRotated(rotZ, 0.0, 0.0, 1.0);
 
 	Point3D a=points->get(l.p1);
 	Point3D b=points->get(l.p2);
@@ -153,9 +153,9 @@ void OGLEngine::drawLine(const Line& l){
 	double angle=acos((c^z) / sqrt(c.LengthSquared()*z.LengthSquared()));
 
 	glPushMatrix();
-	glRotated(rotX, 0.0, 1.0, 0.0);
+	glRotated(rotX, 1.0, 0.0, 0.0);
 	glRotated(rotY, 0.0, 1.0, 0.0);
-	glRotated(rotZ, 0.0, 1.0, 0.0);
+	glRotated(rotZ, 0.0, 0.0, 1.0);
 	glTranslated(a.c[0], a.c[1], a.c[2]);
 
 	glRotated(angle*180/M_PI, axis.c[0], axis.c[1], axis.c[2]);
@@ -185,9 +185,9 @@ void OGLEngine::drawLine(const Line& l){
 
 void OGLEngine::drawTriangle(const Triangle& l){
 	glPushMatrix();
-	glRotated(rotX, 0.0, 1.0, 0.0);
+	glRotated(rotX, 1.0, 0.0, 0.0);
 	glRotated(rotY, 0.0, 1.0, 0.0);
-	glRotated(rotZ, 0.0, 1.0, 0.0);
+	glRotated(rotZ, 0.0, 0.0, 1.0);
 
 	Point3D a=points->get(l.p1);
 	Point3D b=points->get(l.p2);

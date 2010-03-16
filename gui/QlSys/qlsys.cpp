@@ -22,9 +22,9 @@ QlSys::QlSys(QWidget *parent)
 	connect(ui->chkLineMode, SIGNAL(stateChanged(int)), this, SLOT(testRerender()));
 	connect(ui->chkRound, SIGNAL(stateChanged(int)), this, SLOT(testRerender()));
 	connect(ui->btnRendPov, SIGNAL(clicked()), this, SLOT(povRenClicked()));
-	connect(ui->btnPovSet, SIGNAL(clicked()), this, SLOT(povSetClicked()));
 	connect(ui->btnPov, SIGNAL(clicked()), this, SLOT(expPovClicked()));
-	connect(ui->sldRot, SIGNAL(valueChanged(int)), this, SLOT(testRerender()));
+	connect(ui->sldRotY, SIGNAL(valueChanged(int)), this, SLOT(testRerender()));
+	connect(ui->sldRotZ, SIGNAL(valueChanged(int)), this, SLOT(testRerender()));
 }
 
 QlSys::~QlSys(){
@@ -156,7 +156,8 @@ void QlSys::dorender(){
 	qApp->processEvents();
 	opengl->setRoundCylinder(ui->chkRound->isChecked());
 	opengl->setLinePlain(ui->chkLineMode->isChecked());
-	opengl->rotateY(ui->sldRot->value());
+	opengl->rotateY(ui->sldRotY->value());
+	opengl->rotateZ(ui->sldRotZ->value());
 	QTime t = QTime::currentTime();
 	opengl->clear();
 	lsys->render(opengl);

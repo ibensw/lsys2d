@@ -129,14 +129,17 @@ int main(int argc, char *argv[]){
 				break;
 
 			case RENDER:
+				printf("a\n");
 				if (!opengl){
 					opengl = new OGLEngine(800, 600, "LSystem");
 					opengl->onQuit(closerender, 0);
 				}
+				printf("b\n");
 
-				if (cmd.size()>1){
+				if (cmd.size()<2){
 					cmd.push_back("zbuff");
 				}
+				printf("c\n");
 
 				if (cmd[1]=="zbuff"){
 					opengl->setLinePlain(false);
@@ -146,6 +149,7 @@ int main(int argc, char *argv[]){
 					delete opengl;
 					opengl=0;
 				}
+				printf("d\n");
 
 				break;
 
