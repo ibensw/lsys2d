@@ -1,9 +1,9 @@
 CXX           = g++
-INCPATH       = -I. `freetype-config --cflags` `pkg-config libxml++-2.6 --cflags`
+INCPATH       = -I. `pkg-config libxml++-2.6 --cflags`
 CXXFLAGS      = $(INCPATH) -g -pg -pipe -O3 -Wall -W -mtune=native -funroll-loops -ffast-math
 LINK          = g++ -g -pg
 LFLAGS        = -Wl,-O1
-LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut -lpng -lpngwriter -lz -lfreetype `pkg-config libxml++-2.6 --cflags --libs`
+LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut `pkg-config libxml++-2.6 --cflags --libs`
 SOURCEFIND    = find src -type f -path '*.cpp' ! -path '*.svn*'
 SOURCES       = $(shell $(SOURCEFIND))
 HEADERFIND    = find src -type f -path '*.h' ! -path '*.svn*'
@@ -26,7 +26,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(@:%.o=%.cpp) -o `basename $@`
 
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -f $(OBJECTS) $(EXECUTABLE) src/*.gcda src/*.gcno src/*.gcov
 
 flaw:
 	flawfinder -c --html $(SOURCES) $(HEADERS) > flawfinder.htm

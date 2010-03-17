@@ -2,6 +2,7 @@
 #define CRULE_H
 #include <string>
 #include <list>
+#include <vector>
 
 class SIterator;
 class Alphabet;
@@ -12,7 +13,7 @@ class CRule{ //Character rules
 		void addRule(std::string str, double chance=1.0);
 		inline bool isStochastic(){ return rules.size()>1; }
 		std::string getRule();
-		void optimize(Alphabet* ab, SIterator* const it);
+		void optimize(Alphabet* ab, SIterator* const it, std::vector<double>*);
 
 	private:
 		std::list< std::pair<std::string, double> > rules;

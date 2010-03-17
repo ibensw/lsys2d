@@ -23,7 +23,6 @@ private:
     Ui::QlSysClass *ui;
     LSystem* lsys;
     OGLEngine* opengl;
-    QString povsettings;
     void doiterate(int i);
     void docalculate();
     void dorender();
@@ -34,7 +33,6 @@ public slots:
     void renderCloseClicked();
     void expPovClicked();
     void povRenClicked();
-    void povSetClicked();
     void openClicked();
     void testRerender();
 };

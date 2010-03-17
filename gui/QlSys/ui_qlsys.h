@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'qlsys.ui'
 **
-** Created: Tue Mar 16 11:56:42 2010
+** Created: Wed Mar 17 15:23:01 2010
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -88,7 +88,7 @@ public:
     QPushButton *btnPov;
     QHBoxLayout *horizontalLayout_5;
     QLabel *label_10;
-    QLineEdit *lineEdit;
+    QLineEdit *txtPovSettings;
     QSpacerItem *verticalSpacer;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -350,10 +350,10 @@ public:
 
         horizontalLayout_5->addWidget(label_10);
 
-        lineEdit = new QLineEdit(tab_4);
-        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        txtPovSettings = new QLineEdit(tab_4);
+        txtPovSettings->setObjectName(QString::fromUtf8("txtPovSettings"));
 
-        horizontalLayout_5->addWidget(lineEdit);
+        horizontalLayout_5->addWidget(txtPovSettings);
 
 
         verticalLayout_2->addLayout(horizontalLayout_5);
@@ -378,7 +378,7 @@ public:
 
         retranslateUi(QlSysClass);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(3);
         comboBox->setCurrentIndex(5);
 
 
@@ -427,7 +427,7 @@ public:
         btnRendPov->setText(QApplication::translate("QlSysClass", "Render in PO&VRay", 0, QApplication::UnicodeUTF8));
         btnPov->setText(QApplication::translate("QlSysClass", "Export to &POV", 0, QApplication::UnicodeUTF8));
         label_10->setText(QApplication::translate("QlSysClass", "Options:", 0, QApplication::UnicodeUTF8));
-        lineEdit->setText(QApplication::translate("QlSysClass", "+W800 +H600 +Q11 +A0.1", 0, QApplication::UnicodeUTF8));
+        txtPovSettings->setText(QApplication::translate("QlSysClass", "+W800 +H600 +Q11 +A0.1", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("QlSysClass", "&PovRay", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

@@ -19,13 +19,6 @@
 using namespace std;
 
 enum COMMAND {NODEF=0, QUIT, ITERATE, CALC, POV, RENDER, ROTATE, STRING, ROUNDON, ROUNDOFF};
-OGLEngine* opengl=0;
-
-void closerender(void*){
-	printf("Window closed\n");
-	delete opengl;
-	opengl=0;
-}
 
 inline vector<string> splitstring(string line){
 	size_t found = 0;
@@ -46,6 +39,7 @@ inline vector<string> splitstring(string line){
 
 int main(int argc, char *argv[]){
 	LSystem mainsystem;
+	OGLEngine* opengl=0;
 
 	if (argc < 2){
 		printf("No filename specified\n");
@@ -129,17 +123,14 @@ int main(int argc, char *argv[]){
 				break;
 
 			case RENDER:
-				printf("a\n");
 				if (!opengl){
+					printf("Initializing OpenGL...\n");
 					opengl = new OGLEngine(800, 600, "LSystem");
-					opengl->onQuit(closerender, 0);
 				}
-				printf("b\n");
 
 				if (cmd.size()<2){
 					cmd.push_back("zbuff");
 				}
-				printf("c\n");
 
 				if (cmd[1]=="zbuff"){
 					opengl->setLinePlain(false);
@@ -149,8 +140,6 @@ int main(int argc, char *argv[]){
 					delete opengl;
 					opengl=0;
 				}
-				printf("d\n");
-
 				break;
 
 			case ROTATE:

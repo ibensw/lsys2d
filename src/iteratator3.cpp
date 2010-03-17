@@ -133,7 +133,7 @@ void SIterator::addRule(char f, std::string r){
 void SIterator::optimize(){
 	std::map<char, CRule >::iterator it;
 	for (it=rules.begin(); it != rules.end(); it++){
-		(*it).second.optimize(ab, this);
+		(*it).second.optimize(ab, this, params);
 	}
 }
 

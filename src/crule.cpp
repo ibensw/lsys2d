@@ -43,11 +43,11 @@ string CRule::getRule(){
 	throw("Stochastic rule did not produce");
 }
 
-void CRule::optimize(Alphabet* ab, SIterator* const ite){
+void CRule::optimize(Alphabet* ab, SIterator* const ite, std::vector<double>* params){
 	std::list< std::pair<string, double> >::iterator it;
 	for (it=rules.begin(); it!=rules.end(); it++){
 		printf("From %s\n", (*it).first.c_str());
-		(*it).first=cacheoptimize((*it).first, ab, ite);
+		(*it).first=cacheoptimize((*it).first, ab, ite, params);
 		printf("To   %s\n", (*it).first.c_str());
 	}
 }
