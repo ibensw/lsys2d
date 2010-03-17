@@ -88,22 +88,24 @@ void LSystem::openfile(const char* filename){
 			alphabet.setAlphabet(FULLTURN, r);
 	}
 
-	printf("%s\n", getText(root->get_children("axiom").front()).c_str());
-	iterator.setIteration(inlineparams(getText(root->get_children("axiom").front()), params), 0);
-
-	list<Node*> children2 = root->get_children("rule");
-	list<Node*>::iterator childiter2;
+	children = root->get_children("rule");
 
 	char s;
 	double c;
-	for (childiter2 = children2.begin(); childiter2 != children2.end(); childiter2++){
-		s=Attrib(*childiter2, "find")[0];
-		c=AttribD(*childiter2, "prob", 1.0);
-		r=getText(*childiter2);
+	for (childiter = children.begin(); childiter != children.end(); childiter++){
+		s=Attrib(*childiter, "find")[0];
+		c=AttribD(*childiter, "prob", 1.0);
+		r=getText(*childiter);
 		printf("%c (%f) -> %s\n", s, c, r.c_str());
-		r=inlineparams(r, params);
+		//r=inlineparams(r, params);
 		iterator.addRule(s, r);
 	}
+
+
+	r=getText(root->get_children("axiom").front());
+	printf("Axiom: %s\n", r.c_str());
+	iterator.setIteration(cacheoptimize(r, &alphabet, &iterator, &params), 0);
+	printf("Axiom: %s\n", r.c_str());
 
 	children = root->get_children("color");
 

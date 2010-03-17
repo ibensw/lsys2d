@@ -6,17 +6,21 @@
 
 using namespace std;
 
-enum state {NOP=0, TURNS, PITCHS, ROLLS, MOVES, DRAWS, COLORS, LENGTHS, THICKS};
+enum state {NOP=0, TURNS, PITCHS, ROLLS, MOVES, MOVEHALFS, DRAWS, DRAWHALFS, COLORS, LENGTHS, THICKS};
 
 inline state type(action a){
 	switch(a){
 		case DRAW:
-		case DRAWHALF:
 			return DRAWS;
 			break;
+		case DRAWHALF:
+			return DRAWHALFS;
+			break;
 		case MOVE:
-		case MOVEHALF:
 			return MOVES;
+			break;
+		case MOVEHALF:
+			return MOVEHALFS;
 			break;
 		case TURNL:
 		case TURNR:
@@ -103,12 +107,34 @@ string contract(string s, Alphabet* ab, action plus, action minus, char plussign
 			ret[2]=(unsigned char)-x;
 		}
 
-		printf("opt: %i\n", ret[2]);
 		return ret;
 	}
 }
 
-string partopt(part p, Alphabet* ab){
+string contract2(string s, Alphabet* ab, action plus, action minus, char sign, double mplus, double mminus, vector<double>* params){
+	double total=1.0;
+
+	for (unsigned int i = 0; i < s.length(); ++i){
+		if (ab->lookup(s[i]) == plus){
+			total*=mplus;
+		}else if (ab->lookup(s[i]) == minus){
+			total*=mminus;
+		}
+	}
+
+	if (total == 0.0){ //Would be rarely the case
+		return "";
+	}else{
+		string ret;
+		ret.push_back(sign);
+		ret.push_back('~');
+		params->push_back(total);
+		ret.push_back((char)(params->size()-1));
+		return ret;
+	}
+}
+
+string partopt(part p, Alphabet* ab, vector<double>* params){
 	if (p.partial.length() < 2){ //Doing something twice is bether than reading a parameter
 		return p.partial;
 	}
@@ -119,13 +145,25 @@ string partopt(part p, Alphabet* ab){
 			return contract(p.partial, ab, TURNR, TURNL, '-', '+');
 		case PITCHS:
 			return contract(p.partial, ab, PITCHU, PITCHD, '^', '&');
+		case DRAWS:
+			return contract(p.partial, ab, DRAW, IDLE, 'F', '$');
+		case DRAWHALFS:
+			return contract(p.partial, ab, DRAWHALF, IDLE, 'Z', '$');
+		case MOVES:
+			return contract(p.partial, ab, MOVE, IDLE, 'f', '$');
+		case MOVEHALFS:
+			return contract(p.partial, ab, MOVEHALF, IDLE, 'z', '$');
+		case THICKS:
+			return contract2(p.partial, ab, THICKMORE, THICKLESS, '?', 1.4, 0.7, params);
+		case LENGTHS:
+			return contract2(p.partial, ab, LENGTHMORE, LENGTHLESS, '"', 1.1, 0.9, params);
 		default:
 			return p.partial;
 			break;
 	}
 }
 
-string cacheoptimize(string cache, Alphabet* ab, SIterator* const it){
+string cacheoptimize(string cache, Alphabet* ab, SIterator* const it, vector<double>* params){
 	unsigned int i=0;
 	state lasttype=NOP;
 	unsigned int laststart=0;
@@ -155,14 +193,14 @@ string cacheoptimize(string cache, Alphabet* ab, SIterator* const it){
 	string ret;
 	for (list<part>::iterator it2=stringparts.begin(); it2!=stringparts.end(); it2++){
 		//printf("%s\n", (*it2).partial.c_str());
-		ret+=partopt(*it2, ab);
+		ret+=partopt(*it2, ab, params);
 	}
 
 	//return cache;
-	return ret;
+	return inlineparams(ret, params);
 }
 
-string inlineparams(string s, std::vector<double> &params){
+string inlineparams(string s, vector<double> *params){
 	double par;
 	unsigned int j;
 	unsigned int inl;
@@ -171,9 +209,9 @@ string inlineparams(string s, std::vector<double> &params){
 		if (s[i] == '('){
 			j=i;
 			par=param(s, i);
-			params.push_back(par);
+			params->push_back(par);
 			rep="~";
-			inl=params.size()-1;
+			inl=params->size()-1;
 			rep.push_back(inl);
 			s.replace(j, i-j+1, rep);
 		}

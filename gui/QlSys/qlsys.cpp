@@ -11,7 +11,7 @@
 #include "../../src/engine/povengine.h"
 
 QlSys::QlSys(QWidget *parent)
-	:QMainWindow(parent), ui(new Ui::QlSysClass), lsys(0), opengl(0), povsettings("+W800 +H600 +Q11 +A0.1")
+	:QMainWindow(parent), ui(new Ui::QlSysClass), lsys(0), opengl(0)
 {
 	ui->setupUi(this);
 	ui->centralWidget->setEnabled(false);
@@ -86,7 +86,7 @@ void QlSys::povRenClicked(){
 	POVEngine pov(filename.toStdString().c_str(), lsys->getColors());
 	lsys->render((Engine*)&pov);
 	QProcess pr;
-	QStringList args = povsettings.split(" ");
+	QStringList args = ui->txtPovSettings->text().split(" ");
 	args << filename;
 	pr.start("povray", args);
 	if (!pr.waitForStarted()){
@@ -105,14 +105,6 @@ void QlSys::povRenClicked(){
 	view.start("xdg-open", args2);
 	view.waitForStarted();
 	view.waitForFinished(5000);
-}
-
-void QlSys::povSetClicked(){
-	bool ok;
-	QString set=QInputDialog::getText(this, "Input", "POVRay command line options:", QLineEdit::Normal, povsettings, &ok);
-	if (ok){
-		povsettings = set;
-	}
 }
 
 void QlSys::testRerender(){

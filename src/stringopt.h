@@ -7,7 +7,7 @@
 #include "iteratator3.h"
 using std::string;
 
-string cacheoptimize(string, Alphabet*, SIterator* const);
-string inlineparams(string s, std::vector<double> &params);
+string cacheoptimize(string, Alphabet*, SIterator* const, std::vector<double>* params);
+string inlineparams(string s, std::vector<double>* params);
 
 #endif // STRINGOPT_H
