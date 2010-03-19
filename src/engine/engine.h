@@ -11,7 +11,7 @@ public:
 
 	virtual void draw();
 	virtual void setWindow(double l, double r, double b, double t, double n, double f);
-	virtual void setPoints(MemCache<Point3D>*);
+	virtual void setPoints(Point3D*);
 	virtual void drawLine(const Line& l)=0;
 	virtual void drawLinePlain(const Line& l)=0;
 	virtual void drawTriangle(const Triangle&)=0;
@@ -20,7 +20,7 @@ public:
 	inline void setRoundCylinder(bool p=true){ roundcyls=p; }
 
 protected:
-	MemCache<Point3D>* points;
+	Point3D* points;
 	bool plain;
 	bool roundcyls;
 };

@@ -42,8 +42,8 @@ void POVEngine::draw(){
 }
 
 void POVEngine::drawLine(const Line& l){
-	Point3D a=points->get(l.p1);
-	Point3D b=points->get(l.p2);
+	Point3D a=points[l.p1];
+	Point3D b=points[l.p2];
 
 	outfile << "cylinder {" << endl
 			<< " <" << a.c[0] << ", " << a.c[1] << ", " << a.c[2] << ">," << endl
@@ -69,9 +69,9 @@ void POVEngine::drawLine(const Line& l){
 }
 
 void POVEngine::drawTriangle(const Triangle& l){
-	Point3D a=points->get(l.p1);
-	Point3D b=points->get(l.p2);
-	Point3D c=points->get(l.p3);
+	Point3D a=points[l.p1];
+	Point3D b=points[l.p2];
+	Point3D c=points[l.p3];
 
 	outfile << "triangle {" << endl
 			<< " <" << a.c[0] << ", " << a.c[1] << ", " << a.c[2] << ">," << endl

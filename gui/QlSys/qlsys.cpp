@@ -42,6 +42,7 @@ void QlSys::openClicked(){
 		try{
 			lsys->openfile(filename.toStdString().c_str());
 			ui->txtFilename->setText(filename);
+			ui->spinIteration->setValue(0);
 			ui->centralWidget->setEnabled(true);
 		}catch(const char* err){
 			QMessageBox::critical(this, "Error", err);
@@ -60,7 +61,11 @@ void QlSys::iterationsChanged(int i){
 void QlSys::renderClicked(){
 	this->docalculate();
 	if (!opengl){
-		opengl = new OGLEngine(800, 600, "QlSys OpenGL render");
+		int w;
+		int h;
+		w=ui->cmbResolution->itemText(ui->cmbResolution->currentIndex()).split("x").takeFirst().toInt();
+		h=ui->cmbResolution->itemText(ui->cmbResolution->currentIndex()).split("x").takeLast().toInt();
+		opengl = new OGLEngine(w, h, "QlSys OpenGL render");
 	}
 	this->dorender();
 }

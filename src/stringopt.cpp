@@ -169,6 +169,7 @@ string cacheoptimize(string cache, Alphabet* ab, SIterator* const it, vector<dou
 	unsigned int laststart=0;
 	list<part> stringparts;
 	part substr;
+	cache=inlineparams(cache, params);
 	while (i<cache.length()){
 		if (lasttype!=type(ab->lookup(cache[i])) || (!it->NoRule(cache[i]))){
 			if (i!=laststart || cache[i+1]=='~'){

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'qlsys.ui'
 **
-** Created: Wed Mar 17 15:23:01 2010
+** Created: Fri Mar 19 16:04:30 2010
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -65,7 +65,7 @@ public:
     QWidget *tab_3;
     QVBoxLayout *verticalLayout_3;
     QHBoxLayout *horizontalLayout_2;
-    QComboBox *comboBox;
+    QComboBox *cmbResolution;
     QPushButton *btnRender;
     QPushButton *btnRendClose;
     QSpacerItem *horizontalSpacer;
@@ -228,10 +228,10 @@ public:
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        comboBox = new QComboBox(tab_3);
-        comboBox->setObjectName(QString::fromUtf8("comboBox"));
+        cmbResolution = new QComboBox(tab_3);
+        cmbResolution->setObjectName(QString::fromUtf8("cmbResolution"));
 
-        horizontalLayout_2->addWidget(comboBox);
+        horizontalLayout_2->addWidget(cmbResolution);
 
         btnRender = new QPushButton(tab_3);
         btnRender->setObjectName(QString::fromUtf8("btnRender"));
@@ -378,8 +378,8 @@ public:
 
         retranslateUi(QlSysClass);
 
-        tabWidget->setCurrentIndex(3);
-        comboBox->setCurrentIndex(5);
+        tabWidget->setCurrentIndex(2);
+        cmbResolution->setCurrentIndex(5);
 
 
         QMetaObject::connectSlotsByName(QlSysClass);
@@ -403,8 +403,8 @@ public:
         label_6->setText(QApplication::translate("QlSysClass", "Calculating geometry:", 0, QApplication::UnicodeUTF8));
         label_7->setText(QApplication::translate("QlSysClass", "OpenGL Rendering:", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("QlSysClass", "&Timers", 0, QApplication::UnicodeUTF8));
-        comboBox->clear();
-        comboBox->insertItems(0, QStringList()
+        cmbResolution->clear();
+        cmbResolution->insertItems(0, QStringList()
          << QApplication::translate("QlSysClass", "160x120", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("QlSysClass", "176x144", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("QlSysClass", "320x240", 0, QApplication::UnicodeUTF8)
