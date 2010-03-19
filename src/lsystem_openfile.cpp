@@ -67,8 +67,8 @@ void LSystem::openfile(const char* filename){
 	string type;
 	string r;
 	for (childiter = children.begin(); childiter != children.end(); childiter++){
-		type = Attrib(*childiter, "@action");
-		r = Attrib(*childiter, "text()");
+		type = Attrib(*childiter, "action");
+		r = getText(*childiter);
 		if (type == "draw")
 			alphabet.setAlphabet(DRAW, r);
 		else if (type == "move")
@@ -91,6 +91,8 @@ void LSystem::openfile(const char* filename){
 			alphabet.setAlphabet(ROLLR, r);
 		else if (type == "full turn")
 			alphabet.setAlphabet(FULLTURN, r);
+		else
+			printf("Invalid alphabet type: %s\n", type.c_str());
 	}
 
 	children = root->get_children("rule");

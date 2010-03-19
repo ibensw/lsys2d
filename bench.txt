@@ -36,7 +36,7 @@ With even more inlined parameters: (rev 35)
 970
 950
 
-MemCache removed:
+MemCache removed: (rev 36)
 880
 890
 850
