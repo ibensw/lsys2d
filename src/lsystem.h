@@ -16,9 +16,12 @@ struct Geometry{
 	double maxY;
 	double minZ;
 	double maxZ;
-	MemCache<Point3D>* points;
+	/*MemCache<Point3D>* points;
 	MemCache<Line>* lines;
-	MemCache<Triangle>* triangles;
+	MemCache<Triangle>* triangles;*/
+	Point3D* points;
+	Line* lines;
+	Triangle* triangles;
 	unsigned long cLines;
 	unsigned long cPoints;
 	unsigned long cTriangles;
@@ -45,6 +48,7 @@ class LSystem{
 
 	private:
 		Geometry* geo;
+		bool validgeo;
 		std::vector<double> params;
 		Alphabet alphabet;
 		//Calc calculator;

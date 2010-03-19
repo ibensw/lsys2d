@@ -46,7 +46,7 @@ template<typename T> MemCache<T>::MemCache(unsigned long size, unsigned long blo
 		//fwrite(fblock, sizeof(T), fblocksize, ffiles[i]);
 	}
 
-	printf("Init done: %u blocks\n", (unsigned int)fblocks);
+	//printf("%X - Init done: %u blocks\n", this, (unsigned int)fblocks);
 }
 
 template<typename T> MemCache<T>::~MemCache(){
@@ -57,6 +57,7 @@ template<typename T> MemCache<T>::~MemCache(){
 	delete []ffiles;
 	delete []fblockexists;
 	delete []fblock;
+	//printf("%X - Cleaunup done\n", this);
 }
 
 template<typename T> void MemCache<T>::ChangeBlock(unsigned long block) const{

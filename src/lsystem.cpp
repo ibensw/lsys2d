@@ -9,20 +9,24 @@ LSystem::LSystem(){
 	iterations=0;
 	iterator.setAlphabet(&alphabet);
 	iterator.setParameters(&params);
-	geo=new Geometry();
+	geo=0;
+	validgeo=false;
 }
 
 LSystem::~LSystem(){
-	delete geo;
+	if (geo)
+		delete geo;
 }
 
 void LSystem::iterate(int i){
 	iterations+=i;
 	iterator.setIteration(iterations);
+	validgeo=false;
 }
 
 void LSystem::absoluteiterate(int i){
 	iterator.setIteration(i);
+	validgeo=false;
 }
 
 
@@ -38,14 +42,14 @@ void LSystem::render(Engine *gfx){
 
 	Color c;
 	for (unsigned long i=0; i<geo->cLines; ++i){
-		const Line& line=geo->lines->get(i);
+		const Line line=geo->lines[i];
 		c=colors[line.color];
 		gfx->setColor(c.r, c.g, c.b);
 		gfx->drawLine(line);
 	}
 
 	for (unsigned long i=0; i<geo->cTriangles; ++i){
-		const Triangle& triangle=geo->triangles->get(i);
+		const Triangle& triangle=geo->triangles[i];
 		c=colors[triangle.color];
 		gfx->setColor(c.r, c.g, c.b);
 		gfx->drawTriangle(triangle);

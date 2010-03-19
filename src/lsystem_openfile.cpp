@@ -41,6 +41,11 @@ inline string getText(const Node* n){
 }
 
 void LSystem::openfile(const char* filename){
+	validgeo=false;
+
+	if (geo)
+		delete geo;
+
 	//TiXmlDocument doc(filename);
 	DomParser doc;
 	//doc.set_validate();
@@ -123,5 +128,6 @@ void LSystem::openfile(const char* filename){
 	}
 
 	iterator.optimize();
+	geo=new Geometry();
 }
 

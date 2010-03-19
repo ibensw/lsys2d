@@ -129,8 +129,8 @@ void OGLEngine::drawLinePlain(const Line& l){
 	glRotated(rotY, 0.0, 1.0, 0.0);
 	glRotated(rotZ, 0.0, 0.0, 1.0);
 
-	Point3D a=points->get(l.p1);
-	Point3D b=points->get(l.p2);
+	Point3D a=points[l.p1];
+	Point3D b=points[l.p2];
 	
 	glBegin(GL_LINES);
 	glVertex3d(a.c[0], a.c[1], a.c[2]);
@@ -143,8 +143,8 @@ void OGLEngine::drawLine(const Line& l){
 	if (plain)
 		return drawLinePlain(l);
 
-	Point3D a=points->get(l.p1);
-	Point3D b=points->get(l.p2);
+	Point3D a=points[l.p1];
+	Point3D b=points[l.p2];
 
 	Point3D c=b-a;
 	Point3D z(0.0, 0.0, 1.0);
@@ -189,9 +189,9 @@ void OGLEngine::drawTriangle(const Triangle& l){
 	glRotated(rotY, 0.0, 1.0, 0.0);
 	glRotated(rotZ, 0.0, 0.0, 1.0);
 
-	Point3D a=points->get(l.p1);
-	Point3D b=points->get(l.p2);
-	Point3D c=points->get(l.p3);
+	Point3D a=points[l.p1];
+	Point3D b=points[l.p2];
+	Point3D c=points[l.p3];
 
 	glBegin(GL_POLYGON);
 	glVertex3d(a.c[0], a.c[1], a.c[2]);
@@ -202,7 +202,6 @@ void OGLEngine::drawTriangle(const Triangle& l){
 }
 
 void OGLEngine::rotateY(double r){
-	//glRotated(r, 0.0, 1.0, 0.0);
 	rotY=r;
 }
 

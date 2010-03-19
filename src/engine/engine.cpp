@@ -11,7 +11,7 @@ Engine::Engine()
 
 Engine::~Engine(){}
 
-void Engine::setPoints(MemCache<Point3D>* s){
+void Engine::setPoints(Point3D* s){
 	points=s;
 }
 

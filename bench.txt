@@ -28,3 +28,17 @@ With substituted values for repeated actions: (rev 29)
 1080
 1080
 1110
+
+With even more inlined parameters: (rev 35)
+960
+950
+950
+970
+950
+
+MemCache removed:
+880
+890
+850
+870
+890

@@ -186,11 +186,13 @@ SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 		if (maskArr[i]){
 			switch(parent->alphalookup(maskArr[i])){
 				case DRAW:
+				case DRAWHALF:
 					++cpoints;
 					++clines;
 					if (triangstack) ++ctriangles;
 					break;
 				case MOVE:
+				case MOVEHALF:
 					++cpoints;
 					if (triangstack) ++ctriangles;
 					break;
@@ -202,6 +204,7 @@ SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 					++triangstack;
 					break;
 				case POLYEND:
+					--ctriangles;
 					--triangstack;
 					break;
 				default:
