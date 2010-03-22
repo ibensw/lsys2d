@@ -130,6 +130,7 @@ void LSystem::openfile(const char* filename){
 	}
 
 	iterator.optimize();
+	printf("Parameters inlined: %i\n", params.size());
 	geo=new Geometry();
 }
 

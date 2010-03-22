@@ -55,6 +55,10 @@ void LSystem::calculate(){
 	/*geo->points=new MemCache<Point3D>(iterator.countPoints(), (256*1024*1024)/sizeof(Point3D)); //64MB blocks
 	geo->lines=new MemCache<Line>(iterator.countLines(), (128*1024*1024)/sizeof(Line));
 	geo->triangles=new MemCache<Triangle>(iterator.countTriangles(), (64*1024*1024)/sizeof(Triangle));*/
+	printf("Requesting:\nPoints:\t\t%lu\nLines:\t\t%lu\nTriangles:\t%lu\n",
+	 iterator.countPoints(),
+	 iterator.countLines(),
+	 iterator.countTriangles());
 	geo->points = new Point3D[iterator.countPoints()];
 	geo->lines = new Line[iterator.countLines()];
 	geo->triangles = new Triangle[iterator.countTriangles()];
@@ -70,6 +74,7 @@ void LSystem::calculate(){
 	iterator.front();
 	char x;
 	while ((x=iterator.next())){
+		printf("%c - %i\n", x, pointstack.size());
 		switch(alphabet.lookup(x)){
 			case DRAW:
 			case DRAWHALF:

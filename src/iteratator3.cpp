@@ -182,6 +182,7 @@ SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 	clines = 0;
 	ctriangles = 0;
 	int triangstack = 0;
+	unsigned int lastpoly = 0;
 	for (unsigned int i=0; i<strlen; ++i){
 		if (maskArr[i]){
 			switch(parent->alphalookup(maskArr[i])){
@@ -202,9 +203,12 @@ SIteration::SIteration(SIterator* p, CRule c, unsigned long d){
 					break;
 				case POLYSTART:
 					++triangstack;
+					lastpoly=cpoints;
 					break;
 				case POLYEND:
-					--ctriangles;
+					if (cpoints>lastpoly){
+						--ctriangles;
+					}
 					--triangstack;
 					break;
 				default:
