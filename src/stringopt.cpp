@@ -207,7 +207,7 @@ string inlineparams(string s, vector<double> *params){
 	unsigned int inl;
 	string rep;
 	for (unsigned int i=0; i < s.length(); ++i){
-		if (s[i] == '('){
+		if (s[i] == '(' && (i>0 && s[i-1] != '`' && s[i-1] != '~')){
 			j=i;
 			par=param(s, i);
 			params->push_back(par);

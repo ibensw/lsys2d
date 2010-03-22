@@ -9,6 +9,15 @@
 \usepackage{sidecap}
 \usepackage{subfig}
 \usepackage{longtable}
+\usepackage{listings}
+\lstset{
+frame=single,	                % adds a frame around the code
+tabsize=4,	                % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false        % sets if automatic breaks should only happen at whitespace
+}
+
 
 \author{Wouter ibens}
 \title{Lindenmayer Systems, an efficient implementation}
@@ -238,9 +247,47 @@ c(x) & Set color index to x \\
 \subsection{Efficiency} % both time and space approach and complexity
 Implementing a program to calculate and draw Lindenmayer systems is not a big challenge. There is a very naive way of doing this, which will be explained later on, but this method is in general very slow and consumes huge amounts of memory. We will try to speed things up by implementing a more complex data structure and using some general optimizations. The approach of this project was to minimize both time and space complexity.
 
+\newpage
 \section{Implementation}
+
+A Lindenmayer system in a datastructure always consists of:
+\begin{enumerate}
+\item An alphabet \label{structalpha}
+\item An axiom, a string \label{structaxiom}
+\item A list of production rules, a pair (character, string) \label{structrules}
+\item A default angle $\sigma$, a double for the radial of degree representation
+\item A dictionary, telling what characters cause what action
+\item Optionally a set of colors
+\end{enumerate}
+Only \ref{structalpha}, \ref{structaxiom} and \ref{structrules} are required for the string production. And since the alphabet is usually the machines character set, there is no need to store this in the program.
+
 \subsection{String iteration, the naive approach}
+
+Iterating L-systems is not very difficult using string iteration. Your program only needs the production rules and the axiom, no preprocessing is required. From the previous step or axiom, the program loops over every character and adds the substitution of that character to the new string or the character itself if no production rule is found.
+
+\lstset{label=code:stringit,caption=String iteration}
+\begin{lstlisting}
+//Given: axiom (string), rules (array of string)
+currentstring = axiom
+iteration = 0
+
+function iterate()
+	newstring = ""
+	iteration = iteration + 1
+	foreach c in currentstring
+		if (c in rules)
+			newstring = newstring + rules[c]
+		else
+			newstring = newstring + c
+	currentstring = newstring
+\end{lstlisting}
+
+The code \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure but has some huge disadvantages: iterating the L-system found in \ref{fig:3dtree} 12 times returns a string of size 915527344 (~873 MB). Besides the memory usage, it took tens of minutes to process the last 3 iterations. Anoter small disadvantage is the fact you cannot go back one iteration without recalculating it from the axiom to that iteration.
+
 \subsection{A more efficient data structure} %and maybe the draw inside the calc
+
+The only production rule in \ref{fig:3dtree} is $F \rightarrow F[\&+F]F[-\backslash F][\&F]$.
+
 \subsection{See the difference} %benchmark results
 
 \section{Stochastic L-Systems} %and how is fucks the datastructure
@@ -248,6 +295,8 @@ Implementing a program to calculate and draw Lindenmayer systems is not a big ch
 \subsection{Memory usage}
 
 \section{Brighten things up} % features, rounding, GUI, ...
+
+\section{Efficiency tricks}
 
 \section{Conclusion}
 
