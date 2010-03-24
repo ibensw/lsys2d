@@ -197,7 +197,7 @@ c & Increase color index by 1
 \subsubsection{Parameters}
 The last implemented extension is the ability to give each command and optional parameter, specified between brackets after the command it applies to. Using parameters makes it possible to turn by an angle, other than $\sigma$ or specify a fixed color constant.
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
   \subfloat[][Lily]{\label{fig:lilypov}\includegraphics[width=0.27\textwidth]{lily_red.png}}                
   \subfloat[][Plant]{\label{fig:treepov}\includegraphics[width=0.73\textwidth]{plant6.png}}
@@ -284,13 +284,76 @@ function iterate()
 
 The code \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure but has some huge disadvantages: iterating the L-system found in \ref{fig:3dtree} 12 times returns a string of size 915527344 (~873 MB). Besides the memory usage, it took tens of minutes to process the last 3 iterations. Anoter small disadvantage is the fact you cannot go back one iteration without recalculating it from the axiom to that iteration.
 
+For the complexities, let $I$ be the iteration level, $n$ the average production body length, $s$ the total string length, $p$ the average number of replacement symbols in one production body or axiom and $p_t$ the total number of productions and the axiom.
+The time complexity to build this structure is $O(p^I)$. When it is build, the time needed to request one character is $O(1)$, since an array allows direct memory access. This brings the total complexity to build the structure an traverse it once at $O(p^I)+s*O(1) = O(p^I+s)$.
+The space complexity is $O(n^I)$. Both time and space complexity are non-polynomial, so we will try to improve this.
+
 \subsection{A more efficient data structure} %and maybe the draw inside the calc
 
-The only production rule in \ref{fig:3dtree} is $F \rightarrow F[\&+F]F[-\backslash F][\&F]$.
+The only production rule in \ref{fig:3dtree} is $F \rightarrow F[\&+F]F[-\backslash F][\&F]$. So every F in the axiom will be replaced by the same string. The next iteration should only iterate that string once, and it will be correct for every occurence of F in the original string. This will speedup the iteration time and decrease the memory usage of the string representation drastically.
 
-\subsection{See the difference} %benchmark results
 
-\section{Stochastic L-Systems} %and how is fucks the datastructure
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\textwidth]{struct.pdf}
+  \caption{A tree based datastructure that represents the dragoncurve at level 2}
+  \label{fig:struct}
+\end{figure}
+
+The string will be stored as a tree-like datastructure similar to the one in \ref{fig:struct}, with the axiom as root node. Each node consists of 2 arrays. A char array, wich is just the string representation of the node, and an array of pointers, wich point the replacement of the respectilely character at the next iteration level. If the character is a terminal (there exists no production body for this), its pointer will be null. If the iteration level is the last one calculated, the whole array will be null.
+
+The nodes are kept by one common object that manages the creation and deletion of these nodes. This object will assure that no object will be created if it already exists for the requested iteration level.
+
+Besides the two arrays in a node, a third is stored in each node wich represents the total length of the string for every position of its own string. In a leaf node this array will be the sequence 1 to length, as no character will be replaced. In other nodes the step between 2 elements in this array is equal to the length of its childnode at the given position. Due to this sorted list, a binary search can be used to find wich childnode must be searched to find the character for a requested index.
+
+When an iteration level gets deeper and the production bodies are small. Every level must me visited to find the character of a corresponding index. To speed this up a buffer can be used in every node wich length of replaced string is less than a given threshold.
+
+A small threshold will not reduce the number of steps needed to find a character very much, but a big threshold will store much more data in every node, so this threshold must be choosen carefully.
+
+When drawing the string, it will be read from front to back, and for each character the tree must be traversed. Since most characters will be found in the same node as the previous request (certainly if using buffers) it is usefull to store some information about the last path. When requesting a character, the node that holds the character stores his position in a certain directpath pointer, and stores the number of characters left the same node. This information can be used as a direct path instead of traversing the whole tree.
+
+\begin{table}
+\center
+\begin{tabular}{l l}
+Axiom & $A$ \\ \hline
+$\sigma$ & 90\degree \\ \hline
+Rules & $A \rightarrow B-A-B$ \\
+      & $B \rightarrow A+B+A$ \\
+\end{tabular}
+\caption{The L-system of the dragoncurve}
+\end{table}
+
+The time complexity to build this structure is much less, since at every iteration level, a spcific node must be calculated only once, and must be stored only once so it will bring down the space complexity as well.
+Time complexity to build the structure is at worse $O(I*p_t)$.
+Requesting one character in the structure will take $O(I*log p)$ time, but due to the direct path pointer, requesting the whole string sequencally will take only $O((s/n) * I*(log p) + (s-(s/n)) * 1)$ time. The first term are the number of full traversals needed times the traversal of the tree (the number of iterations times a binary search). The second term represents the number of direct accesses. This makes a total time complexity of $O(I*p_t + (s/n) * I*(log p) + (s-(s/n)) * 1) = O(I * (p_t + \frac{s}{n} * log p) + (s - \frac{s}{n}))$. If a buffer is used, $n$ can be replaced by the buffer size.
+The space complexity for this structure is $O(I*p_t*n)$, wich is the number of iteration levels with at each level a node of size n for every production.
+
+\subsection{Real life differences} %benchmark results
+
+These benchmark result are dependent on the implementation details of the programs. The time column was only the building of the datastructure, not the traversal, so the tree based structure might benifit these results. The time was the average of 5 runs. 0 (not iterating) is included to give an impression of the preprocessing time and space.
+
+\begin{table}
+\center
+\begin{tabular}{r r r r r}
+Depth & N time & N memory & TB time & TB memory \\ \hline
+0  & 0.006 s & 252.7 KB & 0.010 s & 384.7 KB \\ \hline
+5  & 0.011 s & 253.6 KB & 0.011 s & 386.4 KB \\ \hline
+10 & 0.012 s & 276.6 KB & 0.010 s & 390.3 KB \\ \hline
+15 & 0.016 s & 758.0 KB & 0.010 s & 391.6 KB \\ \hline
+20 & 0.176 s &  16.2 MB & 0.013 s & 393.0 KB \\ \hline
+25 & 5.256 s & 512.2 MB & 0.010 s & 394.3 KB \\
+\end{tabular}
+\caption{Time and space in real life, N=Naive implementation, TB=Tree bases implementation}
+\end{table}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\textwidth]{bench.pdf}
+  \caption{Memory usage for naieve approach (solid line) versus tree based strcuture (dotted line)}
+  \label{fig:bench}
+\end{figure}
+
+\section{Stochastic L-Systems} %and how it fucks the datastructure
 \subsection{Implementation}
 \subsection{Memory usage}
 
