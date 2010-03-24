@@ -9,10 +9,12 @@ Bij lindenmayer systemen zullen we meestal de string van voor naar achter overlo
 
 Complexiteit:
 I=aantal iteraties
-N=lengte van de string
+N=lengte van grootste production body
 
 Opvragen van willekeurig karakter:
 I*log N		= per iteratie een binary search
 
 Opvragen van X opeenvolgende karakters met buffergrootte B:
 (X/B) * I*log N + X*(1-1/B)		= aantal keer een volledige search gedaan moet worden + de overschot als directe link
+
+(s/n) * I*(log p) + (s-(s/n)) * O(1)
