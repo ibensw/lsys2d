@@ -295,7 +295,7 @@ The only production rule in \ref{fig:3dtree} is $F \rightarrow F[\&+F]F[-\backsl
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1\textwidth]{struct.pdf}
+  \includegraphics[width=0.9\textwidth]{struct.pdf}
   \caption{A tree based datastructure that represents the dragoncurve at level 2}
   \label{fig:struct}
 \end{figure}
@@ -325,7 +325,7 @@ Rules & $A \rightarrow B-A-B$ \\
 
 The time complexity to build this structure is much less, since at every iteration level, a spcific node must be calculated only once, and must be stored only once so it will bring down the space complexity as well.
 Time complexity to build the structure is at worse $O(I*p_t)$.
-Requesting one character in the structure will take $O(I*log p)$ time, but due to the direct path pointer, requesting the whole string sequencally will take only $O((s/n) * I*(log p) + (s-(s/n)) * 1)$ time. The first term are the number of full traversals needed times the traversal of the tree (the number of iterations times a binary search). The second term represents the number of direct accesses. This makes a total time complexity of $O(I*p_t + (s/n) * I*(log p) + (s-(s/n)) * 1) = O(I * (p_t + \frac{s}{n} * log p) + (s - \frac{s}{n}))$. If a buffer is used, $n$ can be replaced by the buffer size.
+Requesting one character in the structure will take $O(I*log(p))$ time, but due to the direct path pointer, requesting the whole string sequencally will take only $O(\frac{s}{n} * I*log(p) + (s-\frac{s}{n}) * 1)$ time. The first term are the number of full traversals needed times the traversal of the tree (the number of iterations times a binary search). The second term represents the number of direct accesses. This makes a total time complexity of $O(I*p_t + \frac{s}{n} * I*(log p) + (s-\frac{s}{n}) * 1) = O(I * (p_t + \frac{s}{n} * log(p)) + (s - \frac{s}{n}))$. If a buffer is used, $n$ can be replaced by the buffer size.
 The space complexity for this structure is $O(I*p_t*n)$, wich is the number of iteration levels with at each level a node of size n for every production.
 
 \subsection{Real life differences} %benchmark results
@@ -353,13 +353,19 @@ Depth & N time & N memory & TB time & TB memory \\ \hline
   \label{fig:bench}
 \end{figure}
 
+\subsection{Calculating geometry}
+
+When the string structure is built, the objects geometry must me calculated. Branch endpoints must be known and polygon points.
+
+\subsection{Improving the efficiency}
+
+
 \section{Stochastic L-Systems} %and how it fucks the datastructure
 \subsection{Implementation}
 \subsection{Memory usage}
 
 \section{Brighten things up} % features, rounding, GUI, ...
 
-\section{Efficiency tricks}
 
 \section{Conclusion}
 
