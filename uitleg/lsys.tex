@@ -31,7 +31,7 @@ breakatwhitespace=false        % sets if automatic breaks should only happen at 
 L-systems or Lindenmayer systems are a way of visualizing any kind of abstract object. It is most often used for fractals and plants or flowers, but variants exist for DNA representation, bit errors in data streams and many more.
 
 \subsection{Turtle Graphics}
-Lindenmayer systems rely on turtle graphics as drawing technique. It specifies a turtle or pen, which has a position, a direction and an specified angle $\sigma$. This pen can draw forward, move forward and turn left or right over $\sigma$. Drawing results in a line of length 1 and an updated position, where moving only results in the latter. Turning only results in an updated direction.
+Lindenmayer systems rely on turtle graphics as drawing technique. It specifies a turtle or pen, which has a position, a direction and an specific angle $\sigma$. This pen can draw a line forward, move forward without drawing a line and turn left or right over $\sigma$. Drawing results in a line of length 1 and an updated position, where moving only results in the latter. Turning only results in an updated direction.
 To control the pen, a set of commands is given as an input string. Where each symbol represents a command.
 \begin{center}
 \begin{tabular}{c | l}
@@ -52,7 +52,26 @@ So the string F+F+F+F and $\sigma = 90\degree$ would result in a square. A more 
 \end{figure}
 
 \subsection{Lindenmayer Systems}
-L-Systems use formal grammar techniques to extend the possibilities of turtle graphics in a way fractals are easier producible. An L-System is given an axiom and a set of rules $X \rightarrow Y$ where $X$ is a character in the alphabet and $Y$ is a string of characters in the alphabet. Except for fractals, L-Systems are very often used to generate plants and trees. The Koch curve in figure \ref{fig:koch} can be given as an L-System.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[]{dragon.png}
+  \caption{Dragon curve}
+  \label{fig:dragon}
+\end{figure}
+
+L-Systems use formal grammar techniques to extend the possibilities of turtle graphics in a way fractals are easier producible. 
+
+An L-system always consists of:
+\begin{enumerate}
+\item an alphabet $\mathcal{A}$, wich represents all the possible symbols in the generated string,
+\item a dictionary $\mathcal{B}$, that maps every symbol from $\mathcal{A}$ to an action for the turtle graphics,
+\item an axiom, a string in $\mathcal{A}$ that represents iteration zero,
+\item an angle $\sigma$, the default angle for turning,
+\item a set of production rules $X \rightarrow Y$, where $X$ is a character in $\mathcal{A}$ and $Y$ a string in $\mathcal{A}$
+\end{enumerate}
+
+Except for fractals, L-systems are very often used to generate plants and trees. The Koch curve in figure \ref{fig:koch} can be given as an L-system.
 
 \begin{table}
 \center
@@ -77,15 +96,20 @@ Rules & $F \rightarrow F+F--F+F$ \\
   \label{fig:animals}
 \end{figure}
 
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[]{dragon.png}
-  \caption{Dragon curve}
-  \label{fig:dragon}
-\end{figure}
-
-The first iteration of an L-System is done by substituting the symbols in the axiom with the body of respectively production rule. The following steps use the resulting string of the previous step as axiom.
+The power of an L-system is the way they generate strings using symmetries, fractals and flowers can be represented as very small files (usually under 1KB) but iterating them can produce complex images. To generate this complex images, the L-system must be iterated.
+The axiom is iteration zero, it specifies the starting string. Iterating an L-system only once will replace every character in the string with the body of the respctively production rule. The second iteration will take the output of the first iteration and will replace these characters by there production bodies. For example, given an axiom $F--F--F$ and only one production rule $F \rightarrow F+F--F+F$ will produce the following output strings:
+\begin{table}[h!]
+\center
+\begin{tabular}{l l}
+Iteration & String \\ \hline \vspace{5pt}
+0 \footnotesize (axiom) & $F--F--F$ \\ \vspace{5pt}
+1 & $\underline{F+F--F+F}--\underline{F+F--F+F}--\underline{F+F--F+F}$ \\
+2 & \footnotesize $\underline{\underline{F+F--F+F}+\underline{F+F--F+F}--\underline{F+F--F+F}+\underline{F+F--F+F}}--$ \\
+  & \footnotesize $\underline{\underline{F+F--F+F}+\underline{F+F--F+F}--\underline{F+F--F+F}+\underline{F+F--F+F}}--$ \\
+  & \footnotesize $\underline{\underline{F+F--F+F}+\underline{F+F--F+F}--\underline{F+F--F+F}+\underline{F+F--F+F}}$ \\
+\end{tabular}
+\caption{Generating the Koch curve}
+\end{table}
 
 \subsection{Extensions}
 Although this basic set of commands allows us to draw some nice pictures, many extensions have been added to maximize the possibilities of L-Systems. The implemented extensions are given in this subsection.
@@ -120,7 +144,7 @@ Rules & $X \rightarrow F-[[X]+X]+F[+FX]-X$ \\
 \end{figure}
 
 \subsubsection{3D}
-To create more realistic models of objects, 3D was introduced. Instead of just turning left and right, it gives support for rotating the pen and adjust its pitch.
+To create more realistic models of objects, 3D was introduced. Instead of just turning left and right, it gives support for rotating the pen and adjusting its pitch.
 
 \begin{center}
 \begin{tabular}{c | l}
@@ -151,11 +175,11 @@ Rules & $F \rightarrow F[\&+F]F[-\backslash F][\&F]$
 \end{figure}
 
 \subsubsection{Polygons}
-To improve the realism of the models even more, flowers and leaves should be added to them. Therefore polygons should be supported by the system. A polygon is similar to the stack as it also stores a position (B) on the stack. When a polygon is started every position the pen moves to will create a new triangle. The corners of this triangle are the top of stack (B), the point it just moved to, and the previous position. Obviously, after the first movement the top of stack and the previous position are the same so no triangle will be created. To support this settings the state of the pen must be extended with a polygon mode, which must be set to true when we want to start a new polygon. Figure \ref{fig:polygon} is the visualization of the following string ($\sigma = 30\degree$):
+To improve the realism of the models even more, flowers and leaves can be added to them. Therefore the drawing system should support polygons. The start of a polygons implies storing the position on the stack. When a polygon is started, for every position the pen moves to a new triangle will be created. This triangle is defined by three corners, the new position, the previous position, and the start position of the polygon. Obviously, after the first movement the startposition and the previous position are the same so no triangle can be created. To support this settings the state of the pen must be extended with a polygon mode, which must be set to true when we want to start a new polygon.
+Figure \ref{fig:polygon} is the visualization of the following string ($\sigma = 30\degree$):
 \begin{verbatim}
 F{-f+f+f-|-f+f+f}
 \end{verbatim}
-
 
 \begin{figure}[h!]
   \centering
@@ -171,13 +195,6 @@ Symbol & Action \\ \hline
 \} & Pop the last saved state from the stack \\
 \end{tabular}
 \end{center}
-
-%\begin{figure}[h!]
-%  \centering
-%  \includegraphics[width=0.25\textwidth]{polys.png}
-%  \caption{Example of polygons: lily}
-%  \label{fig:polyexample}
-%\end{figure}
 
 \subsubsection{Pen style}
 Another extension is the pen style, this includes both line length and thickness as the color. Default, an L-System starts with a line length of 1 and 10\% of the length as thickness. This allows us to draw a thick trunk and smaller branches, or brown trees with green leaves. The pen style is also part of the state, so it gets saved whenever we push the stack.
@@ -282,7 +299,7 @@ function iterate()
 	currentstring = newstring
 \end{lstlisting}
 
-The code \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure but has some huge disadvantages: iterating the L-system found in \ref{fig:3dtree} 12 times returns a string of size 915527344 (~873 MB). Besides the memory usage, it took tens of minutes to process the last 3 iterations. Anoter small disadvantage is the fact you cannot go back one iteration without recalculating it from the axiom to that iteration.
+The code \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure but has some huge disadvantages: iterating the L-system found in \ref{fig:3dtree} only 12 times returns a string of size 915527344 (~873 MB). Besides the memory usage, it took tens of minutes to process the last 3 iterations. Another small disadvantage is the fact you cannot go back one iteration without recalculating it from the axiom to that iteration.
 
 For the complexities, let $I$ be the iteration level, $n$ the average production body length, $s$ the total string length, $p$ the average number of replacement symbols in one production body or axiom and $p_t$ the total number of productions and the axiom.
 The time complexity to build this structure is $O(p^I)$. When it is build, the time needed to request one character is $O(1)$, since an array allows direct memory access. This brings the total complexity to build the structure an traverse it once at $O(p^I)+s*O(1) = O(p^I+s)$.
@@ -304,9 +321,9 @@ The string will be stored as a tree-like datastructure similar to the one in \re
 
 The nodes are kept by one common object that manages the creation and deletion of these nodes. This object will assure that no object will be created if it already exists for the requested iteration level.
 
-Besides the two arrays in a node, a third is stored in each node wich represents the total length of the string for every position of its own string. In a leaf node this array will be the sequence 1 to length, as no character will be replaced. In other nodes the step between 2 elements in this array is equal to the length of its childnode at the given position. Due to this sorted list, a binary search can be used to find wich childnode must be searched to find the character for a requested index.
+Besides the two arrays in a node, a third array is stored in each node wich represents the total length of the whole string for every position of the substring. In a leaf node this array will be the sequence 1 to length, as no character will be replaced. In other nodes the step between 2 elements in this array is equal to the length of its childnode at the given position. Due to this sorted list, a binary search can be used to find wich childnode must be searched to find the character for a requested index.
 
-When an iteration level gets deeper and the production bodies are small. Every level must me visited to find the character of a corresponding index. To speed this up a buffer can be used in every node wich length of replaced string is less than a given threshold.
+When an iteration level gets deeper and the production bodies are small, every level must me visited to find the character of a corresponding index. To speed this up a buffer can be used in every node wich length of replaced string is less than a given threshold.
 
 A small threshold will not reduce the number of steps needed to find a character very much, but a big threshold will store much more data in every node, so this threshold must be choosen carefully.
 
@@ -343,7 +360,7 @@ Depth & N time & N memory & TB time & TB memory \\ \hline
 20 & 0.176 s &  16.2 MB & 0.013 s & 393.0 KB \\ \hline
 25 & 5.256 s & 512.2 MB & 0.010 s & 394.3 KB \\
 \end{tabular}
-\caption{Time and space in real life, N=Naive implementation, TB=Tree bases implementation}
+\caption{Time and space in real life, N=Naive implementation, TB=Tree based implementation}
 \end{table}
 
 \begin{figure}[h!]
@@ -355,16 +372,20 @@ Depth & N time & N memory & TB time & TB memory \\ \hline
 
 \subsection{Calculating geometry}
 
-When the string structure is built, the objects geometry must me calculated. Branch endpoints must be known and polygon points.
+When the string structure is built, the objects geometry must me calculated. For this, the string must be traversed from the beginning to the end, and for every character a transformation must be made. The shorter the string, the less processing time, so we can use compression techniques that don't make the string harder to process. Run-length encoding (RLE) is an example of a string compression technique that keeps the string easy processable. For example, the RLE algorithm will compress the string $+++++//////$ to $+`5/`6$, instead of just shortening the string, the processor will read $+`5$ as $+(sigma*5)$ and that will take up only one action. Furthermore, the LRE algorithm can be modified to compress strings like $+--++++$ to $+`3$ and $+++--+--$ to an empty string.
+Another scenario that will slow down the processing speed are L-systems that contains production bodies with parameters. For example the production rule $X \rightarrow F(0.3333)+F(0.3333)--F(0.3333)+F(0.3333)$. Each time an F is encountered, the tail string will be tested for a parameter. When the test returns true, it must process the string to a double. This process is quite expensive and can be eliminated using an inlined parameter reference. This means every production and the axiom will be preprocessed. In this inline process, every parameter encountered will be pushed in a vector and a reference to the vector index will replace the parameter in the string. The production body of the given example after preprocessing it might look like $F~1+F~1-`2F~1+F~1$ and a vector $p[1]=0.3333$. Not only is this rewritten body shorter so needs less storage space, it will also be processed faster, since the parameter (0.3333) doesn't have to be converted from string to double everytime it is encountered.
+These preprocessing technique shortens the processing time of a string by $\pm 30\%$.
 
 \subsection{Improving the efficiency}
 
+% a histogram for compiler options benchmarking?
 
 \section{Stochastic L-Systems} %and how it fucks the datastructure
 \subsection{Implementation}
-\subsection{Memory usage}
 
-\section{Brighten things up} % features, rounding, GUI, ...
+
+
+\subsection{Memory usage}
 
 
 \section{Conclusion}

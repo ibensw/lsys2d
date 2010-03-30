@@ -1,6 +1,6 @@
 CXX           = g++
 INCPATH       = -I. `pkg-config libxml++-2.6 --cflags`
-CXXFLAGS      = $(INCPATH) -g -pg -pipe -O3 -Wall -W -mtune=native -funroll-loops -ffast-math
+CXXFLAGS      = $(INCPATH) -pipe -Wall -O3 -ffast-math -mtune=native -funroll-loops
 LINK          = g++ -g -pg
 LFLAGS        = -Wl,-O1
 LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut `pkg-config libxml++-2.6 --cflags --libs`
