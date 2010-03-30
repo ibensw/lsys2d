@@ -74,7 +74,7 @@ void LSystem::calculate(){
 	iterator.front();
 	char x;
 	while ((x=iterator.next())){
-		printf("%c - %i\n", x, pointstack.size());
+		//printf("%c - %i\n", x, pointstack.size());
 		switch(alphabet.lookup(x)){
 			case DRAW:
 			case DRAWHALF:
