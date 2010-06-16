@@ -39,7 +39,7 @@ void LSystem::render(Engine *gfx){
 		factor=factorY;
 
 	gfx->setWindow(geo->minX-1, geo->minX+factor+1, geo->minY-1, geo->minY+factor+1, geo->maxZ, geo->minZ);
-
+	
 	Color c;
 	for (unsigned long i=0; i<geo->cLines; ++i){
 		const Line line=geo->lines[i];
