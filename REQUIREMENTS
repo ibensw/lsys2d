@@ -1,0 +1,8 @@
+For CLI:
+OpenGL
+libxml-2.6-dev
+libglut3-dev
+libsdl-1.2-dev
+
+for GUI:
+Qt4
