@@ -45,6 +45,7 @@ class LSystem{
 		inline unsigned int CountLines(){ return geo->cLines; }
 		inline unsigned int CountPoints(){ return geo->cPoints; }
 		inline unsigned int CountTriangles(){ return geo->cTriangles; }
+		inline SIterator* it(){ return &iterator; }
 
 	private:
 		Geometry* geo;

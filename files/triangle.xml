@@ -2,8 +2,9 @@
 <lsystem sigma='60'>
 	<alphabet action='draw'>AB</alphabet>
 	<color id='1' r='0' g='0.5' b='0'/> <!-- Green //-->
+	<color id='2' r='0' g='0' b='0.5'/> <!-- Blue//-->
 
-	<initiator>c(1)A</initiator>
-	<rule find='A'>B-A-B</rule>
-	<rule find='B'>A+B+A</rule>
+	<axiom>c(1)A</axiom>
+	<rule find='A'>c(2)B-c(1)A-c(2)B</rule>
+	<rule find='B'>c(1)A+c(2)B+c(1)A</rule>
 </lsystem>

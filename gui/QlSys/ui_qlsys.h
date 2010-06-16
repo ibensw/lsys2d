@@ -1,10 +1,10 @@
 /********************************************************************************
-** Form generated from reading ui file 'qlsys.ui'
+** Form generated from reading UI file 'qlsys.ui'
 **
-** Created: Fri Mar 19 20:04:03 2010
-**      by: Qt User Interface Compiler version 4.5.0
+** Created: Tue Jun 8 13:02:05 2010
+**      by: Qt User Interface Compiler version 4.6.2
 **
-** WARNING! All changes made in this file will be lost when recompiling ui file!
+** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
 #ifndef UI_QLSYS_H
@@ -99,7 +99,7 @@ public:
             QlSysClass->setObjectName(QString::fromUtf8("QlSysClass"));
         QlSysClass->resize(350, 353);
         QIcon icon;
-        icon.addPixmap(QPixmap(QString::fromUtf8("res/icon.png")), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8("res/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         QlSysClass->setWindowIcon(icon);
         actionOpen = new QAction(QlSysClass);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
@@ -107,7 +107,7 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
         verticalLayout->setSpacing(6);
-        verticalLayout->setMargin(11);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
@@ -135,7 +135,7 @@ public:
         tab->setObjectName(QString::fromUtf8("tab"));
         formLayout_2 = new QFormLayout(tab);
         formLayout_2->setSpacing(6);
-        formLayout_2->setMargin(11);
+        formLayout_2->setContentsMargins(11, 11, 11, 11);
         formLayout_2->setObjectName(QString::fromUtf8("formLayout_2"));
         label_5 = new QLabel(tab);
         label_5->setObjectName(QString::fromUtf8("label_5"));
@@ -186,7 +186,7 @@ public:
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
         formLayout_3 = new QFormLayout(tab_2);
         formLayout_3->setSpacing(6);
-        formLayout_3->setMargin(11);
+        formLayout_3->setContentsMargins(11, 11, 11, 11);
         formLayout_3->setObjectName(QString::fromUtf8("formLayout_3"));
         label = new QLabel(tab_2);
         label->setObjectName(QString::fromUtf8("label"));
@@ -223,7 +223,7 @@ public:
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
         verticalLayout_3 = new QVBoxLayout(tab_3);
         verticalLayout_3->setSpacing(6);
-        verticalLayout_3->setMargin(11);
+        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
@@ -324,7 +324,7 @@ public:
         tab_4->setObjectName(QString::fromUtf8("tab_4"));
         verticalLayout_2 = new QVBoxLayout(tab_4);
         verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setMargin(11);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setSpacing(6);

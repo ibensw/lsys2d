@@ -49,7 +49,7 @@ OGLEngine::OGLEngine(int w, int h, string caption){
 	glClearDepth(1.0f);				// Enables Clearing Of The Depth Buffer
 	glDepthFunc(GL_LEQUAL);				// The Type Of Depth Test To Do
 	glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
-	//glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
+	glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
 	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_POINT_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
