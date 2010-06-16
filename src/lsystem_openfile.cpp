@@ -104,14 +104,14 @@ void LSystem::openfile(const char* filename){
 		c=AttribD(*childiter, "prob", 1.0);
 		r=getText(*childiter);
 		printf("%c (%f) -> %s\n", s, c, r.c_str());
-		//r=inlineparams(r, params);
+		r=inlineparams(r, &params);
 		iterator.addRule(s, r);
 	}
 
 
 	r=getText(root->get_children("axiom").front());
 	printf("Axiom: %s\n", r.c_str());
-	//r=cacheoptimize(r, &alphabet, &iterator, &params);
+	r=cacheoptimize(r, &alphabet, &iterator, &params);
 	iterator.setIteration(r, 0);
 	printf("Axiom: %s\n", r.c_str());
 

@@ -21,6 +21,7 @@ allinone:
 	
 $(EXECUTABLE): $(OBJECTS) 
 	$(LINK) $(LFLAGS) $(LIBS) $(OBJECTS) -o $@
+	rm src/main.o
 
 .o:
 	$(CXX) $(CXXFLAGS) $(@:%.o=%.cpp) -o `basename $@`
