@@ -17,7 +17,7 @@ captionpos=b,                   % sets the caption-position to bottom
 breaklines=true,                % sets automatic line breaking
 breakatwhitespace=false        % sets if automatic breaks should only happen at whitespace
 }
-
+\usepackage{url}
 
 \author{Wouter ibens}
 \title{Lindenmayer Systems, an efficient implementation}
@@ -27,12 +27,25 @@ breakatwhitespace=false        % sets if automatic breaks should only happen at 
 \maketitle
 \tableofcontents
 \newpage
-\section{What are L-Systems}
+
+\begin{abstract}
+L-systems are developed to easily represent complex iterative structures like plants, trees and fractals. This thesis describes the way I implemented a software package that can iterate and draw these structures using an optimized algorithm.
+
+The program can handle both 2D and 3D L-systems and supports brackets, stochastic structures, colors and polygons. The input is an xml-file that the program will transform into a tree-based structure representing a specific iteration. Both a command line tool as a GUI are available. The drawing method uses OpenGL to efficiently draw the structures on screen.
+
+This paper also explains why this program is more efficient than the naive approach to iterate these structures. Time and space complexities are calculated to prove the efficiency gain.
+
+The source and example files can be found at: \url{http://code.google.com/p/lsys2d/source}.
+\end{abstract}
+
+\newpage
+
+\section{What are L-Systems?}
 L-systems or Lindenmayer systems are a way of visualizing any kind of abstract object. It is most often used for fractals and plants or flowers, but variants exist for DNA representation, bit errors in data streams and many more.
 
 \subsection{Turtle Graphics}
 Lindenmayer systems rely on turtle graphics as a drawing technique. It specifies a turtle or pen, which has a position, a direction and an specific angle $\sigma$. This pen can draw a line forward, move forward without drawing a line and turn left or right over $\sigma$. Drawing results in a line of length 1 and an updated position, where moving only results in the latter. Turning only results in an updated direction.
-To control the pen, a set of commands is given as an input string. Where each symbol represents a command.
+To control the pen, a set of commands is given as an input string, where each symbol represents a command.
 \begin{center}
 \begin{tabular}{c | l}
 Symbol & Action \\ \hline
@@ -43,7 +56,7 @@ f & Move forward \\
 \end{tabular}
 \end{center}
 
-So the string F+F+F+F and $\sigma = 90\degree$ would result in a square. A more complicated example is the Koch curve given in figure \ref{fig:koch}.
+This way the string F+F+F+F and $\sigma = 90\degree$ would result in a square. A more complicated example is the Koch curve given in figure \ref{fig:koch}.
 \begin{figure}[h!]
   \centering
   \includegraphics[]{koch.png}
@@ -66,15 +79,15 @@ F+F--F+F+F+F--F+F--F+F--F+F+F+F--F+F--F+F--F+F+F+F--F+F-
   \label{fig:dragon}
 \end{figure}
 
-L-Systems use formal grammar techniques to extend the possibilities of turtle graphics in a way fractals are easier producible. 
+L-Systems use formal grammar techniques to extend the possibilities of turtle graphics in a way fractals are easier to produce. 
 
 An L-system consists of:
 \begin{enumerate}
-\item an alphabet $\mathcal{A}$, which represents all the possible symbols in the generated string,
-\item a dictionary $\mathcal{B}$, that maps every symbol from $\mathcal{A}$ to an action for the turtle graphics,
-\item an axiom, a string in $\mathcal{A}$ that represents iteration zero,
-\item an angle $\sigma$, the default angle for turning,
-\item a set of production rules $X \rightarrow Y$, where $X$ is a character in $\mathcal{A}$ and $Y$ a string in $\mathcal{A}$
+\item an alphabet $\mathcal{A}$, which represents all the possible symbols in the generated string;
+\item a dictionary $\mathcal{B}$, that maps every symbol from $\mathcal{A}$ to an action for the turtle graphics;
+\item an axiom, a string in $\mathcal{A}$ that represents iteration zero;
+\item an angle $\sigma$, the default angle for turning;
+\item a set of production rules $X \rightarrow Y$, where $X$ is a character in $\mathcal{A}$ and $Y$ a string in $\mathcal{A}$.
 \end{enumerate}
 \label{enum:definition}
 
@@ -103,8 +116,8 @@ Rules & $F \rightarrow F+F--F+F$ \\
   \label{fig:animals}
 \end{figure}
 
-The power of an L-system is the way in which they generate strings using symmetries, fractals and flowers can be represented as very small files (usually under 1KB) but iterating them can produce complex images. To generate this complex images, the L-system must be iterated.
-The axiom is iteration zero, it specifies the starting string. Iterating an L-system only once will replace every character in the string with the body of the respectively production rule. The second iteration will take the output of the first iteration and will replace these characters by there production bodies. For example, given an axiom $F--F--F$ and only one production rule $F \rightarrow F+F--F+F$ will produce the following output strings:
+The power of an L-system is the way in which they generate strings using symmetries; fractals and flowers can be represented as very small files (usually under 1KB) but iterating them can produce complex images. To generate this complex images, the L-system must be iterated.
+The axiom is iteration zero, it specifies the starting string. Iterating an L-system will replace every character in the string with the body of the respectively production rule. The second iteration will take the output of the first iteration and will replace these characters by their production bodies. For example, given an axiom $F--F--F$ and only one production rule $F \rightarrow F+F--F+F$ will produce the following output strings:
 \begin{table}[h!]
 \center
 \begin{tabular}{l l}
@@ -122,7 +135,7 @@ Iteration & String \\ \hline \vspace{5pt}
 Although this basic set of commands allows us to draw some nice pictures, many extensions have been added to maximize the possibilities of L-Systems. The implemented extensions are given in this subsection.
 
 \subsubsection{Brackets}
-Brackets are used to save the current state (at least the current position and direction) to a stack. This allows us to start a subexpression as new branch, but return later on to the original position and continue its root branch.
+Brackets are used to save the current state (at least the current position and direction) to a stack. This allows us to start a subexpression as a new branch, but return later on to the original position and continue its root branch.
 
 \begin{center}
 \begin{tabular}{c | l}
@@ -182,7 +195,7 @@ Rules & $F \rightarrow F[\&+F]F[-\backslash F][\&F]$
 \end{figure}
 
 \subsubsection{Polygons}
-To improve the realism of the models even more, flowers and leaves can be added to them. Therefore the drawing system should support polygons. The start of a polygons implies storing the position on the stack. When a polygon is started, every position the pen moves to will create a new triangle. This triangle is defined by three corners, the new position, the previous position, and the start position of the polygon. Obviously, after the first movement the startposition and the previous position are the same so no triangle can be created. To support this settings the state of the pen must be extended with a polygon mode, which must be set to true when we want to start a new polygon.
+To improve the realism of the models even more, flowers and leaves can be added to them. Therefore the drawing system should support polygons. The start of a polygon implies storing the position on the stack. When a polygon is started, every position where the pen moves to will create a new triangle. This triangle is defined by three corners: the new position, the previous position, and the starting position of the polygon. Obviously, after the first movement the starting position and the previous position are the same so no triangle can be created. To support this settings, the state of the pen must be extended with a polygon flag, which must be set when a new polygon is started.
 Figure \ref{fig:polygon} is the visualization of the following string ($\sigma = 30\degree$):
 \begin{verbatim}
 F{-f+f+f-|-f+f+f}
@@ -204,7 +217,7 @@ Symbol & Action \\ \hline
 \end{center}
 
 \subsubsection{Pen style}
-Another extension is the pen style, this includes both line length and thickness as the color. Default, an L-System starts with a line length of 1 and 10\% of the length as thickness. This allows us to draw a thick trunk and smaller branches, or brown trees with green leaves. The pen style is also part of the state, so it gets saved whenever we push the stack.
+Another extension is the pen style, this includes both line length and thickness as the color. On default, an L-System starts with a line length of 1 and 10\% of the length as thickness. This allows us to draw a thick trunk and smaller branches, or brown trees with green leaves. The pen style is also part of the state, so it will get saved whenever we push the stack.
 
 \begin{center}
 \begin{tabular}{c | l}
@@ -217,12 +230,12 @@ c & Increase color index by 1
 \end{tabular}
 \end{center}
 
-The default values (10\% and 20\%) are only guidelines which can be modified per action, this is explained in section \ref{parameters}.
+The default values (10\% and 20\%) are just guidelines which can be modified per action, this will be explained in section \ref{parameters}.
 
 
 \subsubsection{Parameters}
 \label{parameters}
-The last implemented extension is the ability to give each command an optional parameter, specified between brackets after the command it applies to. Using parameters makes it possible to turn by an angle, other than $\sigma$ or specify a fixed color constant.
+The last implemented extension is the ability to give each command an optional parameter which is specified between brackets after the command it applies to. Using parameters makes it possible to turn over an angle, other than $\sigma$, or specify a fixed color constant.
 
 \begin{figure}[h!]
   \centering
@@ -275,14 +288,14 @@ Implementing a program to calculate and draw Lindenmayer systems is not a big ch
 \newpage
 \section{Implementation}
 
-As seen in section \ref{enum:definition}, a Lindenmayer system is defined by several parameters. In a datastructure these could be implemented as follow:
+As seen in section \ref{enum:definition}, a Lindenmayer system is defined by several parameters. In a datastructure, these could be implemented as follows:
 \begin{enumerate}
-\item The alphabet, which could just be the machines character set \label{structalpha}
-\item The axiom as a string \label{structaxiom}
-\item The list of production rules as a list with pairs (character, string) as elements \label{structrules}
-\item The default angle $\sigma$, a floating point for the radial or degree representation
-\item The dictionary, usually an array or vector
-\item Optionally a set of colors
+\item The alphabet, which could just be the machines character set; \label{structalpha}
+\item The axiom as a string; \label{structaxiom}
+\item The list of production rules as a list with pairs (character, string) as elements; \label{structrules}
+\item The default angle $\sigma$, a floating point for the radial or degree representation;
+\item The dictionary, usually an array or vector;
+\item Optionally a set of colors.
 \end{enumerate}
 Only \ref{structalpha}, \ref{structaxiom} and \ref{structrules} are required for the string production. And since the alphabet is usually the machines character set, there is no need to store this in the program.
 
@@ -307,35 +320,9 @@ function iterate()
 	currentstring = newstring
 \end{lstlisting}
 
-The code in Listing \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure, but has some huge disadvantages: iterating the L-system found in Figure \ref{fig:3dtree} only 12 times returns a string of size 915527344 (\~873 MB). Besides the memory usage, it took tens of minutes to process the last 3 iterations. Another small disadvantage is the fact you cannot undo one iteration without recalculating the string from the start.
+The code in Listing \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure, but it has some huge disadvantages: iterating the L-system found in Figure \ref{fig:3dtree} just 12 times returns a string of size 915527344 ($\plusminus$ 873 MB). Besides the memory usage, it took over 30 minutes to process the last 3 iterations. Another small disadvantage is the fact that you cannot undo one iteration without recalculating the string from the start.
 
-For the complexities, let $I$ be the iteration level, $n$ the average production body length, $s$ the total string length, $p$ the average number of replacement symbols in one production body or axiom and $p_t$ the total number of productions and the axiom.
-The time complexity to build this structure is $O(p^I)$. When it is build, the time needed to request one character is $O(1)$, since an array allows direct memory access. This brings the total complexity to build the structure an traverse it once at $O(p^I)+s*O(1) = O(p^I+s)$.
-The space complexity is $O(n^I)$. Both time and space complexity are non-polynomial, so we will try to improve this.
-
-\subsection{A more efficient data structure} %and maybe the draw inside the calc
-
-The only production rule in figure \ref{fig:3dtree} is $F \rightarrow F[\&+F]F[-\backslash F][\&F]$. So every F in the axiom will be replaced by the same string. The next iteration should only iterate that string once, and it will be correct for every occurence of F in the original string. This will speedup the iteration time and decrease the memory usage of the string representation drastically.
-
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=0.9\textwidth]{struct.pdf}
-  \caption{A tree based datastructure that represents the dragoncurve at level 2}
-  \label{fig:struct}
-\end{figure}
-
-The string will be stored as a tree-like datastructure similar to the one in figure \ref{fig:struct}, with the axiom as root node. Each node consists of 2 arrays. A char array, which is just the string representation of the node, and an array of pointers, which points to the replacement node of the respectilely character at the next iteration level. If the character is a terminal (there exists no production body for this), its pointer will be null. If the iteration level is the last one calculated, the whole array will be null.
-
-The nodes are kept by one common object that manages the creation and deletion of these nodes. This object will assure that no object will be created if it already exists for the requested iteration level.
-
-Besides the two arrays in a node, a third array is stored in each node wich represents the total length of the whole string for every position of the substring. In a leaf node this array will be the sequence 1 to length, as no character will be replaced. In other nodes the step between 2 elements in this array is equal to the length of its childnode at the given position. Due to this sorted list, a binary search can be used to find wich childnode must be searched to find the character for a requested index.
-
-When an iteration level gets deeper and the production bodies are small, every level must me visited to find the character of a corresponding index. To speed this up a buffer can be used in every node wich length of replaced string is less than a given threshold.
-
-A small threshold will not reduce the number of steps needed to find a character very much, but a big threshold will store much more data in every node, so this threshold must be chosen carefully.
-
-When drawing the string, it will be read from front to back, and for each character the tree must be traversed. Since most characters will be found in the same node as the previous request (certainly if using buffers) it is usefull to store some information about the last path. When requesting a character, the node that holds the character stores his position in a certain directpath pointer, and stores the number of characters left the same node. This information can be used as a direct path instead of traversing the whole tree.
+Since the complexity differs for every L-system, the specific time and space complexities for the Sierpinski triangle are demonstrated below. A generalisation is given afterwards.
 
 \begin{table}
 \center
@@ -345,17 +332,72 @@ $\sigma$ & 90\degree \\ \hline
 Rules & $A \rightarrow B-A-B$ \\
       & $B \rightarrow A+B+A$ \\
 \end{tabular}
-\caption{The L-system of the dragoncurve}
+\caption{The L-system of the Sierpinski triangle} \label{tbl:siertri}
 \end{table}
 
-The time complexity to build this structure is much less, since at every iteration level, a spcific node must be calculated only once, and must be stored only once so it will bring down the space complexity as well.
-Time complexity to build the structure is at worse $O(I*p_t)$.
-Requesting one character in the structure will take $O(I*log(p))$ time, but due to the direct path pointer, requesting the whole string sequencally will take only $O(\frac{s}{n} * I*log(p) + (s-\frac{s}{n}) * 1)$ time. The first term is the number of full traversals needed times the traversal of the tree (the number of iterations times a binary search). The second term represents the number of direct accesses. This makes a total time complexity of $O(I*p_t + \frac{s}{n} * I*(log(p)) + (s-\frac{s}{n})) = O(I * (p_t + \frac{s}{n} * log(p)) + (s - \frac{s}{n}))$. If a buffer is used, $n$ can be replaced by the buffer size.
-The space complexity for this structure is $O(I*p_t*n)$, which is the number of iteration levels with at each level a node of size $n$ for every production.
+The Sierpinski triangle is described in Table \ref{tbl:siertri}. It contains 2 replacement rules that both contain 3 variables and have a total substring length of 5.
+
+\subsubsection{Space complexity of the Sierpinski triangle}
+
+The naive approach stores the string as a character string in the memory so its space complexity is $O(s)$, where $s$ is the lenght of the string. $s$ can be rewritten as $V+T$, whereas $V$ represents the number of variables and $T$ the number of terminals. At each iteration, every variable is replaced by 3 new variables and 2 terminal symbols. So $V(I) = 3^I$ and $T(I) = T(I-1) + 2 * V(I-1) = T(I-1)*3 + 2$ from where we can show that $T(I) = 3^I-1$. Both $V$ and $T$ have complexity $O(3^I)$ so the space complexity of the Sierpinski triangle in the naive approach is $O(3^I)$.
+
+\subsubsection{Time complexity of the Sierpinski triangle}
+
+The time complexity to build the string representing $I$ iterations is $O(I * it)$, where $it$ is the time complexity of the function $iterate$. This function will replace every variable by a substring, so the complexity is linear with the number of variables in the $currentstring$ ($V=3^I$). The total time complexity becomes $O(I * 3^I)$ which equals $O(3^I)$. The traversal happens with direct access so it is $O(s)=O(3^I)$. This means both space and time complexity of the Sierpinski tiangle as an L-system are non-polynomial ($O(3^I)$).
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.3\textwidth]{triangle.png}
+  \caption{Sierpinski triangle}
+  \label{fig:triangle}
+\end{figure}
+
+\subsubsection{Complexities for a general case}
+
+In general, let $I$ be the iteration level, $n$ the maximum production body length and $p$ the maximum number of replacement symbols in a production body.
+The space complexity is polynomial and bound by $n^I$ (where every character is a variable). The time complexity to build a general structure is $O(p^I)$. When it is build, the time needed to request one character is $O(1)$, since an array allows direct memory access. This brings the total complexity to build the structure and traverse it once at $O(p^I) + (n^I)*O(1) = O(p^I+n^I)$.
+Both time and space complexity are non-polynomial, so we will try to improve this.
+
+\subsection{A more efficient data structure} %and maybe the draw inside the calc
+
+The only production rule in Figure \ref{fig:3dtree} is $F \rightarrow F[\&+F]F[-\backslash F][\&F]$. So every F in the axiom will be replaced by the same string. The next iteration should only iterate that string once, and it will be correct for every occurence of F in the original string. This will speed up the iteration time and decrease the memory usage of the string representation drastically.
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{struct.pdf}
+  \caption{A tree based datastructure that represents the Sierpinske triangle at level 2}
+  \label{fig:struct}
+\end{figure}
+
+The string will be stored as a tree-like datastructure similar to the one in Figure \ref{fig:struct}, with the axiom as the root node. Each node consists of 2 arrays of equal size: a character array, which is just the string representation of the node, and an array of pointers, where each pointer points to the replacement node of the character at the next iteration level. If the character is a terminal (there exists no production body for this), its pointer will be null. If the iteration level is the last one calculated, the whole array will be null.
+
+To prevent node duplication, one object manages the creation and deletion of all nodes. This object must assure that no duplicates will be created for a node in a specified iteration level.
+
+To optimize a search for a specific index in the structure, another array is stored in each node. At each position of the node's string, the array represents the total length of the string with all subnodes expanded. 
+In a leaf node, where no subnodes can be expanded, this array will just be a sequence from 1 to the length of the node's substring. To find a character at a specific index in this node, a binary search can be performed at this array to find the index of the character. In other nodes, a binary string will result in the index of the replacement character; the binary search can then be performed in the replacement node of this character.
+
+Every level must be visited to find the character of a corresponding index. So when production bodies are small and the iteration level is high, this search technique had a high cost. We can eliminate some of these searches by using a buffer in each node. This buffer will contain the string with every subnode expanded so the search technique can find the character with direct access. The buffer will not be used if the expanded string is longer than the buffer size.
+
+A small buffer will not reduce the number of steps needed to find a character this much, but a big one will store much more data in every node, so the buffer size must be chosen carefully.
+
+When drawing the string, it will be read from front to back, and for each character the tree must be traversed. Since most characters will be found in the same node as the previous request (especially when using buffers), it is useful to store some information about the last path. When requesting a character, the node that holds the character stores its position in a certain directpath pointer, and stores the number of characters left in the buffer or in the same node. This information can be used as a direct path instead of traversing the whole tree.
+
+\subsubsection{Space complexity of the Sierpinski triangle}
+The Sierpinske triangle has replacement rules, at every iteration level, each replacement rule will occur maximum once. A node's size is only linear dependend on the lenght of its representing string, which is always $O(5)$ in this case. Since the example only has 2 replacement rules, the structure's space complexity is $O(I*2*5)=O(I)$, representing every node at every level.
+
+\subsubsection{Time complexity of the Sierpinski triangle}
+As well as the space complexity, the time complexity improves a lot using this new datastructure. Building the structure must only create 1 node at each level, this brings down the complexity to $O(I*2)=O(I)$. Requesting a character from the structure needs a binary search at every iteration level which makes the time complexity $O(I*log(5))$. The traversal of the structure without using a buffer must do a binary search at every level for every character, which is $O(3^I * I*log(5))=O(3^I * I)$. We reduced one power from the naive approach, and introducing a buffer of size $b$ will reduce this cost even further to $O(3^I * (\frac{1}{b}*I + \frac{b-1}{b}))$.
+
+\subsubsection{Complexities for a general case}
+Some L-systems are too complex to calculate the exact complexity. So a general worst case complexity can be given that holds for every L-system.
+Let $r$ be the number of production rules, than the worst case time complexity to build the structure is $O(I*r)$.
+Requesting one character in the structure will take $O(I*log(n))$ time, but the traversal with a buffer will take only $O(n^I * (\frac{1}{b} * I*log(n) + (\frac{b-1}{b}))$ time. This makes a total time cost of $O(I*r + n^I * (\frac{1}{b} * I*log(n) + (\frac{b-1}{b}))$. The traversal is slightly worse than the naive approach but only for $1/b$ of the characters.
+The space complexity for this structure is $O(I*r*n)$, which is the number of iteration levels with at each level a node of size $n$ for all $r$ production.
 
 \subsection{Real life differences} %benchmark results
 
-The benchmark result (Table \ref{bench}) are dependent on the implementation details of the programs. The time column represents both the building of the structure, traversal and the geometry calculation. The time was the average of 5 runs. 0 (not iterating) is included to give an impression of the preprocessing time and space. The memory is measured by iterating the system so the structure is build, but not the drawing. N/A means the program crashes after about 40 seconds because the machine ran out of memory. The testmachine had 4GB of (virtual) memory with more than 3GB available.
+The benchmark results (Table \ref{bench}) depend on the implementation details of the programs. The time column represents both the building of the structure, traversal and the geometry calculation. The time was the average of 5 runs. 0 (not iterating) is included to give an impression of the preprocessing time and space. The memory is measured by iterating the system so only the structure is build, but without drawing the structure. N/A means the program crashes after about 40 seconds because the machine ran out of memory. The testmachine had 4GB of (virtual) memory with more than 3GB available.
 
 \begin{table}
 \center
@@ -380,27 +422,46 @@ Depth & N time & N memory & TB time & TB memory \\ \hline
 
 \subsection{Calculating geometry}
 
-When the string structure is built, the objects geometry must be calculated. For this, the string must be traversed from the beginning to the end, and for every character a transformation must be made. The shorter the string, the less processing time, so we can use compression techniques that do not make the string harder to process. Run-length encoding (RLE) is an example of a string compression technique that keeps the string easy processable. For example, the RLE algorithm will compress the string $+++++//////$ to $+`5/`6$, instead of just shortening the string, the processor will read $+`5$ as $+(\sigma*5)$ and that will take up only one action. Furthermore, the LRE algorithm can be modified to compress strings like $+--++++$ to $+`3$ and $+++--+--$ to an empty string.
-Another scenario that will slow down the processing speed are L-systems that contains production bodies with parameters. For example the production rule $X \rightarrow F(0.3333)+F(0.3333)--F(0.3333)+F(0.3333)$. Each time an F is encountered, the tail string will be tested for a parameter. When the test returns true, it must process the string to a double. This process is quite expensive and can be eliminated using an inlined parameter reference. This means every production and the axiom will be preprocessed. In this inline process, every parameter encountered will be pushed in a vector and a reference to the vector index will replace the parameter in the string. The production body of a given example after preprocessing might look like $F\tilde{ } 1+F\tilde{ } 1-`2F\tilde{ } 1+F\tilde{ } 1$ and a vector $p[1]=0.3333$. Not only is this rewritten body shorter such that it needs less storage space, it will also be processed faster, since the parameter (0.3333) does not have to be converted from string to double everytime it is encountered.
+When the string structure is built, the geometry of eacht object must be calculated. For this, the string must be traversed from the beginning to the end, and for every character a transformation must be made. The shorter the string, the less processing time, so we can use compression techniques that do not make the string harder to process. Run-length encoding (RLE) is an example of a string compression technique that keeps the string easily processable. For example, the RLE algorithm will compress the string $+++++//////$ to $+`5/`6$. Instead of just shortening the string, the processor will read $+`5$ as $+(\sigma*5)$ and that will take up only one action. Furthermore, the LRE algorithm can be modified to compress strings like $+--++++$ to $+`3$ and $+++--+--$ to an empty string.
+Another scenario that will slow down the processing speed are L-systems that contain production bodies with parameters. For example the production rule $X \rightarrow F(0.3333)+F(0.3333)--F(0.3333)+F(0.3333)$. Each time an F is encountered, the following character will be tested for the presence of a parameter. When the test is positive, it must process the tail string to a double. This process is quite expensive and can be eliminated using an inlined parameter reference. This means every production body and the axiom will be preprocessed to inline the parameters. In this inline process, every parameter encountered will be pushed in a vector and a reference to the vector index will replace the parameter in the string. The production body of a given example after preprocessing might look like $F\tilde{ } 1+F\tilde{ } 1-`2F\tilde{ } 1+F\tilde{ } 1$ and a vector $p[1]=0.3333$. Not only is this rewritten body shorter so it needs less storage space, it will also be processed faster, since the parameter (0.3333) does not have to be converted from string to double whenever it is encountered.
 
 \begin{table}
 \center
 \begin{tabular}{l r r r r}
 File 			& iterations	& NO time	& O time	& relative speedup\\ \hline
-dragoncurve.xml	& 25			& 12.315 s	& 12.158 s	&  2.4 \% \\ \hline
-tree.xml		& 8				&  3.205 s	&  2.520 s	& 42.8 \% \\ \hline
-plant6.xml		& 12			&  3.335 s	&  2.450 s	& 53.0 \% \\ \hline
-snowflake.xml	& 10			&  1.240 s	&  1.020 s	& 35.5 \% \\ \hline
+dragoncurve.xml	& 25			& 12.315 s	& 12.158 s	&  1.27 \% \\ \hline
+tree.xml		& 8				&  3.205 s	&  2.520 s	& 21.37 \% \\ \hline
+plant6.xml		& 12			&  3.335 s	&  2.450 s	& 26.54 \% \\ \hline
+snowflake.xml	& 10			&  1.240 s	&  1.020 s	& 17.74 \% \\ \hline
 
 \end{tabular}
 \caption{Geometry optimization. NO time = non-optimized time; O time = optimized time} \label{benchopt}
 \end{table}
 
-Table \ref{benchopt} shows these optimization techniques speedup the processing time of the string from nearly 0 to over 50 \%.
-
+Table \ref{benchopt} shows how these optimization techniques speed up the processing time of the string from nearly 0 to over 25 \%.
 
 \newpage
-\begin{appendix}
-\listoffigures
-\end{appendix}
+\begin{thebibliography}{9}
+
+\bibitem{book}
+P. Prusinkiewicz and A. Lindenmayer,
+\emph{The algorithmic beauty of plants},
+electronic edition, 2004
+
+\bibitem{website}
+L-sytem examples,
+\emph{Fractal Trees},
+\url{http://web.telia.com/~u61105057/Treefractals.htm}
+
+\bibitem{website} C. Swindells and J. Ouwerkerk,
+\emph{Generating Computer Images of Plants and Flowers Using L-Systems},
+\url{http://users.openface.ca/~jelle/mcgill-www/proj557.html}
+
+\bibitem{book}
+P. Prusinkiewicz,
+\emph{Lindenmayer systems, fractals and plants},
+NY, Springerelectronic, 1989
+
+\end{thebibliography}
+
 \end{document}

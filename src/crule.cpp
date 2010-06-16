@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <utility>
+#include <stdio.h>
 #include "stringopt.h"
 
 #include "alphabet.h"

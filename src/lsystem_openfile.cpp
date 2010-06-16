@@ -111,7 +111,8 @@ void LSystem::openfile(const char* filename){
 
 	r=getText(root->get_children("axiom").front());
 	printf("Axiom: %s\n", r.c_str());
-	iterator.setIteration(cacheoptimize(r, &alphabet, &iterator, &params), 0);
+	//r=cacheoptimize(r, &alphabet, &iterator, &params);
+	iterator.setIteration(r, 0);
 	printf("Axiom: %s\n", r.c_str());
 
 	children = root->get_children("color");
@@ -129,8 +130,8 @@ void LSystem::openfile(const char* filename){
 		colors.add((unsigned int)id, Color(red, green, blue));
 	}
 
-	iterator.optimize();
-	printf("Parameters inlined: %i\n", params.size());
+	//iterator.optimize();
+        printf("Parameters inlined: %i\n", (int)params.size());
 	geo=new Geometry();
 }
 

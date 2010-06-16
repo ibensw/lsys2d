@@ -92,7 +92,7 @@ void LSystem::calculate(){
 
 				geo->points[pCount++]=curr.pos;
 
-				geo->lines[lCount++] = Line(pCount-2, pCount-1, curr.thick, curr.color);
+				geo->lines[lCount++] = Line(pCount-2, pCount-1, curr.thick*curr.length, curr.color);
 
 				if (curr.pos.c[0]<geo->minX) geo->minX=curr.pos.c[0];
 				if (curr.pos.c[0]>geo->maxX) geo->maxX=curr.pos.c[0];
@@ -166,11 +166,11 @@ void LSystem::calculate(){
 				curr.length*=param;
 				break;
 			case THICKLESS:
-				param=iterator.nextParam(0.7);
+				param=iterator.nextParam(0.8);
 				curr.thick*=param;
 				break;
 			case THICKMORE:
-				param=iterator.nextParam(1.4);
+				param=iterator.nextParam(1.2);
 				curr.thick*=param;
 				break;
 			case POLYSTART:

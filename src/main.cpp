@@ -125,7 +125,13 @@ int main(int argc, char *argv[]){
 			case RENDER:
 				if (!opengl){
 					printf("Initializing OpenGL...\n");
-					opengl = new OGLEngine(800, 600, "LSystem");
+					try{
+						opengl = new OGLEngine(800, 600, "LSystem");
+					}catch(char* e){
+						opengl=0;
+						printf("OpenGL Exception: %s\n", e);
+						break;
+					}
 				}
 
 				if (cmd.size()<2){
@@ -154,15 +160,15 @@ int main(int argc, char *argv[]){
 				}
 				break;
 
-			/*case STRING:
-				mainsystem.it->front();
+			case STRING:
+				mainsystem.it()->front();
 				{
-					for (unsigned int i=0; i<mainsystem.it->length() && i < 1024; ++i){
-						printf("%c", mainsystem.it->next());
+					for (unsigned int i=0; i<mainsystem.it()->length(); ++i){
+						printf("%c", mainsystem.it()->next());
 					}
 				}
 
-				break;*/
+				break;
 
 			case ROUNDON:
 				opengl->setRoundCylinder(true);
