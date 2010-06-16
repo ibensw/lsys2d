@@ -320,7 +320,7 @@ function iterate()
 	currentstring = newstring
 \end{lstlisting}
 
-The code in Listing \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure, but it has some huge disadvantages: iterating the L-system found in Figure \ref{fig:3dtree} just 12 times returns a string of size 915527344 ($\plusminus$ 873 MB). Besides the memory usage, it took over 30 minutes to process the last 3 iterations. Another small disadvantage is the fact that you cannot undo one iteration without recalculating the string from the start.
+The code in Listing \ref{code:stringit} shows the algorithm to iterate currentstring to the next iteration. This is a fairly easy implementation of both the algorithm and the datastructure, but it has some huge disadvantages: iterating the L-system found in Figure \ref{fig:3dtree} just 12 times returns a string of size 915527344 ($\pm$ 873 MB). Besides the memory usage, it took over 30 minutes to process the last 3 iterations. Another small disadvantage is the fact that you cannot undo one iteration without recalculating the string from the start.
 
 Since the complexity differs for every L-system, the specific time and space complexities for the Sierpinski triangle are demonstrated below. A generalisation is given afterwards.
 
