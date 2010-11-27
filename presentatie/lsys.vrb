@@ -1,0 +1,10 @@
+\frametitle {Parameters inlinen}
+\begin{itemize}
+\item Parameters=\{\} $F(0.3333)$
+\item $\Rightarrow$ Parameters=\{0.3333\} $F*0$
+\pause
+\item Korter
+\item Sneller (niet telkens parsen van een float maar lookup in tabel)
+\pause
+\item Speedup: $14-21\%$
+\end{itemize}
