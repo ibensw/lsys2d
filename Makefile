@@ -3,7 +3,7 @@ INCPATH       = -I. `pkg-config libxml++-2.6 --cflags`
 CXXFLAGS      = $(INCPATH) -pipe -Wall -O3 -ffast-math -mtune=native -funroll-loops
 LINK          = g++ -g -pg
 LFLAGS        = -Wl,-O1
-LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut -lGLU `pkg-config libxml++-2.6 --cflags --libs`
+LIBS          = -L/usr/lib -lpthread -lSDL -lGL -lglut `pkg-config libxml++-2.6 --cflags --libs` -lGLU
 SOURCEFIND    = find src -type f -path '*.cpp' ! -path '*.svn*'
 SOURCES       = $(shell $(SOURCEFIND))
 HEADERFIND    = find src -type f -path '*.h' ! -path '*.svn*'

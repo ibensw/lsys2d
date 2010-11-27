@@ -1,0 +1,10 @@
+\beamer@endinputifotherversion {3.07pt}
+\select@language {dutch}
+\beamer@sectionintoc {1}{Wat zijn L-Systemen}{4}{0}{1}
+\beamer@subsectionintoc {1}{1}{Turtle Graphics}{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{De basis}{8}{0}{1}
+\beamer@subsectionintoc {1}{3}{Uitbreidingen}{14}{0}{1}
+\beamer@sectionintoc {2}{Implementatie}{21}{0}{2}
+\beamer@subsectionintoc {2}{1}{Straight-forward}{22}{0}{2}
+\beamer@subsectionintoc {2}{2}{Tree-based}{24}{0}{2}
+\beamer@sectionintoc {3}{Optimalisaties}{28}{0}{3}
